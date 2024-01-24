@@ -1,12 +1,90 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import useSWR from 'swr';
+import { Game } from './api/stats/route';
+
+import styles from './page.module.css';
+
+const Home = () => {
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
+  const { data, error } = useSWR('/api/stats', fetcher);
+
+  if (error) {
+    return <div>Error loading data</div>;
+  }
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
+  // Count the number of wins for each corporation
+  const corporationWins: {
+    [corporation: string]: {
+      plays: number;
+      wins?: number;
+    }
+  } = {};
+  data?.forEach((game: Game) => {
+    Object.entries(game.players ?? {}).forEach(([_, playerData], key) => {
+      playerData.corporations?.forEach((corporation: string) => {
+        if (corporationWins[corporation]?.plays) {
+          corporationWins[corporation].plays++;
+        } else {
+          corporationWins[corporation] = {
+            plays: 1,
+          };
+        }
+      });
+      if (key === 0) {
+        playerData.corporations?.forEach((corporation: string) => {
+          if (corporationWins[corporation]?.wins) {
+            // @ts-ignore - weird bug
+            corporationWins[corporation].wins++;
+          } else {
+            corporationWins[corporation].wins = 1;
+          }
+        });
+      }
+    });
+  });
+
+  // Sort corporations by highest winning to lowest
+  const sortedCorporations = Object.entries(corporationWins).sort((a, b) => {
+    return (b[1].wins ?? 0) * 10000 - (a[1].wins ?? 0) * 10000 + (a[1].plays ?? 0) - (b[1].plays ?? 0);
+  });
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        Hello!
+    <div>
+      <h1>Terra-Stats!</h1>
+      <h2>Wins by Corporation</h2>
+      <div className={styles.corporationDataContainer}>
+        {sortedCorporations.map(([corporation, corporationStats]) => (
+          <div key={corporation}>
+            <div>{corporation} ({corporationStats.wins ?? 0}/{corporationStats.plays})</div>
+          </div>
+        ))}
       </div>
-    </main>
+      <h2>All Games</h2>
+      <div className={styles.allDataContainer}>
+        <div className={styles.allDataContainer}>
+          {data?.map((game: Game, id: number) => (
+            <div key={id} className={styles.playerRow}>{
+              Object.entries(game.players ?? {}).map(([player, playerData]) => (
+                <div key={player} className={styles.player}>
+                  <div className={styles.playerName}>{player}</div>
+                  <div className={styles.playerScore}>{playerData.finalScore}</div>
+                  <div className={styles.playerCorporation}>{playerData.corporations?.map((corporation) => {
+                    return <div key={corporation}>{corporation}</div>
+                  })}</div>
+                </div>
+              ))
+            }
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
+
+export default Home;

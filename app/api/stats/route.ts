@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { promises as fsPromises } from 'fs';
 
-interface Game {
+export interface Game {
   dateOfGame?: Date;
   playerCount?: number;
   generations?: number;
@@ -45,7 +45,7 @@ const normalizedPlayerNames = {
   Victor: ['Victor', 'Vic', 'VicVic'],
   Yota: ['Yota', 'Haircut'],
   Vy: ['Vy'],
-  Lindsey: ['Lindsey', 'LinLin', 'Lin'],
+  Lindsey: ['Lindsey', 'LinLin', 'Lin', 'Lind'],
   Landon: ['Landon', 'Lando', 'Lan', 'LanLan'],
 }
 
@@ -86,7 +86,7 @@ export async function GET(request: Request) {
             tds.push(tdMatch[1]);
           }
 
-          // the first td contains two values, the player name and the corporation they played. use regex to grab them.
+          // the first td contains two values, the player name and the corporation they played. use regex to grab them. 
           const playerRegex = /<a.*?>(.*?)<\/a>/gs;
           const playerMatch = playerRegex.exec(tds[0]);
           if (playerMatch) {
@@ -95,7 +95,7 @@ export async function GET(request: Request) {
             // also get the normalized player name based on the normalizedPlayerNames object. if the player name is not in the object, use the original name.
             let normalizedPlayerName = playerName;
             Object.entries(normalizedPlayerNames).forEach(([normalizedName, names]) => {
-              if (names.includes(playerName)) {
+              if (names.map(name => name.toLowerCase()).includes(playerName.toLowerCase())) {
                 normalizedPlayerName = normalizedName;
               }
             });
