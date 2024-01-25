@@ -26,3 +26,11 @@
   line-height: 1.1em;
   color: teal;
 }
+
+.highlight {
+  color: teal;
+}
+
+.subtle {
+  color: rgb(178, 178, 178)
+}

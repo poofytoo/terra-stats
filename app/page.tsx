@@ -4,6 +4,7 @@ import useSWR from 'swr';
 import { Game } from './api/stats/route';
 
 import styles from './page.module.css';
+import cx from 'classnames';
 
 const Home = () => {
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -22,26 +23,39 @@ const Home = () => {
     [corporation: string]: {
       plays: number;
       wins?: number;
+      mainPlays?: number;
+      mainWins?: number;
     }
   } = {};
+
   data?.forEach((game: Game) => {
     Object.entries(game.players ?? {}).forEach(([_, playerData], key) => {
-      playerData.corporations?.forEach((corporation: string) => {
+      playerData.corporations?.forEach((corporation: string, corporationId) => {
         if (corporationWins[corporation]?.plays) {
           corporationWins[corporation].plays++;
+          if (corporationId === 0) {
+            // @ts-ignore - weird bug
+            corporationWins[corporation].mainPlays++;
+          }
         } else {
           corporationWins[corporation] = {
             plays: 1,
+            ...(corporationId === 0 ? { mainPlays: 1 } : { mainPlays: 0 })
           };
         }
       });
       if (key === 0) {
-        playerData.corporations?.forEach((corporation: string) => {
+        playerData.corporations?.forEach((corporation: string, corporationId) => {
           if (corporationWins[corporation]?.wins) {
             // @ts-ignore - weird bug
             corporationWins[corporation].wins++;
+            if (corporationId === 0) {
+              // @ts-ignore - weird bug
+              corporationWins[corporation].mainWins++;
+            }
           } else {
             corporationWins[corporation].wins = 1;
+            corporationWins[corporation].mainWins = corporationId === 0 ? 1 : 0;
           }
         });
       }
@@ -83,15 +97,21 @@ const Home = () => {
   return (
     <div>
       <h1>Terra-Stats!</h1>
-      <h2>Wins by Corporation (wins/plays)</h2>
+      <h2>Wins by Corporation (all wins/plays) <span className={styles.highlight}>(main wins/plays)</span></h2>
+      <p>
+        All win/plays include corps which were merger'd in. Main is only the initial corp.
+      </p>
       <div className={styles.corporationDataContainer}>
         {sortedCorporations.map(([corporation, corporationStats]) => (
           <div key={corporation}>
-            <div>{corporation} ({corporationStats.wins ?? 0}/{corporationStats.plays})</div>
+            <div>
+              {corporation} ({corporationStats.wins ?? 0}/{corporationStats.plays}){" "}
+              <span className={styles.highlight}>({corporationStats.mainWins ?? 0}/{corporationStats.mainPlays ?? 0})</span>
+            </div>
           </div>
         ))}
       </div>
-      <h2>Wins by Player (wins/plays)</h2>
+      <h2>Wins by Player</h2>
       {
         Object.entries(winsByPlayer).sort((a, b) => {
           return (b[1].wins ?? 0) * 10000 - (a[1].wins ?? 0) * 10000 + (a[1].plays ?? 0) - (b[1].plays ?? 0);
@@ -119,17 +139,21 @@ const Home = () => {
                       <div className={styles.playerName}>{player}</div>
                       <div className={styles.playerScore}>{playerData.finalScore}</div>
                       <div className={styles.playerCorporation}>{playerData.corporations?.map((corporation) => {
-                        return <div key={corporation}>{corporation}</div>
+                        return <div key={corporation} className={
+                          cx({
+                            [styles.subtle]: playerData.corporations?.[0] !== corporation,
+                          })
+                        }>{corporation}</div>
                       })}</div>
                     </div>
                   ))
                 }
                 </div>
-            </>
-          })}
+              </>
+            })}
         </div>
       </div>
-      <div dangerouslySetInnerHTML={{ __html: `` }}> 
+      <div dangerouslySetInnerHTML={{ __html: `` }}>
 
       </div>
     </div>
