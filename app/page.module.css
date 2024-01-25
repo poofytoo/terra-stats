@@ -3,8 +3,6 @@
 .playerRow {
   display: flex;
   margin-top: 10px;
-  border-top: 1px solid #ddd;
-  padding-top: 10px;
 }
 
 .player {
@@ -18,4 +16,13 @@
 
 .playerScore {
   font-weight: bold;
+}
+
+.dateOfGame {
+  border-top: 1px solid teal;
+  margin-top: 10px;
+  padding-top: 10px;
+  font-size: 12px;
+  line-height: 1.1em;
+  color: teal;
 }

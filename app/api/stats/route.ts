@@ -4,7 +4,7 @@ import path from 'path';
 import { promises as fsPromises } from 'fs';
 
 export interface Game {
-  dateOfGame?: Date;
+  dateOfGame: Date;
   playerCount?: number;
   generations?: number;
   url?: string;
@@ -56,7 +56,10 @@ export async function GET(request: Request) {
 
   for (const file of htmlFiles) {
     const filePath = path.join(process.cwd(), 'data', file);
-    const game: Game = {}
+    const game: Game = {
+      dateOfGame: new Date(parseInt(file.split('-')[2]), parseInt(file.split('-')[0]) - 1, parseInt(file.split('-')[1]))
+    }
+
     try {
       const fileContent = await fsPromises.readFile(filePath, 'utf-8');
 

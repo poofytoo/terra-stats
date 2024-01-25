@@ -77,6 +77,9 @@ const Home = () => {
     });
   });
 
+
+
+
   return (
     <div>
       <h1>Terra-Stats!</h1>
@@ -101,20 +104,29 @@ const Home = () => {
       <h2>All Games</h2>
       <div className={styles.allDataContainer}>
         <div className={styles.allDataContainer}>
-          {data?.map((game: Game, id: number) => (
-            <div key={id} className={styles.playerRow}>{
-              Object.entries(game.players ?? {}).map(([player, playerData]) => (
-                <div key={player} className={styles.player}>
-                  <div className={styles.playerName}>{player}</div>
-                  <div className={styles.playerScore}>{playerData.finalScore}</div>
-                  <div className={styles.playerCorporation}>{playerData.corporations?.map((corporation) => {
-                    return <div key={corporation}>{corporation}</div>
-                  })}</div>
+          {data?.sort((a: Game, b: Game) => {
+            // sort by date
+            return new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime();
+          }).
+            map((game: Game, id: number) => {
+              const date = new Date(game.dateOfGame);
+              const dateOfGame = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+              return <>
+                <div className={styles.dateOfGame}>{dateOfGame}</div>
+                <div key={id} className={styles.playerRow}>{
+                  Object.entries(game.players ?? {}).map(([player, playerData]) => (
+                    <div key={player} className={styles.player}>
+                      <div className={styles.playerName}>{player}</div>
+                      <div className={styles.playerScore}>{playerData.finalScore}</div>
+                      <div className={styles.playerCorporation}>{playerData.corporations?.map((corporation) => {
+                        return <div key={corporation}>{corporation}</div>
+                      })}</div>
+                    </div>
+                  ))
+                }
                 </div>
-              ))
-            }
-            </div>
-          ))}
+            </>
+          })}
         </div>
       </div>
     </div>
