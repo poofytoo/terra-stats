@@ -53,10 +53,34 @@ const Home = () => {
     return (b[1].wins ?? 0) * 10000 - (a[1].wins ?? 0) * 10000 + (a[1].plays ?? 0) - (b[1].plays ?? 0);
   });
 
+  const winsByPlayer: {
+    [player: string]: {
+      plays: number;
+      wins?: number;
+    }
+  } = {};
+
+  data?.forEach((game: Game) => {
+    Object.entries(game.players ?? {}).forEach(([player, playerData], id: number) => {
+      if (winsByPlayer[player]?.plays) {
+        winsByPlayer[player].plays++;
+      } else {
+        winsByPlayer[player] = {
+          plays: 1,
+          wins: 0,
+        };
+      }
+      if (id === 0) {
+        // @ts-ignore - weird bug
+        winsByPlayer[player].wins++;
+      }
+    });
+  });
+
   return (
     <div>
       <h1>Terra-Stats!</h1>
-      <h2>Wins by Corporation</h2>
+      <h2>Wins by Corporation (wins/plays)</h2>
       <div className={styles.corporationDataContainer}>
         {sortedCorporations.map(([corporation, corporationStats]) => (
           <div key={corporation}>
@@ -64,6 +88,16 @@ const Home = () => {
           </div>
         ))}
       </div>
+      <h2>Wins by Player (wins/plays)</h2>
+      {
+        Object.entries(winsByPlayer).sort((a, b) => {
+          return (b[1].wins ?? 0) * 10000 - (a[1].wins ?? 0) * 10000 + (a[1].plays ?? 0) - (b[1].plays ?? 0);
+        }).map(([player, playerStats]) => (
+          <div key={player}>
+            <div>{player} ({playerStats.wins ?? 0}/{playerStats.plays})</div>
+          </div>
+        ))
+      }
       <h2>All Games</h2>
       <div className={styles.allDataContainer}>
         <div className={styles.allDataContainer}>
