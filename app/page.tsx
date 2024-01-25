@@ -99,7 +99,7 @@ const Home = () => {
       <h1>Terra-Stats!</h1>
       <h2>Wins by Corporation (all wins/plays) <span className={styles.highlight}>(main wins/plays)</span></h2>
       <p>
-        All win/plays include corps which were merger'd in. Main is only the initial corp.
+        All win/plays include corps which were mergered in. Main is only the initial corp.
       </p>
       <div className={styles.corporationDataContainer}>
         {sortedCorporations.map(([corporation, corporationStats]) => (
