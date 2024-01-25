@@ -56,8 +56,11 @@ export async function GET(request: Request) {
 
   for (const file of htmlFiles) {
     const filePath = path.join(process.cwd(), 'data', file);
+    const dateOfGame = new Date(parseInt(file.split('-')[2]), parseInt(file.split('-')[0]) - 1, parseInt(file.split('-')[1]));
+    // add 6 hours to the date because the date is in UTC time and we want it in EST time.
+    dateOfGame.setHours(dateOfGame.getHours() + 6);
     const game: Game = {
-      dateOfGame: new Date(parseInt(file.split('-')[2]), parseInt(file.split('-')[0]) - 1, parseInt(file.split('-')[1]))
+      dateOfGame,
     }
 
     try {
