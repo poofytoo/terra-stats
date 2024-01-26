@@ -141,6 +141,9 @@ const Home = () => {
                         {playerId === 0 && <span className={styles.winner}> 🏆</span>}
                       </div>
                       <div className={styles.playerScore}>{playerData.finalScore}</div>
+                      <div className={styles.details}>
+                        <span className={styles.subtle}>Actions:</span> {playerData.actionsTaken}
+                      </div>
                       <div className={styles.playerCorporation}>{playerData.corporations?.map((corporation) => {
                         return <div key={corporation} className={
                           cx({
