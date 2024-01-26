@@ -134,9 +134,12 @@ const Home = () => {
               return <>
                 <div className={styles.dateOfGame}>{dateOfGame}</div>
                 <div key={id} className={styles.playerRow}>{
-                  Object.entries(game.players ?? {}).map(([player, playerData]) => (
-                    <div key={player} className={styles.player}>
-                      <div className={styles.playerName}>{player}</div>
+                  Object.entries(game.players ?? {}).map(([player, playerData], playerId) => (
+                    <div key={playerId} className={styles.player}>
+                      <div className={styles.playerName}>
+                        {player}
+                        {playerId === 0 && <span className={styles.winner}> 🏆</span>}
+                      </div>
                       <div className={styles.playerScore}>{playerData.finalScore}</div>
                       <div className={styles.playerCorporation}>{playerData.corporations?.map((corporation) => {
                         return <div key={corporation} className={

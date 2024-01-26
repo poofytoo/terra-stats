@@ -9,4 +9,15 @@ body {
 
 h1 {
   margin-top: 0;
+  line-height: 1.5em;
+}
+
+h2 {
+  line-height: 1.3em;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 20px;
+  }
 }
