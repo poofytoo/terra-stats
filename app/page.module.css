@@ -44,3 +44,8 @@
   margin: 5px 0;
   display: inline-block;
 }
+
+.winPercentage {
+  display: inline-block;
+  width: 50px;
+}

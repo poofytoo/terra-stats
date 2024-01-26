@@ -8,6 +8,7 @@ export interface Game {
   playerCount?: number;
   generations?: number;
   url?: string;
+  fileName: string;
   players?: {
     [name: string]: {
       displayName?: string;
@@ -61,6 +62,7 @@ export async function GET(request: Request) {
     dateOfGame.setHours(dateOfGame.getHours() + 6);
     const game: Game = {
       dateOfGame,
+      fileName: file,
     }
 
     try {
@@ -145,7 +147,6 @@ export async function GET(request: Request) {
 
             // add the score to the player object.
             game.players[normalizedPlayerName].terraformingRating = parseInt(tds[1]);
-
 
             // add the timer to the player object. replace any <div> or </div> with a space, and trim the string.
             const timerString = tds[9].replace(/<\/?div.*?>/g, '').trim();

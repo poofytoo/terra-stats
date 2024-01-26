@@ -6,6 +6,9 @@ import { Game } from './api/stats/route';
 import styles from './page.module.css';
 import cx from 'classnames';
 
+// round to two digits
+const round = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100;
+
 const Home = () => {
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const { data, error } = useSWR('/api/stats', fetcher);
@@ -27,6 +30,7 @@ const Home = () => {
       mainWins?: number;
     }
   } = {};
+
 
   data?.forEach((game: Game) => {
     Object.entries(game.players ?? {}).forEach(([_, playerData], key) => {
@@ -71,6 +75,7 @@ const Home = () => {
     [player: string]: {
       plays: number;
       wins?: number;
+      winPercentage?: number;
     }
   } = {};
 
@@ -89,6 +94,11 @@ const Home = () => {
         winsByPlayer[player].wins++;
       }
     });
+  });
+
+  // add winPercentage to winsbyplayer and store in winsByPlayer
+  Object.entries(winsByPlayer).forEach(([player, playerStats]) => {
+    winsByPlayer[player].winPercentage = round((playerStats.wins ?? 0) / playerStats.plays);
   });
 
 
@@ -114,10 +124,10 @@ const Home = () => {
       <h2>Wins by Player</h2>
       {
         Object.entries(winsByPlayer).sort((a, b) => {
-          return (b[1].wins ?? 0) * 10000 - (a[1].wins ?? 0) * 10000 + (a[1].plays ?? 0) - (b[1].plays ?? 0);
+          return (b[1].winPercentage ?? 0) - (a[1].winPercentage ?? 0);
         }).map(([player, playerStats]) => (
           <div key={player}>
-            <div>{player} ({playerStats.wins ?? 0}/{playerStats.plays})</div>
+            <span className={styles.winPercentage}>{(playerStats.winPercentage ?? 0) * 100}%</span>{player} ({playerStats.wins ?? 0}/{playerStats.plays})
           </div>
         ))
       }
@@ -125,6 +135,11 @@ const Home = () => {
       <div className={styles.allDataContainer}>
         <div className={styles.allDataContainer}>
           {data?.sort((a: Game, b: Game) => {
+            // if dates are the same, sort by filename
+            if (new Date(b.dateOfGame).getTime() === new Date(a.dateOfGame).getTime()) {
+              return (b.fileName.split("-")[3] ?? "0").localeCompare(a.fileName.split("-")[3] ?? "0");
+            }
+
             // sort by date
             return new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime();
           }).
