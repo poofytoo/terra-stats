@@ -177,7 +177,7 @@ export async function GET(request: Request) {
           generationCount = generation;
         }
       }
-      game.generations = generationCount;
+      game.generations = generationCount + 1;
 
       game.playerCount = Object.keys(game.players ?? {}).length;
 

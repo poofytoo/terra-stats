@@ -127,7 +127,7 @@ const Home = () => {
           return (b[1].winPercentage ?? 0) - (a[1].winPercentage ?? 0);
         }).map(([player, playerStats]) => (
           <div key={player}>
-            <span className={styles.winPercentage}>{(playerStats.winPercentage ?? 0) * 100}%</span>{player} ({playerStats.wins ?? 0}/{playerStats.plays})
+            <span className={styles.winPercentage}>{Math.round((playerStats.winPercentage ?? 0) * 100)}%</span>{player} ({playerStats.wins ?? 0}/{playerStats.plays})
           </div>
         ))
       }
@@ -147,7 +147,10 @@ const Home = () => {
               const date = new Date(game.dateOfGame);
               const dateOfGame = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
               return <>
-                <div className={styles.dateOfGame}>{dateOfGame}</div>
+                <div className={styles.dateOfGame}>
+                  <span>{dateOfGame}</span>
+                  <span className={styles.generations}>{game.generations} generations</span>
+                </div>
                 <div key={id} className={styles.playerRow}>{
                   Object.entries(game.players ?? {}).map(([player, playerData], playerId) => (
                     <div key={playerId} className={styles.player}>

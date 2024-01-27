@@ -49,3 +49,18 @@
   display: inline-block;
   width: 50px;
 }
+
+.generations {
+  background-color: teal;
+  color: white;
+  display: inline-block;
+  margin-left: 5px;
+  padding: 2px 5px;
+  border-radius: 5px;
+  line-height: normal;
+  opacity: 0.5;
+}
+
+.generations:hover {
+  opacity: 1;
+}
