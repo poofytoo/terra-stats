@@ -5,7 +5,6 @@ import { Game } from './api/stats/route';
 
 import styles from './page.module.css';
 import cx from 'classnames';
-import Head from 'next/head';
 
 // round to two digits
 const round = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100;
@@ -32,38 +31,32 @@ const Home = () => {
     }
   } = {};
 
-
+  // Instantiate corporationWins with all corporations
   data?.forEach((game: Game) => {
-    Object.entries(game.players ?? {}).forEach(([_, playerData], key) => {
-      playerData.corporations?.forEach((corporation: string, corporationId) => {
-        if (corporationWins[corporation]?.plays) {
-          corporationWins[corporation].plays++;
-          if (corporationId === 0) {
-            // @ts-ignore - weird bug
-            corporationWins[corporation].mainPlays++;
-          }
-        } else {
+    Object.entries(game.players ?? {}).forEach(([_, playerData]) => {
+      playerData.corporations?.forEach((corporation: string) => {
+        if (!corporationWins[corporation]) {
           corporationWins[corporation] = {
-            plays: 1,
-            ...(corporationId === 0 ? { mainPlays: 1 } : { mainPlays: 0 })
+            wins: 0,
+            plays: 0,
+            mainPlays: 0,
+            mainWins: 0,
           };
         }
       });
-      if (key === 0) {
-        playerData.corporations?.forEach((corporation: string, corporationId) => {
-          if (corporationWins[corporation]?.wins) {
-            // @ts-ignore - weird bug
-            corporationWins[corporation].wins++;
-            if (corporationId === 0) {
-              // @ts-ignore - weird bug
-              corporationWins[corporation].mainWins++;
-            }
-          } else {
-            corporationWins[corporation].wins = 1;
-            corporationWins[corporation].mainWins = corporationId === 0 ? 1 : 0;
-          }
-        });
-      }
+    });
+  });
+
+  // Count the number of wins for each corporation
+  data?.forEach((game: Game) => {
+    Object.entries(game.players ?? {}).forEach(([_, playerData], playerId) => {
+      playerData.corporations?.forEach((corporation: string, corporationId) => {
+        corporationWins[corporation].plays++;
+        corporationWins[corporation].mainPlays = (corporationWins[corporation]?.mainPlays ?? 0) + (corporationId === 0 ? 1 : 0);
+        // playerId === 0 is the winner
+        corporationWins[corporation].wins = (corporationWins[corporation]?.wins ?? 0) + (playerId === 0 ? 1 : 0);
+        corporationWins[corporation].mainWins = (corporationWins[corporation]?.mainWins ?? 0) + ((playerId === 0 && corporationId === 0) ? 1 : 0);
+      });
     });
   });
 
@@ -80,20 +73,23 @@ const Home = () => {
     }
   } = {};
 
+  // Instantiate winsByPlayer with all players
   data?.forEach((game: Game) => {
-    Object.entries(game.players ?? {}).forEach(([player, playerData], id: number) => {
-      if (winsByPlayer[player]?.plays) {
-        winsByPlayer[player].plays++;
-      } else {
+    Object.entries(game.players ?? {}).forEach(([player]) => {
+      if (!winsByPlayer[player]) {
         winsByPlayer[player] = {
-          plays: 1,
+          plays: 0,
           wins: 0,
         };
       }
-      if (id === 0) {
-        // @ts-ignore - weird bug
-        winsByPlayer[player].wins++;
-      }
+    });
+  });
+
+  // Count the number of wins for each player
+  data?.forEach((game: Game) => {
+    Object.entries(game.players ?? {}).forEach(([player], id: number) => {
+      winsByPlayer[player].plays++;
+      winsByPlayer[player].wins = (winsByPlayer[player]?.wins ?? 0) + (id === 0 ? 1 : 0);
     });
   });
 
@@ -102,16 +98,8 @@ const Home = () => {
     winsByPlayer[player].winPercentage = round((playerStats.wins ?? 0) / playerStats.plays);
   });
 
-
-
-
   return (
     <div>
-      <Head>
-        <title>Terra-Stats</title>
-        <meta name="description" content="Terraforming Mars Stats" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <h1>Terra-Stats!</h1>
       <h2>Wins by Corporation (all wins/plays) <span className={styles.highlight}>(main wins/plays)</span></h2>
       <p>
@@ -152,6 +140,7 @@ const Home = () => {
             map((game: Game, id: number) => {
               const date = new Date(game.dateOfGame);
               const dateOfGame = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+
               return <>
                 <div className={styles.dateOfGame}>
                   <span>{dateOfGame}</span>

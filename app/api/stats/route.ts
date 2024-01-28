@@ -9,7 +9,7 @@ export interface Game {
   generations?: number;
   url?: string;
   fileName: string;
-  players?: {
+  players: {
     [name: string]: {
       displayName?: string;
       finalScore?: number;
@@ -63,6 +63,7 @@ export async function GET(request: Request) {
     const game: Game = {
       dateOfGame,
       fileName: file,
+      players: {}
     }
 
     try {
