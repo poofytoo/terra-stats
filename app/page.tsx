@@ -98,6 +98,26 @@ const Home = () => {
     winsByPlayer[player].winPercentage = round((playerStats.wins ?? 0) / playerStats.plays);
   });
 
+  // Get average time taken for each player
+  const timeTakenByPlayer: {
+    [player: string]: {
+      plays: number;
+      timeTaken: number;
+    }
+  } = {};
+
+  // Instantiate timeTakenByPlayer with all players
+  data?.forEach((game: Game) => {
+    Object.entries(game.players ?? {}).forEach(([player]) => {
+      if (!timeTakenByPlayer[player]) {
+        timeTakenByPlayer[player] = {
+          plays: 0,
+          timeTaken: 0,
+        };
+      }
+    });
+  });
+
   return (
     <div>
       <h1>Terra-Stats!</h1>

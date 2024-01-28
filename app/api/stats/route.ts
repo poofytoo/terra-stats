@@ -151,11 +151,23 @@ export async function GET(request: Request) {
 
             // add the timer to the player object. replace any <div> or </div> with a space, and trim the string.
             const timerString = tds[9].replace(/<\/?div.*?>/g, '').trim();
-            const minutes = parseInt(timerString.split(':')[0]);
-            const seconds = parseInt(timerString.split(':')[1]);
+            // if there are only two colons, then it's in the format of mm:ss. if there are three colons, then it's in the format of hh:mm:ss.
+            const colonCount = timerString.split(':').length;
+            let minutes = 0;
+            let seconds = 0;
+
+            if (colonCount === 2) {
+              minutes = parseInt(timerString.split(':')[0]);
+              seconds = parseInt(timerString.split(':')[1]);
+            } else if (colonCount === 3) {
+              const hours = parseInt(timerString.split(':')[0]);
+              minutes = parseInt(timerString.split(':')[1]) + (hours * 60);
+              seconds = parseInt(timerString.split(':')[2]);
+            }
+
             game.players[normalizedPlayerName].timer = {
               minutes,
-              seconds,
+              seconds
             }
 
             // actions taken
