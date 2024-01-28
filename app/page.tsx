@@ -125,7 +125,7 @@ const Home = () => {
           </div>
         ))
       }
-      <h2>All Games</h2>
+      <h2>All Games ({data.length})</h2>
       <div className={styles.allDataContainer}>
         <div className={styles.allDataContainer}>
           {data?.sort((a: Game, b: Game) => {
@@ -155,7 +155,14 @@ const Home = () => {
                       </div>
                       <div className={styles.playerScore}>{playerData.finalScore}</div>
                       <div className={styles.details}>
-                        <span className={styles.subtle}>Actions:</span> {playerData.actionsTaken}
+                        <span title="actions">
+                          <span className={styles.subtle}>🚀&nbsp;</span>
+                          {playerData.actionsTaken}
+                        </span>{" "}
+                        <span title="time taken">
+                          <span className={styles.subtle}>⏱️&nbsp;</span>
+                          {playerData.timer?.minutes}:{(playerData.timer?.seconds ?? "0").toString().padStart(2, "0")}
+                        </span>
                       </div>
                       <div className={styles.playerCorporation}>{playerData.corporations?.map((corporation) => {
                         return <div key={corporation} className={

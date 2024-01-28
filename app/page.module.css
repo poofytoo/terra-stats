@@ -3,10 +3,12 @@
 .playerRow {
   display: flex;
   margin-top: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .player {
-  width: 150px;
+  width: 170px;
 }
 
 .playerCorporation {
@@ -16,6 +18,7 @@
 
 .playerScore {
   font-weight: bold;
+  font-size: 24px;
 }
 
 .dateOfGame {
@@ -32,7 +35,7 @@
 }
 
 .subtle {
-  opacity: 0.4
+  opacity: 0.5
 }
 
 .details {
