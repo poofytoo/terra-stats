@@ -5,6 +5,7 @@ import { Game } from './api/stats/route';
 
 import styles from './page.module.css';
 import cx from 'classnames';
+import Head from 'next/head';
 
 // round to two digits
 const round = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100;
@@ -106,6 +107,11 @@ const Home = () => {
 
   return (
     <div>
+      <Head>
+        <title>Terra-Stats</title>
+        <meta name="description" content="Terraforming Mars Stats" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <h1>Terra-Stats!</h1>
       <h2>Wins by Corporation (all wins/plays) <span className={styles.highlight}>(main wins/plays)</span></h2>
       <p>
