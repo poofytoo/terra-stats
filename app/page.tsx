@@ -118,6 +118,26 @@ const Home = () => {
     });
   });
 
+
+  let mostActions = 0;
+  data?.forEach((game: Game) => {
+    Object.entries(game.players ?? {}).forEach(([player, playerData]) => {
+      if (playerData.actionsTaken && (playerData.actionsTaken ?? 0) > mostActions) {
+        mostActions = playerData.actionsTaken;
+      }
+    });
+  });
+
+  let shortestTimeSeconds = Number.MAX_SAFE_INTEGER;
+  data?.forEach((game: Game) => {
+    Object.entries(game.players ?? {}).forEach(([player, playerData]) => {
+      const timeInSeconds = (playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds);
+      if (timeInSeconds < shortestTimeSeconds) {
+        shortestTimeSeconds = timeInSeconds;
+      }
+    });
+  });
+
   return (
     <div>
       <h1>Terra-Stats!</h1>
@@ -168,7 +188,11 @@ const Home = () => {
                 </div>
                 <div key={id} className={styles.playerRow}>{
                   Object.entries(game.players ?? {}).map(([player, playerData], playerId) => (
-                    <div key={playerId} className={styles.player}>
+                    <div key={playerId} className={cx(styles.player,
+                      {
+                        [styles.mostActions]: playerData.actionsTaken === mostActions,
+                        [styles.shortestTime]: (playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds) === shortestTimeSeconds,
+                      })}>
                       <div className={styles.playerName}>
                         {player}
                         {playerId === 0 && <span className={styles.winner}> 🏆</span>}
