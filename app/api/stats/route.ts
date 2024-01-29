@@ -19,9 +19,10 @@ export interface Game {
       greeneryPoints?: number;
       cityPoints?: number;
       victoryPoints?: number;
-      timer?: {
-        minutes?: number;
-        seconds?: number;
+      timer: {
+        minutes: number;
+        seconds: number;
+        hours: number;
       };
       actionsTaken?: number;
       corporations?: string[];
@@ -125,6 +126,11 @@ export async function GET(request: Request) {
                 [normalizedPlayerName]: {
                   displayName: playerName,
                   finalScore: 0,
+                  timer: {
+                    minutes: 0,
+                    seconds: 0,
+                    hours: 0,
+                  }
                 }
               }
             }
@@ -153,6 +159,7 @@ export async function GET(request: Request) {
             const timerString = tds[9].replace(/<\/?div.*?>/g, '').trim();
             // if there are only two colons, then it's in the format of mm:ss. if there are three colons, then it's in the format of hh:mm:ss.
             const colonCount = timerString.split(':').length;
+            let hours = 0;
             let minutes = 0;
             let seconds = 0;
 
@@ -160,14 +167,15 @@ export async function GET(request: Request) {
               minutes = parseInt(timerString.split(':')[0]);
               seconds = parseInt(timerString.split(':')[1]);
             } else if (colonCount === 3) {
-              const hours = parseInt(timerString.split(':')[0]);
-              minutes = parseInt(timerString.split(':')[1]) + (hours * 60);
+              hours = parseInt(timerString.split(':')[0]);
+              minutes = parseInt(timerString.split(':')[1]);
               seconds = parseInt(timerString.split(':')[2]);
             }
 
             game.players[normalizedPlayerName].timer = {
               minutes,
-              seconds
+              seconds,
+              hours,
             }
 
             // actions taken

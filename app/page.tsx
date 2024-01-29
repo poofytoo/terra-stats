@@ -176,12 +176,13 @@ const Home = () => {
                       <div className={styles.playerScore}>{playerData.finalScore}</div>
                       <div className={styles.details}>
                         <span title="actions">
-                          <span className={styles.subtle}>🚀&nbsp;</span>
+                          <span className={styles.subtle}>➡️&nbsp;</span>
                           {playerData.actionsTaken}
                         </span>{" "}
                         <span title="time taken">
                           <span className={styles.subtle}>⏱️&nbsp;</span>
-                          {playerData.timer?.minutes}:{(playerData.timer?.seconds ?? "0").toString().padStart(2, "0")}
+                          {playerData.timer.hours ? `${playerData.timer.hours}:` : ""}
+                          {playerData.timer?.minutes.toString().padStart(2, "0")}:{(playerData.timer?.seconds).toString().padStart(2, "0")}
                         </span>
                       </div>
                       <div className={styles.playerCorporation}>{playerData.corporations?.map((corporation) => {
