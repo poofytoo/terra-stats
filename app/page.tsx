@@ -138,6 +138,15 @@ const Home = () => {
     });
   });
 
+  let fastestWin = Number.MAX_SAFE_INTEGER;
+  data?.forEach((game: Game) => {
+    const winner = Object.entries(game.players)[0][1];
+    const timeInSeconds = (winner.timer.hours) * 60 * 60 + (winner.timer.minutes) * 60 + (winner.timer.seconds);
+    if (timeInSeconds < fastestWin) {
+      fastestWin = timeInSeconds;
+    }
+  });
+
   return (
     <div>
       <h1>Terra-Stats!</h1>
@@ -191,7 +200,8 @@ const Home = () => {
                     <div key={playerId} className={cx(styles.player,
                       {
                         [styles.mostActions]: playerData.actionsTaken === mostActions,
-                        [styles.shortestTime]: (playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds) === shortestTimeSeconds,
+                        [styles.shortestTime]: ((playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds) === shortestTimeSeconds) && playerId !== 0,
+                        [styles.fastestWin]: ((playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds) === fastestWin) && playerId === 0,
                       })}>
                       <div className={styles.playerName}>
                         {player}

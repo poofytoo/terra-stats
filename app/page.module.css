@@ -105,7 +105,7 @@
   font-size: 12px;
 }
 
-.mostActions:after {
+.mostActions:after, .shortestTime:after, .fastestWin:after {
   content: "➡️ Most Actions!";
   color: orange;
   font-size: 12px;
@@ -118,21 +118,25 @@
 .shortestTime:after {
   content: "⏱️ Shortest Time!";
   color: hotpink;
-  font-size: 12px;
-  font-weight: bold;
-  text-align: right;
-  display: block;
-  width: 100%;
 }
 
-.mostActions, .shortestTime {
+.fastestWin:after {
+  content: "⏱️ Fastest Win!";
+  color: purple;
+}
+
+.mostActions, .shortestTime, .fastestWin {
   position: relative;
   padding: 5px 8px;
   border-radius: 5px;
   line-height: normal;
-  border: 1px solid orange;
+  border: 2px solid orange;
 }
 
 .shortestTime {
-  border: 1px solid hotpink;
+  border-color: hotpink;
+}
+
+.fastestWin {
+  border-color: purple;
 }
