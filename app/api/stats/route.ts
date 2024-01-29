@@ -150,7 +150,7 @@ export async function GET(request: Request) {
             game.players[normalizedPlayerName].finalScore = parseInt(tds[7]);
 
             // add the victory points to the player object.
-            game.players[normalizedPlayerName].victoryPoints = parseInt(tds[8].replace(/<\/?div.*?>/g, '').trim());
+            game.players[normalizedPlayerName].victoryPoints = parseInt(tds[6].replace(/<\/?div.*?>/g, '').trim());
 
             // add the score to the player object.
             game.players[normalizedPlayerName].terraformingRating = parseInt(tds[1]);

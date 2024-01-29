@@ -44,7 +44,7 @@
   background-color: #eee;
   border-radius: 3px;
   padding: 2px 5px;
-  margin: 5px 0;
+  margin: 0 0 5px 0;
   display: inline-block;
 }
 
@@ -66,4 +66,41 @@
 
 .generations:hover {
   opacity: 1;
+}
+
+.victoryPoints:before {
+  content: "VP";
+  width: 16px;
+  font-size: 8px;
+  height: 16px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: goldenrod;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.terraformingRating:before {
+  content: "TR";
+  width: 19px;
+  font-size: 8px;
+  height: 13px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(209, 73, 0);
+  color: white;
+  border-radius: 2px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.victoryPoints, .terraformingRating {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 2px;
+  font-size: 12px;
 }

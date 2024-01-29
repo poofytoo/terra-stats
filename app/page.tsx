@@ -174,6 +174,14 @@ const Home = () => {
                         {playerId === 0 && <span className={styles.winner}> 🏆</span>}
                       </div>
                       <div className={styles.playerScore}>{playerData.finalScore}</div>
+                      <div className={styles.pointsBreakdown}>
+                        <span className={styles.victoryPoints}>
+                          {playerData.victoryPoints}
+                        </span>{" "}
+                        <span className={styles.terraformingRating}>
+                          {playerData.terraformingRating}
+                        </span>
+                      </div>
                       <div className={styles.details}>
                         <span title="actions">
                           <span className={styles.subtle}>➡️&nbsp;</span>
