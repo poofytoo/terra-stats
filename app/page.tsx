@@ -147,6 +147,21 @@ const Home = () => {
     }
   });
 
+  let highestVp = 0;
+  let highestTr = 0;
+  data?.forEach((game: Game) => {
+    Object.entries(game.players ?? {}).forEach(([_, playerData]) => {
+      if (playerData.victoryPoints && (playerData.victoryPoints ?? 0) > highestVp) {
+        highestVp = playerData.victoryPoints;
+      }
+      if (playerData.terraformingRating && (playerData.terraformingRating ?? 0) > highestTr) {
+        highestTr = playerData.terraformingRating;
+      }
+    });
+  });
+
+  console.log(highestVp);
+
   return (
     <div>
       <h1>Terra-Stats!</h1>
@@ -202,6 +217,8 @@ const Home = () => {
                         [styles.mostActions]: playerData.actionsTaken === mostActions,
                         [styles.shortestTime]: ((playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds) === shortestTimeSeconds) && playerId !== 0,
                         [styles.fastestWin]: ((playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds) === fastestWin) && playerId === 0,
+                        [styles.highestVp]: playerData.victoryPoints === highestVp,
+                        [styles.highestTr]: playerData.terraformingRating === highestTr,
                       })}>
                       <div className={styles.playerName}>
                         {player}
