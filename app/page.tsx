@@ -98,67 +98,55 @@ const Home = () => {
     winsByPlayer[player].winPercentage = round((playerStats.wins ?? 0) / playerStats.plays);
   });
 
-  // Get average time taken for each player
-  const timeTakenByPlayer: {
-    [player: string]: {
-      plays: number;
-      timeTaken: number;
-    }
-  } = {};
+  // // Get average time taken for each player
+  // const timeTakenByPlayer: {
+  //   [player: string]: {
+  //     plays: number;
+  //     timeTaken: number;
+  //   }
+  // } = {};
 
-  // Instantiate timeTakenByPlayer with all players
-  data?.forEach((game: Game) => {
-    Object.entries(game.players ?? {}).forEach(([player]) => {
-      if (!timeTakenByPlayer[player]) {
-        timeTakenByPlayer[player] = {
-          plays: 0,
-          timeTaken: 0,
-        };
-      }
-    });
-  });
-
+  // // Instantiate timeTakenByPlayer with all players
+  // data?.forEach((game: Game) => {
+  //   Object.entries(game.players ?? {}).forEach(([player]) => {
+  //     if (!timeTakenByPlayer[player]) {
+  //       timeTakenByPlayer[player] = {
+  //         plays: 0,
+  //         timeTaken: 0,
+  //       };
+  //     }
+  //   });
+  // });
 
   let mostActions = 0;
-  data?.forEach((game: Game) => {
-    Object.entries(game.players ?? {}).forEach(([player, playerData]) => {
-      if (playerData.actionsTaken && (playerData.actionsTaken ?? 0) > mostActions) {
-        mostActions = playerData.actionsTaken;
-      }
-    });
-  });
-
   let shortestTimeSeconds = Number.MAX_SAFE_INTEGER;
-  data?.forEach((game: Game) => {
-    Object.entries(game.players ?? {}).forEach(([player, playerData]) => {
-      const timeInSeconds = (playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds);
-      if (timeInSeconds < shortestTimeSeconds) {
-        shortestTimeSeconds = timeInSeconds;
-      }
-    });
-  });
-
   let fastestWin = Number.MAX_SAFE_INTEGER;
+  let highestVp = 0;
+  let highestTr = 0;
+
   data?.forEach((game: Game) => {
     const winner = Object.entries(game.players)[0][1];
     const timeInSeconds = (winner.timer.hours) * 60 * 60 + (winner.timer.minutes) * 60 + (winner.timer.seconds);
     if (timeInSeconds < fastestWin) {
       fastestWin = timeInSeconds;
     }
-  });
-
-  let highestVp = 0;
-  let highestTr = 0;
-  data?.forEach((game: Game) => {
     Object.entries(game.players ?? {}).forEach(([_, playerData]) => {
+      const playerTimeInSeconds = (playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds);
+      if (playerTimeInSeconds < shortestTimeSeconds) {
+        shortestTimeSeconds = playerTimeInSeconds;
+      }
       if (playerData.victoryPoints && (playerData.victoryPoints ?? 0) > highestVp) {
         highestVp = playerData.victoryPoints;
       }
       if (playerData.terraformingRating && (playerData.terraformingRating ?? 0) > highestTr) {
         highestTr = playerData.terraformingRating;
       }
+      if (playerData.actionsTaken && (playerData.actionsTaken ?? 0) > mostActions) {
+        mostActions = playerData.actionsTaken;
+      }
     });
   });
+
 
   console.log(highestVp);
 
