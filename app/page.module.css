@@ -10,6 +10,9 @@
 
 .player {
   width: 170px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  padding: 10px 15px;
+  border-radius: 8px;
 }
 
 .playerCorporation {
@@ -23,8 +26,7 @@
 }
 
 .dateOfGame {
-  border-top: 1px solid teal;
-  margin-top: 10px;
+  margin-top: 20px;
   padding-top: 10px;
   font-size: 12px;
   line-height: 1.1em;
@@ -153,8 +155,6 @@
 
 .mostActions, .shortestTime, .fastestWin, .highestVp, .highestTr {
   position: relative;
-  padding: 5px 8px;
-  border-radius: 5px;
   line-height: normal;
   border: 2px solid orange;
 }
