@@ -186,8 +186,7 @@ export async function GET(request: Request) {
             }
 
             // actions taken
-            game.players[normalizedPlayerName].actionsTaken = parseInt(tds[10].replace(/<\/?div.*?>/g, '').trim());
-
+            game.players[normalizedPlayerName].actionsTaken = parseInt(tds[10 + hasEscapeVelocity].replace(/<\/?div.*?>/g, '').trim());
           }
 
           rows.push(tds);
