@@ -19,6 +19,7 @@ export interface Game {
       greeneryPoints?: number;
       cityPoints?: number;
       victoryPoints?: number;
+      megaCredits?: number;
       timer: {
         minutes: number;
         seconds: number;
@@ -154,6 +155,9 @@ export async function GET(request: Request) {
 
             // add the score to the player object.
             game.players[normalizedPlayerName].terraformingRating = parseInt(tds[1]);
+
+            // add the score to the player object.
+            game.players[normalizedPlayerName].megaCredits = parseInt(tds[8].replace(/<\/?div.*?>/g, '').trim());
 
             // add the timer to the player object. replace any <div> or </div> with a space, and trim the string.
             const timerString = tds[9].replace(/<\/?div.*?>/g, '').trim();

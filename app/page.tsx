@@ -147,9 +147,6 @@ const Home = () => {
     });
   });
 
-
-  console.log(highestVp);
-
   return (
     <div>
       <h1>Terra-Stats!</h1>
@@ -219,6 +216,9 @@ const Home = () => {
                         </span>{" "}
                         <span className={styles.terraformingRating}>
                           {playerData.terraformingRating}
+                        </span>{" "}
+                        <span className={styles.megaCredits}>
+                          {playerData.megaCredits}
                         </span>
                       </div>
                       <div className={styles.details}>

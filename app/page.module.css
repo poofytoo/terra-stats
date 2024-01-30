@@ -99,7 +99,22 @@
   margin-right: 5px;
 }
 
-.victoryPoints, .terraformingRating {
+.megaCredits:before {
+  content: "$";
+  width: 14px;
+  font-size: 10px;
+  height: 14px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--mc);
+  color: white;
+  border-radius: 3px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.victoryPoints, .terraformingRating, .megaCredits {
   display: inline-flex;
   align-items: center;
   margin-right: 2px;
