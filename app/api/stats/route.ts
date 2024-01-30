@@ -136,6 +136,9 @@ export async function GET(request: Request) {
               }
             }
 
+            // see if this html "<th data-tooltip="Escape Velocity penalty" class="clock-icon tooltip tooltip-top">⏳</th>" is in the entire html
+            const hasEscapeVelocity = fileContent.includes('<th data-tooltip="Escape Velocity penalty" class="clock-icon tooltip tooltip-top">⏳</th>') ? 1 : 0;
+
             // add the corporation name to the player object.
             game.players[normalizedPlayerName].corporations = corporationList;
 
@@ -148,7 +151,7 @@ export async function GET(request: Request) {
             game.players[normalizedPlayerName].cityPoints = parseInt(tds[5]);
 
             // add the score to the player object.
-            game.players[normalizedPlayerName].finalScore = parseInt(tds[7]);
+            game.players[normalizedPlayerName].finalScore = parseInt(tds[7 + hasEscapeVelocity]);
 
             // add the victory points to the player object.
             game.players[normalizedPlayerName].victoryPoints = parseInt(tds[6].replace(/<\/?div.*?>/g, '').trim());
@@ -157,10 +160,10 @@ export async function GET(request: Request) {
             game.players[normalizedPlayerName].terraformingRating = parseInt(tds[1]);
 
             // add the score to the player object.
-            game.players[normalizedPlayerName].megaCredits = parseInt(tds[8].replace(/<\/?div.*?>/g, '').trim());
+            game.players[normalizedPlayerName].megaCredits = parseInt(tds[8 + hasEscapeVelocity].replace(/<\/?div.*?>/g, '').trim());
 
             // add the timer to the player object. replace any <div> or </div> with a space, and trim the string.
-            const timerString = tds[9].replace(/<\/?div.*?>/g, '').trim();
+            const timerString = tds[9 + hasEscapeVelocity].replace(/<\/?div.*?>/g, '').trim();
             // if there are only two colons, then it's in the format of mm:ss. if there are three colons, then it's in the format of hh:mm:ss.
             const colonCount = timerString.split(':').length;
             let hours = 0;
