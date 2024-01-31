@@ -93,7 +93,6 @@ const Home = () => {
     });
   });
 
-  // add winPercentage to winsbyplayer and store in winsByPlayer
   Object.entries(winsByPlayer).forEach(([player, playerStats]) => {
     winsByPlayer[player].winPercentage = round((playerStats.wins ?? 0) / playerStats.plays);
   });
