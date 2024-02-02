@@ -6,6 +6,12 @@ import { Game } from './api/stats/route';
 import styles from './page.module.css';
 import cx from 'classnames';
 
+// round to two digits. if there are no digits after the decimal, include zeros up to two digits (or 0.30 or 0.00)
+const percentageWithTwoSigFigs = (num: number): string => {
+  const rounded = round(num * 100);
+  return (rounded % 1 === 0 ? `${rounded}.00` : rounded % 0.1 === 0 ? `${rounded}0` : `${rounded}`) + '%';
+}
+
 // round to two digits
 const round = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100;
 
@@ -94,7 +100,7 @@ const Home = () => {
   });
 
   Object.entries(winsByPlayer).forEach(([player, playerStats]) => {
-    winsByPlayer[player].winPercentage = round((playerStats.wins ?? 0) / playerStats.plays);
+    winsByPlayer[player].winPercentage = (playerStats.wins ?? 0) / playerStats.plays;
   });
 
   // // Get average time taken for each player
@@ -169,7 +175,7 @@ const Home = () => {
           return (b[1].winPercentage ?? 0) - (a[1].winPercentage ?? 0);
         }).map(([player, playerStats]) => (
           <div key={player}>
-            <span className={styles.winPercentage}>{Math.round((playerStats.winPercentage ?? 0) * 100)}%</span>{player} ({playerStats.wins ?? 0}/{playerStats.plays})
+            <span className={styles.winPercentage}>{percentageWithTwoSigFigs(playerStats.winPercentage ?? 0)}</span>{player} ({playerStats.wins ?? 0}/{playerStats.plays})
           </div>
         ))
       }

@@ -17,12 +17,13 @@
 
 .playerCorporation {
   font-size: 12px;
-  line-height: 1.3em;
+  line-height: 1.4em;
 }
 
 .playerScore {
   font-weight: bold;
   font-size: 24px;
+  margin-top: 5px;
 }
 
 .dateOfGame {
@@ -53,7 +54,9 @@
 
 .winPercentage {
   display: inline-block;
-  width: 50px;
+  width: 70px;
+  text-align: right;
+  margin-right: 15px;
 }
 
 .generations {
