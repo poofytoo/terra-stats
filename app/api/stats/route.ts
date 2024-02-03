@@ -18,6 +18,11 @@ const notableCollections = [
   "Floating Habs",
   "Tardigrades",
   "Jovian Lanterns",
+  "Io Mining Industries",
+  "Ganymede Colony",
+  "St. Joseph of Cupertino Mission",
+  "Water Import From Europa",
+  "Extremophiles",
 ];
 
 export interface vpCard {

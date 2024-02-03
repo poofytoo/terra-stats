@@ -61,6 +61,10 @@ export const Corporations = ({ data }: { data: Game[] }) => {
     {sortedCorporations.filter((_, id) => showAll ? true : (id < topCorporationCount) || (id > sortedCorporations.length - bottomCorporationCount - 1)).map(([corporation, corporationStats], id) => (<>
       {(id === topCorporationCount && !showAll) && <div key={'...'}>
         <div>
+          ...<br />
+          <button onClick={() => {
+            setShowAll(!showAll);
+          }}>{showAll ? "Hide" : "Show all"}</button><br />
           ...
         </div>
       </div>}
@@ -71,10 +75,11 @@ export const Corporations = ({ data }: { data: Game[] }) => {
         </div>
       </div></>
     ))}
-    <p>
-      <button onClick={() => {
-        setShowAll(!showAll);
-      }}>{showAll ? "Hide" : "Show all"}</button>
-    </p>
+    {showAll &&
+      <p>
+        <button onClick={() => {
+          setShowAll(!showAll);
+        }}>Hide</button>
+      </p>}
   </div>
 }

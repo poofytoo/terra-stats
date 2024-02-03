@@ -1,9 +1,9 @@
 .corporationDataContainer {
-  border: 1px solid #aaa;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
   padding: 20px;
   margin-bottom: 20px;
   border-radius: var(--round);
-  flex: 1 1 100px;
+  flex: 5 0 200px;
 }
 
 .highlight {
