@@ -1,4 +1,4 @@
-import styles from "@/components/players/Players.module.css";
+import styles from "@/components/Players/Players.module.css";
 
 import { Game } from "@/app/api/stats/route";
 

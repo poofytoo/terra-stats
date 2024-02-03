@@ -16,6 +16,14 @@
   border-radius: 8px;
 }
 
+.player:after {
+  font-size: 12px;
+  font-weight: bold;
+  width: 100%;
+  display: block;
+  text-align: right;
+}
+
 .playerCorporation {
   font-size: 12px;
   line-height: 1.4em;
@@ -113,14 +121,22 @@
   margin-right: 5px;
 }
 
-.victoryPoints, .terraformingRating, .megaCredits {
+.victoryPoints, 
+.terraformingRating, 
+.megaCredits {
   display: inline-flex;
   align-items: center;
   margin-right: 2px;
   font-size: 12px;
 }
 
-.mostActions:after, .shortestTime:after, .fastestWin:after, .highestVp:after, .highestTr:after {
+.mostActions:after, 
+.shortestTime:after, 
+.fastestWin:after, 
+.highestVp:after, 
+.highestTr:after 
+.lowestVpWin:after
+{
   content: "➡️ Most Actions!";
   color: orange;
   font-size: 12px;
@@ -145,12 +161,22 @@
   color: var(--vp);
 }
 
+.lowestVpWin:after {
+  content: "Lowest VP Win!";
+  color: var(--vp);
+}
+
 .highestTr:after {
   content: "Highest TR!";
   color: var(--tr);
 }
 
-.mostActions, .shortestTime, .fastestWin, .highestVp, .highestTr {
+.mostActions, 
+.shortestTime, 
+.fastestWin, 
+.highestVp, 
+.highestTr,
+.lowestVpWin {
   position: relative;
   line-height: normal;
   border: 2px solid orange;
@@ -164,7 +190,7 @@
   border-color: purple;
 }
 
-.highestVp {
+.highestVp, .lowestVpWin {
   border-color: var(--vp);
 }
 

@@ -24,6 +24,7 @@ const Home = () => {
   let mostActions = 0;
   let shortestTimeSeconds = Number.MAX_SAFE_INTEGER;
   let fastestWin = Number.MAX_SAFE_INTEGER;
+  let lowestVpWin = Number.MAX_SAFE_INTEGER;
   let highestVp = 0;
   let highestTr = 0;
 
@@ -46,6 +47,9 @@ const Home = () => {
       }
       if (playerData.actionsTaken && (playerData.actionsTaken ?? 0) > mostActions) {
         mostActions = playerData.actionsTaken;
+      }
+      if (playerData.victoryPoints && (playerData.victoryPoints ?? Number.MAX_SAFE_INTEGER) < lowestVpWin) {
+        lowestVpWin = playerData.victoryPoints;
       }
     });
   });
@@ -86,6 +90,7 @@ const Home = () => {
                         [styles.shortestTime]: ((playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds) === shortestTimeSeconds) && playerId !== 0,
                         [styles.fastestWin]: ((playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds) === fastestWin) && playerId === 0,
                         [styles.highestVp]: playerData.victoryPoints === highestVp,
+                        [styles.lowestVpWin]: playerData.victoryPoints === lowestVpWin && playerId === 0,
                         [styles.highestTr]: playerData.terraformingRating === highestTr,
                       })}>
                       <div className={styles.playerName}>
