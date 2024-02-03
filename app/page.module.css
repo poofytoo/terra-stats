@@ -6,6 +6,7 @@
   margin-top: 10px;
   flex-wrap: wrap;
   gap: 10px;
+  align-items: flex-start;
 }
 
 .player {
@@ -176,4 +177,33 @@
 
 .highestTr {
   border-color: var(--tr);
+}
+
+.vpCard {
+  margin-bottom: 0;
+  font-size: 12px;
+  line-height: 1.4em;
+  color: black;
+  padding: 3px 7px;
+  background-color: rgb(244, 234, 216);
+  border-radius: 5px;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.notableCollections {
+  margin-top: 6px;
+  margin-bottom: 5px;
+}
+
+.vpCardName {
+  text-align: left;
+  justify-self: flex-start;
+}
+
+.vpCard .victoryPoints {
+  font-weight: bold;
+  font-size: 14px;
 }

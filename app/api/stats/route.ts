@@ -3,6 +3,22 @@ import fs from 'fs/promises';
 import path from 'path';
 import { promises as fsPromises } from 'fs';
 
+const notableCollections = [
+  "Stratospheric Birds",
+  "Venusian Animals",
+  "Ants",
+  "Venusian Insects",
+  "Penguins",
+  "Birds",
+  "Livestock",
+  "Physics Complex",
+  "Pets",
+]
+export interface vpCard {
+  vp: number;
+  cardName: string;
+  isNotable?: boolean;
+}
 export interface Game {
   dateOfGame: Date;
   playerCount?: number;
@@ -27,9 +43,11 @@ export interface Game {
       };
       actionsTaken?: number;
       corporations?: string[];
+      vpCards?: vpCard[];
     }
   }
 }
+
 type processedData = Game[];
 
 async function getAllFilesInFolder(folderPath: string): Promise<string[]> {
@@ -56,6 +74,13 @@ export async function GET(request: Request) {
   const files = await getAllFilesInFolder('data');
   const htmlFiles = files.filter(file => file.endsWith('.html'));
   const processedData: processedData = [];
+
+  const notableCollectionRecords = notableCollections.map(collection => {
+    return {
+      collection,
+      vp: 0,
+    }
+  })
 
   for (const file of htmlFiles) {
     const filePath = path.join(process.cwd(), 'data', file);
@@ -187,6 +212,80 @@ export async function GET(request: Request) {
         }
       }
 
+      // look for divs named game-end-column; split the content into sections where that occurs. ignore the first section. within each section, there are multiple instances of two divs, which is always in pairs. one that is game-end-column-vp and one that is game-end-column-text. grab the vp and text and place it into an array. do this for every section
+      const splitRegex = /<div class="game-end-column">/gs;
+      const splitMatch = fileContent.split(splitRegex);
+
+      // ignore the first section
+      const vpSections = splitMatch.slice(1);
+
+      // for each section, grab the vp and text and place it into an array.
+
+      // iterate through each section. for each section, console log the id
+      for (const id in vpSections) {
+        const section = vpSections[id];
+
+        const vpRegex = /<div class="game-end-column-vp">(.*?)<\/div>/gs;
+        const textRegex = /<div class="game-end-column-text">(.*?)<\/div>/gs;
+        const vpMatches: string[] = [];
+        const textMatches: string[] = [];
+        let vpMatch;
+        let textMatch;
+
+        while ((vpMatch = vpRegex.exec(section)) !== null) {
+          vpMatches.push(vpMatch[1]);
+        }
+        while ((textMatch = textRegex.exec(section)) !== null) {
+          textMatches.push(textMatch[1]);
+        }
+
+        const vpCards: vpCard[] = [];
+
+        for (let i = 0; i < vpMatches.length; i++) {
+          // ignore white space like &nbsp;
+          let cardName = textMatches[i].replace(/<\/?span.*?>/g, '');
+
+          // if the cardname contains the phrase `funded by X`, we want to replace X which is the original player name with the normalized player name.
+          const fundedByRegex = /\(funded by (.*?)\)/;
+          const fundedByMatch = fundedByRegex.exec(cardName);
+          if (fundedByMatch) {
+            const originalPlayerName = fundedByMatch[1];
+            let normalizedPlayerName = originalPlayerName;
+            Object.entries(normalizedPlayerNames).forEach(([normalizedName, names]) => {
+              if (names.map(name => name.toLowerCase()).includes(originalPlayerName.toLowerCase())) {
+                normalizedPlayerName = normalizedName;
+              }
+            });
+            cardName = cardName.replace(fundedByRegex, `(funded by ${normalizedPlayerName})`);
+          }
+          // remove double spaces
+          cardName = cardName.replace(/  /g, ' ');
+
+          if (textMatches[i].replace(/&nbsp;/g, '') !== '') {
+            vpCards.push({
+              vp: parseInt(vpMatches[i]),
+              cardName
+            });
+          }
+        }
+
+        game.players[Object.keys(game.players)[id]].vpCards = vpCards;
+      }
+
+      // look through each player's vp cards. if the card name is in the notableCollections array. if the vp is greater than the existing value in the corresponding notableCollectionRecords array, replace it.
+
+      for (const playerName in game.players) {
+        const player = game.players[playerName];
+        if (!player.vpCards) {
+          continue;
+        }
+        for (const vpCard of player.vpCards) {
+          const notableCollectionRecord = notableCollectionRecords.find(collection => collection.collection === vpCard.cardName);
+          if (notableCollectionRecord && vpCard.vp > notableCollectionRecord.vp) {
+            notableCollectionRecord.vp = vpCard.vp;
+          }
+        }
+      }
 
       // look for a div with the class named log-gen-numbers and get the contents with regex. The contents within that will look something like: <div class="log-gen-indicator">1</div><div class="log-gen-indicator">2</div><div class="log-gen-indicator">3</div>... etc. we want to get the highest number and that will be the generation count.
       const generationRegex = /<div class="log-gen-indicator">(.*?)<\/div>/gs;
@@ -209,6 +308,23 @@ export async function GET(request: Request) {
 
     } catch (error) {
       console.error(`Error reading file ${file}:`, error);
+    }
+  }
+
+  // for each game, look through each player's vp cards. if the card name is in the notableCollections array, and if the vp is within 5 of the highest vp in notableCollectionRecords, set isNotable to true.
+
+  for (const game of processedData) {
+    for (const playerName in game.players) {
+      const player = game.players[playerName];
+      if (!player.vpCards) {
+        continue;
+      }
+      for (const vpCard of player.vpCards) {
+        const notableCollectionRecord = notableCollectionRecords.find(collection => collection.collection === vpCard.cardName);
+        if (notableCollectionRecord && vpCard.vp >= notableCollectionRecord.vp - 5 && vpCard.vp > 5) {
+          vpCard.isNotable = true;
+        }
+      }
     }
   }
 

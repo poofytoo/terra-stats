@@ -237,13 +237,27 @@ const Home = () => {
                           {playerData.timer?.minutes.toString().padStart(2, "0")}:{(playerData.timer?.seconds).toString().padStart(2, "0")}
                         </span>
                       </div>
-                      <div className={styles.playerCorporation}>{playerData.corporations?.map((corporation) => {
-                        return <div key={corporation} className={
-                          cx({
-                            [styles.subtle]: playerData.corporations?.[0] !== corporation,
-                          })
-                        }>{corporation}</div>
-                      })}</div>
+                      <div className={styles.playerCorporation}>
+                        {playerData.corporations?.map((corporation) => {
+                          return <div key={corporation} className={
+                            cx({
+                              [styles.subtle]: playerData.corporations?.[0] !== corporation,
+                            })
+                          }>{corporation}</div>
+                        })}
+                      </div>
+                      <div className={styles.notableCollections}>
+                        {playerData.vpCards?.filter(vpCard => vpCard.isNotable).map((vpCard, key) => {
+                          return <div key={key} className={styles.vpCard}>
+                            <span className={styles.victoryPoints}>
+                              {vpCard.vp}
+                            </span>
+                            <span className={styles.vpCardName}>
+                              {vpCard.cardName}!
+                            </span>
+                          </div>
+                        })}
+                      </div>
                     </div>
                   ))
                 }
