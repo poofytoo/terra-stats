@@ -135,7 +135,7 @@
   font-weight: bold;
   margin-right: 5px;
   margin-left: -17px;
-  margin-top: -3px;
+  top: -1px;
 }
 
 .victoryPoints, 
@@ -146,6 +146,7 @@
   align-items: center;
   margin-right: 2px;
   font-size: 12px;
+  position: relative;
 }
 
 .greeneryPoints {
@@ -231,7 +232,6 @@
 }
 
 .vpCard {
-  margin-bottom: 0;
   font-size: 12px;
   line-height: 1.4em;
   color: black;
