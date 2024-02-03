@@ -15,7 +15,10 @@ const notableCollections = [
   "Pets",
   "Fish",
   "Immigration Shuttles",
-]
+  "Floating Habs",
+  "Tardigrades",
+];
+
 export interface vpCard {
   vp: number;
   cardName: string;
