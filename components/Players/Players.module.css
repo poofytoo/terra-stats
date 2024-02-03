@@ -1,9 +1,8 @@
 .playersDataContainer {
   box-shadow: 0 0 15px rgba(0,0,0,0.1);
   padding: 20px;
-  margin-bottom: 20px;
   border-radius: var(--round);
-  flex: 1 0 100px;
+  flex: 1 0 200px;
 }
 
 .winPercentage {

@@ -12,8 +12,9 @@
 .player {
   width: 180px;
   box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  padding: 10px 15px;
+  padding: 10px 13px;
   border-radius: 8px;
+  line-height: normal;
 }
 
 .player:after {
@@ -209,7 +210,6 @@
 .lowestVpWin,
 .mostGreeneryPoints {
   position: relative;
-  line-height: normal;
   border: 2px solid orange;
 }
 
@@ -264,7 +264,7 @@
 .columns {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
   margin-bottom: 30px;
 }
 
