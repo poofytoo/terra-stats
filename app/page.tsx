@@ -27,6 +27,7 @@ const Home = () => {
   let lowestVpWin = Number.MAX_SAFE_INTEGER;
   let highestVp = 0;
   let highestTr = 0;
+  let mostGreeneryPoints = 0;
 
   data?.forEach((game: Game) => {
     const winner = Object.entries(game.players)[0][1];
@@ -50,6 +51,9 @@ const Home = () => {
       }
       if (playerData.victoryPoints && (playerData.victoryPoints ?? Number.MAX_SAFE_INTEGER) < lowestVpWin) {
         lowestVpWin = playerData.victoryPoints;
+      }
+      if (playerData.greeneryPoints && (playerData.greeneryPoints ?? 0) > mostGreeneryPoints) {
+        mostGreeneryPoints = playerData.greeneryPoints;
       }
     });
   });
@@ -92,6 +96,7 @@ const Home = () => {
                         [styles.highestVp]: playerData.victoryPoints === highestVp,
                         [styles.lowestVpWin]: playerData.victoryPoints === lowestVpWin && playerId === 0,
                         [styles.highestTr]: playerData.terraformingRating === highestTr,
+                        [styles.mostGreeneryPoints]: playerData.greeneryPoints === mostGreeneryPoints,
                       })}>
                       <div className={styles.playerName}>
                         {player}
@@ -107,6 +112,9 @@ const Home = () => {
                         </span>{" "}
                         <span className={styles.megaCredits}>
                           {playerData.megaCredits}
+                        </span>
+                        <span className={styles.greeneryPoints}>
+                          {playerData.greeneryPoints}
                         </span>
                       </div>
                       <div className={styles.details}>
