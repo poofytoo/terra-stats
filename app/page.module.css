@@ -126,7 +126,8 @@
   color: var(--greenery);
   width: 14px;
   font-size: 21px;
-  height: 15px;
+  height: 0;
+  line-height: 0;
   position: absolute;
   display: inline-flex;
   justify-content: center;
@@ -135,7 +136,7 @@
   font-weight: bold;
   margin-right: 5px;
   margin-left: -17px;
-  top: -1px;
+  top: 5px;
 }
 
 .victoryPoints, 
@@ -151,6 +152,7 @@
 
 .greeneryPoints {
   padding-left: 20px;
+  top: 1px;
 }
 
 .shortestTime:after, 
