@@ -13,6 +13,8 @@ const notableCollections = [
   "Livestock",
   "Physics Complex",
   "Pets",
+  "Fish",
+  "Immigration Shuttles",
 ]
 export interface vpCard {
   vp: number;

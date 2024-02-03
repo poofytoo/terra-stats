@@ -184,13 +184,13 @@
   font-size: 12px;
   line-height: 1.4em;
   color: black;
-  padding: 3px 7px;
+  padding: 3px 4px;
   background-color: rgb(244, 234, 216);
   border-radius: 5px;
   margin-bottom: 3px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .notableCollections {
