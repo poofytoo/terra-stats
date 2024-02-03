@@ -17,6 +17,7 @@ const notableCollections = [
   "Immigration Shuttles",
   "Floating Habs",
   "Tardigrades",
+  "Jovian Lanterns",
 ];
 
 export interface vpCard {
