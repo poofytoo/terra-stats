@@ -1,0 +1,13 @@
+.playersDataContainer {
+  border: 1px solid #aaa;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: var(--round);
+}
+
+.winPercentage {
+  display: inline-block;
+  width: 70px;
+  text-align: right;
+  margin-right: 15px;
+}

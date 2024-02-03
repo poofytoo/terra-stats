@@ -53,13 +53,6 @@
   display: inline-block;
 }
 
-.winPercentage {
-  display: inline-block;
-  width: 70px;
-  text-align: right;
-  margin-right: 15px;
-}
-
 .generations {
   background-color: teal;
   color: white;
@@ -206,4 +199,10 @@
 .vpCard .victoryPoints {
   font-weight: bold;
   font-size: 14px;
+}
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
