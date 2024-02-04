@@ -8,7 +8,7 @@ const round = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100;
 // round to two digits. if there are no digits after the decimal, include zeros up to two digits (or 0.30 or 0.00)
 const percentageWithTwoSigFigs = (num: number): string => {
   const rounded = round(num * 100);
-  return (rounded % 1 === 0 ? `${rounded}.00` : rounded % 0.1 === 0 ? `${rounded}0` : `${rounded}`) + '%';
+  return rounded.toFixed(2) + '%';
 }
 
 export const Players = ({ data }: { data: Game[] }) => {

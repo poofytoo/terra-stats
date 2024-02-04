@@ -23,6 +23,7 @@ const notableCollections = [
   "St. Joseph of Cupertino Mission",
   "Water Import From Europa",
   "Extremophiles",
+  "Neptunian Power Consultants"
 ];
 
 export interface vpCard {
