@@ -7,7 +7,6 @@
 
 .playersTable {
   display: grid;
-  gap: 5px;
   grid-template-columns: 80px 80px 40px 1fr 1fr;
 }
 
@@ -22,7 +21,12 @@
 }
 
 .header span {
-  margin-bottom: 5px;
   display: flex;
   align-items: flex-end;
+}
+
+.playersTable span {
+  border-bottom: 1px solid #ddd;
+  padding: 4px 1px;
+  line-height: normal;
 }
