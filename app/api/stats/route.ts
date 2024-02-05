@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs/promises';
 import path from 'path';
 import { promises as fsPromises } from 'fs';
@@ -26,9 +25,14 @@ const notableCollections = [
   "Neptunian Power Consultants"
 ];
 
+export enum vpCardType {
+  milestone = 'milestone',
+  award = 'award',
+}
 export interface vpCard {
   vp: number;
   cardName: string;
+  vpType?: vpCardType;
   isNotable?: boolean;
 }
 export interface Game {
@@ -336,6 +340,13 @@ export async function GET(request: Request) {
         const notableCollectionRecord = notableCollectionRecords.find(collection => collection.collection === vpCard.cardName);
         if (notableCollectionRecord && vpCard.vp >= notableCollectionRecord.vp - 5 && vpCard.vp > 5) {
           vpCard.isNotable = true;
+        }
+
+        if (vpCard.cardName.includes('Milestone')) {
+          vpCard.vpType = vpCardType.milestone;
+        }
+        if (vpCard.cardName.includes('Award')) {
+          vpCard.vpType = vpCardType.award;
         }
       }
     }

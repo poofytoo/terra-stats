@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from 'swr';
-import { Game } from './api/stats/route';
+import { Game, vpCardType } from './api/stats/route';
 
 import styles from './page.module.css';
 import cx from 'classnames';
@@ -138,7 +138,7 @@ const Home = () => {
                         })}
                       </div>
                       <div className={styles.notableCollections}>
-                        {playerData.vpCards?.filter(vpCard => vpCard.isNotable).map((vpCard, key) => {
+                        {playerData.vpCards?.filter(vpCard => vpCard.isNotable || vpCard.vpType === vpCardType.award).map((vpCard, key) => {
                           return <div key={key} className={styles.vpCard}>
                             <span className={styles.victoryPoints}>
                               {vpCard.vp}
