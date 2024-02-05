@@ -76,10 +76,11 @@ async function getAllFilesInFolder(folderPath: string): Promise<string[]> {
 
 const normalizedPlayerNames = {
   Victor: ['Victor', 'Vic', 'VicVic', 'Victortor'],
-  Yota: ['Yota', 'Haircut'],
-  Vy: ['Vy', 'Vyvy'],
-  Lindsey: ['Lindsey', 'LinLin', 'Lin', 'Lind'],
+  Yota: ['Yota', 'Haircut', 'flourer'],
+  Vy: ['Vy', 'Vyvy', 'need bubs'],
+  Lindsey: ['Lindsey', 'LinLin', 'Lin', 'Lind',],
   Landon: ['Landon', 'Lando', 'Lan', 'LanLan'],
+  Ming: ['need nap'],
 }
 
 export async function GET(request: Request) {
