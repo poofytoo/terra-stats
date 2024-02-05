@@ -1,4 +1,4 @@
-import { Game } from '@/app/api/stats/route';
+import { Game } from '@/types';
 
 import styles from './Corporations.module.css';
 import { useState } from 'react';
