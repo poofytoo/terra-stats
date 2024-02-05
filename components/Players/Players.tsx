@@ -1,6 +1,7 @@
 import styles from "@/components/Players/Players.module.css";
 
-import { Game } from "@/app/api/stats/route";
+import { Game } from "@/types";
+import cx from "classnames";
 
 // round to two digits
 const round = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100;
@@ -18,6 +19,8 @@ export const Players = ({ data }: { data: Game[] }) => {
       plays: number;
       wins?: number;
       winPercentage?: number;
+      totalCorporations: number;
+      averageCorporations?: number;
     }
   } = {};
 
@@ -26,10 +29,18 @@ export const Players = ({ data }: { data: Game[] }) => {
     Object.entries(game.players ?? {}).forEach(([player]) => {
       if (!winsByPlayer[player]) {
         winsByPlayer[player] = {
+          totalCorporations: 0,
           plays: 0,
           wins: 0,
         };
       }
+    });
+  });
+
+  // loop through all games and count the number of corporations played by each player using a reduce function. then divide by the number of games played by that player to get the average corporations played by that player
+  data?.forEach((game: Game) => {
+    Object.entries(game.players ?? {}).forEach(([player, playerData]) => {
+      winsByPlayer[player].totalCorporations = winsByPlayer[player].totalCorporations + ((playerData.corporations ?? []).length ?? 0);
     });
   });
 
@@ -41,20 +52,41 @@ export const Players = ({ data }: { data: Game[] }) => {
     });
   });
 
+
   Object.entries(winsByPlayer).forEach(([player, playerStats]) => {
     winsByPlayer[player].winPercentage = (playerStats.wins ?? 0) / playerStats.plays;
   });
 
+  // Calculate the average corporations played by each player
+  Object.entries(winsByPlayer).forEach(([player, playerStats]) => {
+    winsByPlayer[player].averageCorporations = round(playerStats.totalCorporations / playerStats.plays);
+    console.log(winsByPlayer[player].totalCorporations)
+  });
+
+
   return <div className={styles.playersDataContainer}>
     <h2>Wins by Player</h2>
-    {
-      Object.entries(winsByPlayer).sort((a, b) => {
-        return (b[1].winPercentage ?? 0) - (a[1].winPercentage ?? 0);
-      }).map(([player, playerStats]) => (
-        <div key={player}>
-          <span className={styles.winPercentage}>{percentageWithTwoSigFigs(playerStats.winPercentage ?? 0)}</span>{player} ({playerStats.wins ?? 0}/{playerStats.plays})
-        </div>
-      ))
-    }
+    <div className={styles.playersTable}>
+      <div className={cx(styles.row, styles.header)}>
+        <span>Player</span>
+        <span>Win Rate</span>
+        <span>Wins</span>
+        <span>Total Plays</span>
+        <span>Avg Corps</span>
+      </div>
+      {
+        Object.entries(winsByPlayer).sort((a, b) => {
+          return (b[1].winPercentage ?? 0) - (a[1].winPercentage ?? 0);
+        }).map(([player, playerStats]) => (
+          <div key={player} className={styles.row}>
+            <span>{player}</span>
+            <span>{percentageWithTwoSigFigs(playerStats.winPercentage ?? 0)}</span>
+            <span>{playerStats.wins ?? 0}</span>
+            <span>{playerStats.plays}</span>
+            <span>{playerStats.averageCorporations}</span>
+          </div>
+        ))
+      }
+    </div>
   </div>
 }

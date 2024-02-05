@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { promises as fsPromises } from 'fs';
+import { Game, processedData, vpCard, vpCardType } from '@/types';
 
 const notableCollections = [
   "Stratospheric Birds",
@@ -24,47 +25,6 @@ const notableCollections = [
   "Extremophiles",
   "Neptunian Power Consultants"
 ];
-
-export enum vpCardType {
-  milestone = 'milestone',
-  award = 'award',
-}
-export interface vpCard {
-  vp: number;
-  cardName: string;
-  vpType?: vpCardType;
-  isNotable?: boolean;
-}
-export interface Game {
-  dateOfGame: Date;
-  playerCount?: number;
-  generations?: number;
-  url?: string;
-  fileName: string;
-  players: {
-    [name: string]: {
-      displayName?: string;
-      finalScore?: number;
-      terraformingRating?: number;
-      milestonePoints?: number;
-      awardPoints?: number;
-      greeneryPoints?: number;
-      cityPoints?: number;
-      victoryPoints?: number;
-      megaCredits?: number;
-      timer: {
-        minutes: number;
-        seconds: number;
-        hours: number;
-      };
-      actionsTaken?: number;
-      corporations?: string[];
-      vpCards?: vpCard[];
-    }
-  }
-}
-
-type processedData = Game[];
 
 async function getAllFilesInFolder(folderPath: string): Promise<string[]> {
   const fullPath = path.join(process.cwd(), folderPath);
@@ -341,11 +301,10 @@ export async function GET(request: Request) {
         if (notableCollectionRecord && vpCard.vp >= notableCollectionRecord.vp - 5 && vpCard.vp > 5) {
           vpCard.isNotable = true;
         }
-
-        if (vpCard.cardName.includes('Milestone')) {
+        if (vpCard.cardName.includes('milestone')) {
           vpCard.vpType = vpCardType.milestone;
         }
-        if (vpCard.cardName.includes('Award')) {
+        if (vpCard.cardName.includes('1st place')) {
           vpCard.vpType = vpCardType.award;
         }
       }

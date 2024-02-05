@@ -5,9 +5,23 @@
   flex: 1 0 200px;
 }
 
-.winPercentage {
-  display: inline-block;
-  width: 70px;
-  text-align: right;
-  margin-right: 15px;
+.playersTable {
+  display: grid;
+  grid-template-columns: 80px 80px 40px 40px 1fr;
+}
+
+.row {
+  display: contents;
+}
+
+.header {
+  font-size: 11px;
+  color: #999;
+  line-height: 1.2em;
+}
+
+.header span {
+  margin-bottom: 5px;
+  display: flex;
+  align-items: flex-end;
 }
