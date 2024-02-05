@@ -80,7 +80,7 @@ export const Players = ({ data }: { data: Game[] }) => {
         }).map(([player, playerStats]) => (
           <div key={player} className={styles.row}>
             <span>{player}</span>
-            <span>{percentageWithTwoSigFigs(playerStats.winPercentage ?? 0)}</span>
+            <strong>{percentageWithTwoSigFigs(playerStats.winPercentage ?? 0)}</strong>
             <span>{playerStats.wins ?? 0}</span>
             <span>{playerStats.plays}</span>
             <span>{playerStats.averageCorporations}</span>
