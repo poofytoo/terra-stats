@@ -8,6 +8,7 @@ export interface vpCard {
   cardName: string;
   vpType?: vpCardType;
   isNotable?: boolean;
+  isTop?: boolean;
 }
 export interface Game {
   dateOfGame: Date;

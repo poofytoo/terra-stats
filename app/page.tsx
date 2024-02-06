@@ -146,6 +146,7 @@ const Home = () => {
                             <span className={styles.vpCardName}>
                               {vpCard.cardName}!
                             </span>
+                            {vpCard.isTop && <span>🥇</span>}
                           </div>
                         })}
                       </div>

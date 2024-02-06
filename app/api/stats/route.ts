@@ -300,6 +300,9 @@ export async function GET(request: Request) {
         const notableCollectionRecord = notableCollectionRecords.find(collection => collection.collection === vpCard.cardName);
         if (notableCollectionRecord && vpCard.vp >= notableCollectionRecord.vp - 5 && vpCard.vp > 5) {
           vpCard.isNotable = true;
+          if (vpCard.vp === notableCollectionRecord.vp) {
+            vpCard.isTop = true;
+          }
         }
         if (vpCard.cardName.includes('milestone')) {
           vpCard.vpType = vpCardType.milestone;
