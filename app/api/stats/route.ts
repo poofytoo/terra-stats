@@ -23,7 +23,8 @@ const notableCollections = [
   "St. Joseph of Cupertino Mission",
   "Water Import From Europa",
   "Extremophiles",
-  "Neptunian Power Consultants"
+  "Neptunian Power Consultants",
+  "Asteroid Deflection System",
 ];
 
 async function getAllFilesInFolder(folderPath: string): Promise<string[]> {
