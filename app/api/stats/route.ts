@@ -25,6 +25,7 @@ const notableCollections = [
   "Extremophiles",
   "Neptunian Power Consultants",
   "Asteroid Deflection System",
+  "Decomposers",
 ];
 
 async function getAllFilesInFolder(folderPath: string): Promise<string[]> {
