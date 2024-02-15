@@ -63,18 +63,34 @@
 }
 
 .generations {
-  background-color: teal;
-  color: white;
+  color: teal;
   display: inline-block;
   margin-left: 5px;
-  padding: 2px 5px;
+  padding: 2px 6px;
   border-radius: 5px;
+  border: 1px solid teal;
   line-height: normal;
-  opacity: 0.5;
 }
 
 .generations:hover {
   opacity: 1;
+}
+
+.gameLink {
+  font-size: 12px;
+  line-height: 1.1em;
+  color: teal;
+  margin-left: 5px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: white;
+  background-color: teal;
+}
+
+.gameLink:hover {
+  opacity: 0.8;
+
 }
 
 .victoryPoints:before {

@@ -11,6 +11,7 @@ export interface vpCard {
   isTop?: boolean;
 }
 export interface Game {
+  id: string;
   dateOfGame: Date;
   playerCount?: number;
   generations?: number;

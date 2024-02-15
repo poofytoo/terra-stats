@@ -66,6 +66,9 @@ export async function GET(request: Request) {
     const dateOfGame = new Date(parseInt(file.split('-')[2]), parseInt(file.split('-')[0]) - 1, parseInt(file.split('-')[1]));
     // add 6 hours to the date because the date is in UTC time and we want it in EST time.
     dateOfGame.setHours(dateOfGame.getHours() + 6);
+
+
+
     const game: Game = {
       dateOfGame,
       fileName: file,
@@ -85,6 +88,8 @@ export async function GET(request: Request) {
       if (tableMatch) {
         tbodyMatch = tbodyRegex.exec(tableMatch[1]);
       }
+
+
 
       // inside this table, ignore the first row (header row). place the rest of the rows into an array.
       const rowRegex = /<tr.*?>(.*?)<\/tr>/gs;
@@ -185,6 +190,15 @@ export async function GET(request: Request) {
 
             // actions taken
             game.players[normalizedPlayerName].actionsTaken = parseInt(tds[10 + hasEscapeVelocity].replace(/<\/?div.*?>/g, '').trim());
+
+            // search for this: <a href="api/game/logs?id=p7955b5d5891&amp;full=true" target="_blank">Download game log</a> and extract the ID, in this case it's p7955b5d5891
+            const logIdRegex = /logs\?id=(.*?)&amp;full=true"/;
+            const logIdMatch = logIdRegex.exec(fileContent);
+            if (logIdMatch) {
+              game.id = logIdMatch[1];
+            }
+
+
           }
 
           rows.push(tds);

@@ -78,13 +78,22 @@ const Home = () => {
             return new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime();
           }).
             map((game: Game, id: number) => {
+
               const date = new Date(game.dateOfGame);
               const dateOfGame = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+
+
+              // showGameResultsLink is only True if date is within the last 15 days 
+              const showGameResultsLink = (new Date().getTime() - date.getTime()) / (1000 * 60 * 60 * 24) < 15;
 
               return <>
                 <div className={styles.dateOfGame}>
                   <span>{dateOfGame}</span>
-                  <span className={styles.generations}>{game.generations} generations</span>
+                  <span className={styles.generations}>{game.generations} generations</span>{" "}
+                  {showGameResultsLink &&
+                    <span>
+                      <a className={styles.gameLink} href={`https://terraforming-mars.herokuapp.com/the-end?id=${game.id}`} target="_blank">View Game Results</a>
+                    </span>}
                 </div>
                 <div key={id} className={styles.playerRow}>{
                   Object.entries(game.players ?? {}).map(([player, playerData], playerId) => (
