@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from 'swr';
-import { Game, vpCardType } from '@/types';
+import { Game } from '@/types';
 
 import styles from './page.module.css';
 import cx from 'classnames';
