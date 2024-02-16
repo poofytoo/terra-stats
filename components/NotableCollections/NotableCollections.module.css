@@ -7,7 +7,7 @@
 
 .notableCollectionsTable {
   display: grid;
-  grid-template-columns: 200px max-content max-content;
+  grid-template-columns: minmax(100px, 200px) max-content max-content;
 }
 
 .row {
