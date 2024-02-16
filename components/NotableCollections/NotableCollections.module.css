@@ -1,0 +1,57 @@
+.notableCollectionsContainer {
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  padding: 20px;
+  border-radius: var(--round);
+  flex: 1 0 220px;
+}
+
+.notableCollectionsTable {
+  display: grid;
+  grid-template-columns: 200px max-content max-content;
+}
+
+.row {
+  display: contents;
+}
+
+.header {
+  font-size: 11px;
+  color: #999;
+  line-height: 1.2em;
+}
+
+.header .record {
+  font-weight: normal;
+}
+
+.collectionName {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  border-bottom: 1px solid #ddd;
+  padding: 3px 10px 3px 1px;
+}
+
+.record {
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
+  padding: 3px 10px 3px 1px;
+  
+}
+
+.holders {
+  white-space: nowrap;
+  border-bottom: 1px solid #ddd;
+  padding: 3px 1px;
+}
+
+.header {
+  font-size: 11px;
+  color: #999;
+  line-height: 1.2em;
+}
+
+.header span {
+  display: flex;
+  align-items: flex-end;
+}

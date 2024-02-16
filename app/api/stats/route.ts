@@ -2,31 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { promises as fsPromises } from 'fs';
 import { Game, processedData, vpCard, vpCardType } from '@/types';
-
-const notableCollections = [
-  "Stratospheric Birds",
-  "Venusian Animals",
-  "Ants",
-  "Venusian Insects",
-  "Penguins",
-  "Birds",
-  "Livestock",
-  "Physics Complex",
-  "Pets",
-  "Fish",
-  "Immigration Shuttles",
-  "Floating Habs",
-  "Tardigrades",
-  "Jovian Lanterns",
-  "Io Mining Industries",
-  "Ganymede Colony",
-  "St. Joseph of Cupertino Mission",
-  "Water Import From Europa",
-  "Extremophiles",
-  "Neptunian Power Consultants",
-  "Asteroid Deflection System",
-  "Decomposers",
-];
+import { notableCollections } from '@/constants';
 
 async function getAllFilesInFolder(folderPath: string): Promise<string[]> {
   const fullPath = path.join(process.cwd(), folderPath);

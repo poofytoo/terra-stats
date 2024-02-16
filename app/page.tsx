@@ -8,6 +8,7 @@ import cx from 'classnames';
 
 import { Corporations } from '@/components/Corporations';
 import { Players } from '@/components/Players';
+import { NotableCollections } from '@/components/NotableCollections';
 
 const Home = () => {
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -64,6 +65,7 @@ const Home = () => {
       <div className={styles.columns}>
         <Players data={data} />
         <Corporations data={data} />
+        <NotableCollections data={data} />
       </div>
       <h2>All Games ({data.length})</h2>
       <div className={styles.allDataContainer}>
