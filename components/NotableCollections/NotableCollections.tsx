@@ -30,7 +30,9 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
                   players: [name]
                 }
               } else if (card.vp === acc[card.cardName].highest) {
-                acc[card.cardName].players.push(name);
+                if (!acc[card.cardName].players.includes(name)) {
+                  acc[card.cardName].players.push(name);
+                }
               }
             }
           }
