@@ -44,10 +44,14 @@ const Home = () => {
       streakCount = 1;
     }
     previousWinner = winnerName;
-    // game.streakCount = streakCount;
+    game.streakCount = streakCount;
+    console.log(game.streakCount, winnerName, streakCount);
   });
 
+  console.log(data);
+
   data?.forEach((game: Game) => {
+    console.log(game.streakCount);
     const winner = Object.entries(game.players)[0][1];
 
     const timeInSeconds = (winner.timer.hours) * 60 * 60 + (winner.timer.minutes) * 60 + (winner.timer.seconds);
