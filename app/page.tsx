@@ -122,7 +122,7 @@ const Home = () => {
                       player={player}
                       playerData={playerData}
                       nthPlayer={nthPlayer}
-                      streakAmount={game.streakCount}
+                      streakAmount={game.streakCount ?? 0}
                       topPerformers={{
                         mostActions,
                         shortestTimeSeconds,
