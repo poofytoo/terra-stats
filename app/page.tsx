@@ -35,6 +35,16 @@ const Home = () => {
   let streakCount = 0;
   let previousWinner = "";
 
+  data?.sort((a: Game, b: Game) => {
+    // if dates are the same, sort by filename
+    if (new Date(b.dateOfGame).getTime() === new Date(a.dateOfGame).getTime()) {
+      return (b.fileName.split("-")[3] ?? "0").localeCompare(a.fileName.split("-")[3] ?? "0");
+    }
+
+    // sort by date
+    return new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime();
+  })
+
   // iterate through data but reversed
   data?.slice().reverse().forEach((game: Game) => {
     const winnerName = Object.keys(game.players)[0];
@@ -92,16 +102,7 @@ const Home = () => {
       <h2>All Games ({data.length})</h2>
       <div className={styles.allDataContainer}>
         <div className={styles.allDataContainer}>
-          {data?.sort((a: Game, b: Game) => {
-            // if dates are the same, sort by filename
-            if (new Date(b.dateOfGame).getTime() === new Date(a.dateOfGame).getTime()) {
-              return (b.fileName.split("-")[3] ?? "0").localeCompare(a.fileName.split("-")[3] ?? "0");
-            }
-
-            // sort by date
-            return new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime();
-          }).
-            map((game: Game, id: number) => {
+          {data.map((game: Game, id: number) => {
 
               const date = new Date(game.dateOfGame);
               const dateOfGame = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
