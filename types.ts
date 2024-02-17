@@ -40,7 +40,7 @@ export interface Game {
   generations?: number;
   url?: string;
   fileName: string;
-  streakCount: number;
+  streakCount?: number;
   players: {
     [name: string]: PlayerData
   }
