@@ -44,7 +44,7 @@ const Home = () => {
       streakCount = 1;
     }
     previousWinner = winnerName;
-    game.streakCount = streakCount;
+    // game.streakCount = streakCount;
   });
 
   data?.forEach((game: Game) => {
