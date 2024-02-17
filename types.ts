@@ -10,6 +10,29 @@ export interface vpCard {
   isNotable?: boolean;
   isTop?: boolean;
 }
+
+export interface PlayerData {
+  displayName?: string;
+  finalScore?: number;
+  terraformingRating?: number;
+  milestonePoints?: number;
+  awardPoints?: number;
+  greeneryPoints?: number;
+  cityPoints?: number;
+  victoryPoints?: number;
+  megaCredits?: number;
+  timer: {
+    minutes: number;
+    seconds: number;
+    hours: number;
+  };
+  actionsTaken?: number;
+  corporations?: string[];
+  vpCards?: vpCard[];
+  milestones?: number;
+  awards?: number
+}
+
 export interface Game {
   id?: string;
   dateOfGame: Date;
@@ -17,29 +40,20 @@ export interface Game {
   generations?: number;
   url?: string;
   fileName: string;
+  streakCount: number;
   players: {
-    [name: string]: {
-      displayName?: string;
-      finalScore?: number;
-      terraformingRating?: number;
-      milestonePoints?: number;
-      awardPoints?: number;
-      greeneryPoints?: number;
-      cityPoints?: number;
-      victoryPoints?: number;
-      megaCredits?: number;
-      timer: {
-        minutes: number;
-        seconds: number;
-        hours: number;
-      };
-      actionsTaken?: number;
-      corporations?: string[];
-      vpCards?: vpCard[];
-      milestones?: number;
-      awards?: number
-    }
+    [name: string]: PlayerData
   }
+}
+
+export interface TopPerformers {
+  mostActions: number;
+  shortestTimeSeconds: number;
+  fastestWin: number;
+  lowestVpWin: number;
+  highestVp: number;
+  highestTr: number;
+  mostGreeneryPoints: number;
 }
 
 export type processedData = Game[];

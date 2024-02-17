@@ -1,6 +1,4 @@
 import styles from "@/components/NotableCollections/NotableCollections.module.css";
-import { notableCollections } from "@/constants";
-
 import { Game } from "@/types";
 import cx from "classnames";
 

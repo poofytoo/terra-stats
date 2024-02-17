@@ -1,7 +1,7 @@
 import { Game } from '@/types';
 
 import styles from './Corporations.module.css';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export const Corporations = ({ data }: { data: Game[] }) => {
   const [showAll, setShowAll] = useState(false);
@@ -58,7 +58,7 @@ export const Corporations = ({ data }: { data: Game[] }) => {
     <p>
       All win/plays include corps which were mergered in. Main is only the initial corp.
     </p>
-    {sortedCorporations.filter((_, id) => showAll ? true : (id < topCorporationCount) || (id > sortedCorporations.length - bottomCorporationCount - 1)).map(([corporation, corporationStats], id) => (<>
+    {sortedCorporations.filter((_, id) => showAll ? true : (id < topCorporationCount) || (id > sortedCorporations.length - bottomCorporationCount - 1)).map(([corporation, corporationStats], id) => (<React.Fragment key={id}>
       {(id === topCorporationCount && !showAll) && <div key={'...'}>
         <div>
           ...<br />
@@ -73,7 +73,8 @@ export const Corporations = ({ data }: { data: Game[] }) => {
           {corporation} ({corporationStats.wins ?? 0}/{corporationStats.plays}){" "}
           <span className={styles.highlight}>({corporationStats.mainWins ?? 0}/{corporationStats.mainPlays ?? 0})</span>
         </div>
-      </div></>
+      </div>
+    </React.Fragment>
     ))}
     {showAll &&
       <p>

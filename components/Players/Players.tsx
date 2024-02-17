@@ -60,7 +60,6 @@ export const Players = ({ data }: { data: Game[] }) => {
   // Calculate the average corporations played by each player
   Object.entries(winsByPlayer).forEach(([player, playerStats]) => {
     winsByPlayer[player].averageCorporations = round(playerStats.totalCorporations / playerStats.plays);
-    console.log(winsByPlayer[player].totalCorporations)
   });
 
 

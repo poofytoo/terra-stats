@@ -9,6 +9,8 @@ import cx from 'classnames';
 import { Corporations } from '@/components/Corporations';
 import { Players } from '@/components/Players';
 import { NotableCollections } from '@/components/NotableCollections';
+import { PlayerCard } from '@/components/PlayerCard';
+import React from 'react';
 
 const Home = () => {
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -30,8 +32,24 @@ const Home = () => {
   let highestTr = 0;
   let mostGreeneryPoints = 0;
 
+  let streakCount = 0;
+  let previousWinner = "";
+
+  // iterate through data but reversed
+  data?.slice().reverse().forEach((game: Game) => {
+    const winnerName = Object.keys(game.players)[0];
+    if (winnerName === previousWinner) {
+      streakCount++;
+    } else {
+      streakCount = 1;
+    }
+    previousWinner = winnerName;
+    game.streakCount = streakCount;
+  });
+
   data?.forEach((game: Game) => {
     const winner = Object.entries(game.players)[0][1];
+
     const timeInSeconds = (winner.timer.hours) * 60 * 60 + (winner.timer.minutes) * 60 + (winner.timer.seconds);
     if (timeInSeconds < fastestWin) {
       fastestWin = timeInSeconds;
@@ -88,7 +106,7 @@ const Home = () => {
               // showGameResultsLink is only True if date is within the last 15 days 
               const showGameResultsLink = (new Date().getTime() - date.getTime()) / (1000 * 60 * 60 * 24) < 15;
 
-              return <>
+              return <React.Fragment key={id}>
                 <div className={styles.dateOfGame}>
                   <span>{dateOfGame}</span>
                   <span className={styles.generations}>{game.generations} generations</span>{" "}
@@ -97,75 +115,27 @@ const Home = () => {
                       <a className={styles.gameLink} href={`https://terraforming-mars.herokuapp.com/the-end?id=${game.id}`} target="_blank">View Game Results</a>
                     </span>}
                 </div>
-                <div key={id} className={styles.playerRow}>{
-                  Object.entries(game.players ?? {}).map(([player, playerData], playerId) => (
-                    <div key={playerId} className={cx(styles.player,
-                      {
-                        [styles.mostActions]: playerData.actionsTaken === mostActions,
-                        [styles.shortestTime]: ((playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds) === shortestTimeSeconds) && playerId !== 0,
-                        [styles.fastestWin]: ((playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds) === fastestWin) && playerId === 0,
-                        [styles.highestVp]: playerData.victoryPoints === highestVp,
-                        [styles.lowestVpWin]: playerData.victoryPoints === lowestVpWin && playerId === 0,
-                        [styles.highestTr]: playerData.terraformingRating === highestTr,
-                        [styles.mostGreeneryPoints]: playerData.greeneryPoints === mostGreeneryPoints,
-                      })}>
-                      <div className={styles.playerName}>
-                        {player}
-                        {playerId === 0 && <span className={styles.winner}> 🏆</span>}
-                      </div>
-                      <div className={styles.playerScore}>{playerData.finalScore}</div>
-                      <div className={styles.pointsBreakdown}>
-                        <span className={styles.victoryPoints}>
-                          {playerData.victoryPoints}
-                        </span>{" "}
-                        <span className={styles.terraformingRating}>
-                          {playerData.terraformingRating}
-                        </span>{" "}
-                        <span className={styles.megaCredits}>
-                          {playerData.megaCredits}
-                        </span>
-                        <span className={styles.greeneryPoints}>
-                          {playerData.greeneryPoints}
-                        </span>
-                      </div>
-                      <div className={styles.details}>
-                        <span title="actions">
-                          <span className={styles.subtle}>➡️&nbsp;</span>
-                          {playerData.actionsTaken}
-                        </span>{" "}
-                        <span title="time taken">
-                          <span className={styles.subtle}>⏱️&nbsp;</span>
-                          {playerData.timer.hours ? `${playerData.timer.hours}:` : ""}
-                          {playerData.timer?.minutes.toString().padStart(2, "0")}:{(playerData.timer?.seconds).toString().padStart(2, "0")}
-                        </span>
-                      </div>
-                      <div className={styles.playerCorporation}>
-                        {playerData.corporations?.map((corporation) => {
-                          return <div key={corporation} className={
-                            cx({
-                              [styles.subtle]: playerData.corporations?.[0] !== corporation,
-                            })
-                          }>{corporation}</div>
-                        })}
-                      </div>
-                      <div className={styles.notableCollections}>
-                        {playerData.vpCards?.filter(vpCard => vpCard.isNotable).map((vpCard, key) => {
-                          return <div key={key} className={styles.vpCard}>
-                            <span className={styles.victoryPoints}>
-                              {vpCard.vp}
-                            </span>
-                            <span className={styles.vpCardName}>
-                              {vpCard.cardName}!
-                            </span>
-                            {vpCard.isTop && <span>🥇</span>}
-                          </div>
-                        })}
-                      </div>
-                    </div>
+                <div className={styles.playerRow}>{
+                  Object.entries(game.players ?? {}).map(([player, playerData], nthPlayer) => (
+                    <PlayerCard
+                      key={player}
+                      player={player}
+                      playerData={playerData}
+                      nthPlayer={nthPlayer}
+                      streakAmount={game.streakCount}
+                      topPerformers={{
+                        mostActions,
+                        shortestTimeSeconds,
+                        fastestWin,
+                        lowestVpWin,
+                        highestVp,
+                        highestTr,
+                        mostGreeneryPoints
+                      }} />
                   ))
                 }
                 </div>
-              </>
+              </React.Fragment>
             })}
         </div>
       </div>
