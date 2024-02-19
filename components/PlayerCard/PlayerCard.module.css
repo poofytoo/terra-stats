@@ -236,6 +236,9 @@
 }
 
 .vpCardName {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   text-align: left;
   justify-self: flex-start;
 }

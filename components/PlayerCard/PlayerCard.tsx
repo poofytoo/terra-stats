@@ -7,7 +7,7 @@ const streakMessage = (streakAmount: number) => {
   if (streakAmount === 1) {
     return "1 win";
   }
-  return <><strong>{streakAmount} </strong> wins in a row!</>
+  return <><strong>{streakAmount} </strong> consecutive wins!</>
 }
 
 export const PlayerCard = ({
