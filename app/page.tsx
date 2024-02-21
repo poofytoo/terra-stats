@@ -58,8 +58,6 @@ const Home = () => {
     console.log(game.streakCount, winnerName, streakCount);
   });
 
-  console.log(data);
-
   data?.forEach((game: Game) => {
     console.log(game.streakCount);
     const winner = Object.entries(game.players)[0][1];
@@ -68,6 +66,7 @@ const Home = () => {
     if (timeInSeconds < fastestWin) {
       fastestWin = timeInSeconds;
     }
+
     Object.entries(game.players ?? {}).forEach(([_, playerData]) => {
       const playerTimeInSeconds = (playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds);
       if (playerTimeInSeconds < shortestTimeSeconds) {
