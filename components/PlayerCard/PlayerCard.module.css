@@ -241,11 +241,16 @@
   overflow: hidden;
   text-align: left;
   justify-self: flex-start;
+  color: rgb(102, 92, 34);
 }
 
 .vpCard .victoryPoints {
   font-weight: bold;
   font-size: 14px;
+}
+
+.isTop {
+  color: black;
 }
 
 

@@ -76,17 +76,28 @@ export const PlayerCard = ({
           })}
         </div>
         <div className={styles.notableCollections}>
-          {playerData.vpCards?.filter(vpCard => vpCard.isNotable).map((vpCard, key) => {
-            return <div key={key} className={styles.vpCard}>
-              <span className={styles.victoryPoints}>
-                {vpCard.vp}
-              </span>
-              <span className={styles.vpCardName}>
-                {vpCard.cardName}!
-              </span>
-              {vpCard.isTop && <span>🥇</span>}
-            </div>
-          })}
+          {playerData.vpCards?.filter(vpCard => vpCard.isNotable)
+            .sort((a, b) => {
+              if (a.isTop && !b.isTop) {
+                return -1
+              } else if (!a.isTop && b.isTop) {
+                return 1
+              }
+              return b.vp - a.vp
+            })
+            .map((vpCard, key) => {
+              return <div key={key} className={styles.vpCard}>
+                <span className={styles.victoryPoints}>
+                  {vpCard.vp}
+                </span>
+                <span className={cx(styles.vpCardName, {
+                  [styles.isTop]: vpCard.isTop
+                })}>
+                  {vpCard.cardName}!
+                </span>
+                {vpCard.isTop && <span>🥇</span>}
+              </div>
+            })}
         </div>
       </div>
       {nthPlayer === 0 && streakAmount > 1 && <div className={styles.streakAmount}>{streakMessage(streakAmount)}</div>}
