@@ -22,3 +22,7 @@ export const notableCollections = [
   "Asteroid Deflection System",
   "Decomposers",
 ];
+
+export const formatDate = (date: Date) => {
+  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+}

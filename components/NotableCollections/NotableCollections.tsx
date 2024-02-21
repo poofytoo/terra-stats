@@ -1,11 +1,13 @@
 import styles from "@/components/NotableCollections/NotableCollections.module.css";
 import { Game } from "@/types";
+import { formatDate } from "@/utils";
 import cx from "classnames";
 
 interface HighestNotableCollections {
   [collection: string]: {
     highest: number;
-    players: string[];
+    dateOfGamePlayed: Date;
+    player: string;
   }
 }
 
@@ -19,19 +21,17 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
             if (!acc[card.cardName]) {
               acc[card.cardName] = {
                 highest: card.vp,
-                players: [name]
+                player: name,
+                dateOfGamePlayed: game.dateOfGame
               }
             } else {
-              if (card.vp > acc[card.cardName].highest) {
+              if (card.vp >= acc[card.cardName].highest && game.dateOfGame < acc[card.cardName].dateOfGamePlayed) {
                 acc[card.cardName] = {
                   highest: card.vp,
-                  players: [name]
+                  player: name,
+                  dateOfGamePlayed: game.dateOfGame
                 }
-              } else if (card.vp === acc[card.cardName].highest) {
-                if (!acc[card.cardName].players.includes(name)) {
-                  acc[card.cardName].players.push(name);
-                }
-              }
+              } 
             }
           }
         })
@@ -59,6 +59,9 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
         <div className={styles.holders}>
           Holders
         </div>
+        <div className={styles.date}>
+          Date
+        </div>
       </div>
       {Object.entries(sortedNotableCollections).map(([collectionName, collectionData], i) => {
         return <div className={styles.row} key={i}>
@@ -69,7 +72,10 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
             {collectionData.highest}
           </div>
           <div className={styles.holders}>
-            {collectionData.players.join(", ")}
+            {collectionData.player}
+          </div>
+          <div className={styles.date}>
+            {formatDate(collectionData.dateOfGamePlayed)}
           </div>
         </div>
       })}

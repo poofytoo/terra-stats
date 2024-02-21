@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { promises as fsPromises } from 'fs';
 import { Game, processedData, vpCard, vpCardType } from '@/types';
-import { notableCollections } from '@/constants';
+import { notableCollections } from '@/utils';
 
 async function getAllFilesInFolder(folderPath: string): Promise<string[]> {
   const fullPath = path.join(process.cwd(), folderPath);
@@ -42,8 +42,6 @@ export async function GET(request: Request) {
     const dateOfGame = new Date(parseInt(file.split('-')[2]), parseInt(file.split('-')[0]) - 1, parseInt(file.split('-')[1]));
     // add 6 hours to the date because the date is in UTC time and we want it in EST time.
     dateOfGame.setHours(dateOfGame.getHours() + 6);
-
-
 
     const game: Game = {
       dateOfGame,

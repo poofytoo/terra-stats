@@ -7,7 +7,7 @@
 
 .notableCollectionsTable {
   display: grid;
-  grid-template-columns: minmax(100px, 200px) max-content max-content;
+  grid-template-columns: minmax(100px, 200px) max-content max-content max-content;
 }
 
 .row {
@@ -28,27 +28,31 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.row > div {
   border-bottom: 1px solid #ddd;
   padding: 3px 10px 3px 1px;
 }
 
+
 .record {
-  border-bottom: 1px solid #ddd;
   font-weight: bold;
-  padding: 3px 10px 3px 1px;
-  
 }
 
 .holders {
   white-space: nowrap;
-  border-bottom: 1px solid #ddd;
-  padding: 3px 1px;
 }
 
 .header {
   font-size: 11px;
   color: #999;
   line-height: 1.2em;
+}
+
+.date {
+  font-size: 11px;  
+  color: #999;
 }
 
 .header span {

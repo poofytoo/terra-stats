@@ -2,7 +2,7 @@
   box-shadow: 0 0 15px rgba(0,0,0,0.1);
   padding: 20px;
   border-radius: var(--round);
-  flex: 5 0 200px;
+  flex: 3 0 200px;
 }
 
 .highlight {
