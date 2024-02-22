@@ -1,16 +1,8 @@
 import styles from "@/components/Players/Players.module.css";
 
 import { Game } from "@/types";
+import { percentageWithTwoSigFigs, roundWithTwoSigFigs } from "@/utils";
 import cx from "classnames";
-
-// round to two digits
-const round = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100;
-
-// round to two digits. if there are no digits after the decimal, include zeros up to two digits (or 0.30 or 0.00)
-const percentageWithTwoSigFigs = (num: number): string => {
-  const rounded = round(num * 100);
-  return rounded.toFixed(2) + '%';
-}
 
 export const Players = ({ data }: { data: Game[] }) => {
 
@@ -20,7 +12,7 @@ export const Players = ({ data }: { data: Game[] }) => {
       wins?: number;
       winPercentage?: number;
       totalCorporations: number;
-      averageCorporations?: number;
+      averageCorporations?: string;
     }
   } = {};
 
@@ -59,7 +51,7 @@ export const Players = ({ data }: { data: Game[] }) => {
 
   // Calculate the average corporations played by each player
   Object.entries(winsByPlayer).forEach(([player, playerStats]) => {
-    winsByPlayer[player].averageCorporations = round(playerStats.totalCorporations / playerStats.plays);
+    winsByPlayer[player].averageCorporations = roundWithTwoSigFigs(playerStats.totalCorporations / playerStats.plays);
   });
 
 

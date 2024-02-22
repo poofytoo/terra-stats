@@ -2,6 +2,7 @@ import { Game } from '@/types';
 
 import styles from './Corporations.module.css';
 import React, { useState } from 'react';
+import { percentageWithTwoSigFigs } from '@/utils';
 
 export const Corporations = ({ data }: { data: Game[] }) => {
   const [showAll, setShowAll] = useState(false);
@@ -13,6 +14,7 @@ export const Corporations = ({ data }: { data: Game[] }) => {
       wins?: number;
       mainPlays?: number;
       mainWins?: number;
+      winPercentage?: string;
     }
   } = {};
 
@@ -45,6 +47,11 @@ export const Corporations = ({ data }: { data: Game[] }) => {
     });
   });
 
+  // Calculate the win percentage for each corporation
+  Object.entries(corporationWins).forEach(([corporation, corporationStats]) => {
+    corporationWins[corporation].winPercentage = percentageWithTwoSigFigs((corporationStats.wins ?? 0) / corporationStats.plays);
+  });
+
   // Sort corporations by highest winning to lowest
   const sortedCorporations = Object.entries(corporationWins).sort((a, b) => {
     return (b[1].wins ?? 0) * 10000 - (a[1].wins ?? 0) * 10000 + (a[1].plays ?? 0) - (b[1].plays ?? 0);
@@ -70,7 +77,7 @@ export const Corporations = ({ data }: { data: Game[] }) => {
       </div>}
       <div key={corporation}>
         <div>
-          {corporation} ({corporationStats.wins ?? 0}/{corporationStats.plays}){" "}
+          {corporation} {/* corporationStats.winPercentage */} ({corporationStats.wins ?? 0}/{corporationStats.plays}){" "}
           <span className={styles.highlight}>({corporationStats.mainWins ?? 0}/{corporationStats.mainPlays ?? 0})</span>
         </div>
       </div>
