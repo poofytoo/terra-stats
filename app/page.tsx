@@ -72,8 +72,6 @@ const Home = () => {
     }
   });
 
-  console.log(mostConsecutiveWins);
-
   data?.forEach((game: Game) => {
     const winner = Object.entries(game.players)[0][1];
 
