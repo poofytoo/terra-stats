@@ -37,9 +37,7 @@ const Home = () => {
   let highestVp = 0;
   let highestTr = 0;
   let mostGreeneryPoints = 0;
-
-  let streakCount = 0;
-  let previousWinner = "";
+  let mostConsecutiveWins = 0
 
   data?.sort((a: Game, b: Game) => {
     // if dates are the same, sort by filename
@@ -51,17 +49,30 @@ const Home = () => {
     return new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime();
   })
 
+  const streakTracker: {
+    [player: string]: number
+  } = {
+
+  }
+
   // iterate through data but reversed
   data?.slice().reverse().forEach((game: Game) => {
-    const winnerName = Object.keys(game.players)[0];
-    if (winnerName === previousWinner) {
-      streakCount++;
-    } else {
-      streakCount = 1;
+    const winner = Object.entries(game.players)[0][0];
+    const players = Object.keys(game.players);
+    players.map((player) => {
+      if (player === winner) {
+        streakTracker[player] = (streakTracker?.[player] ?? 0) + 1;
+      } else {
+        streakTracker[player] = 0;
+      }
+    })
+    game.streakCount = streakTracker[winner];
+    if (streakTracker[winner] > mostConsecutiveWins) {
+      mostConsecutiveWins = streakTracker[winner];
     }
-    previousWinner = winnerName;
-    game.streakCount = streakCount;
   });
+
+  console.log(mostConsecutiveWins);
 
   data?.forEach((game: Game) => {
     const winner = Object.entries(game.players)[0][1];
@@ -137,7 +148,8 @@ const Home = () => {
                       lowestVpWin,
                       highestVp,
                       highestTr,
-                      mostGreeneryPoints
+                      mostGreeneryPoints,
+                      mostConsecutiveWins
                     }} />
                 ))
               }

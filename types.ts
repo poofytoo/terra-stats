@@ -54,6 +54,7 @@ export interface TopPerformers {
   highestVp: number;
   highestTr: number;
   mostGreeneryPoints: number;
+  mostConsecutiveWins: number;
 }
 
 export type processedData = Game[];

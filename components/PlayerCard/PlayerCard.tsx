@@ -3,11 +3,14 @@ import styles from './PlayerCard.module.css';
 
 import cx from 'classnames';
 
-const streakMessage = (streakAmount: number) => {
+const streakMessage = (streakAmount: number, mostConsecutiveWins: number) => {
   if (streakAmount === 1) {
     return "1 win";
   }
-  return <><strong>{streakAmount} </strong> consecutive wins!</>
+  return <>
+    <strong>{streakAmount} </strong> consecutive wins!
+    {streakAmount === mostConsecutiveWins && <span> 🥇</span>}
+  </>
 }
 
 export const PlayerCard = ({
@@ -15,7 +18,7 @@ export const PlayerCard = ({
   playerData,
   nthPlayer,
   topPerformers,
-  streakAmount
+  streakAmount,
 }: {
   player: string,
   playerData: PlayerData,
@@ -23,7 +26,7 @@ export const PlayerCard = ({
   topPerformers: TopPerformers,
   streakAmount: number
 }) => {
-  const { mostActions, shortestTimeSeconds, fastestWin, lowestVpWin, highestVp, highestTr, mostGreeneryPoints } = topPerformers;
+  const { mostActions, shortestTimeSeconds, fastestWin, lowestVpWin, highestVp, highestTr, mostGreeneryPoints, mostConsecutiveWins } = topPerformers;
   return (
     <div className={styles.playerCard}>
       <div className={cx(styles.player,
@@ -100,7 +103,7 @@ export const PlayerCard = ({
             })}
         </div>
       </div>
-      {nthPlayer === 0 && streakAmount > 1 && <div className={styles.streakAmount}>{streakMessage(streakAmount)}</div>}
+      {nthPlayer === 0 && streakAmount > 1 && <div className={styles.streakAmount}>{streakMessage(streakAmount, mostConsecutiveWins)}</div>}
     </div>
   )
 }
