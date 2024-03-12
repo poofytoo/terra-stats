@@ -43,7 +43,18 @@ export const PlayerCard = ({
           {player}
           {nthPlayer === 0 && <span className={styles.winner}> 🏆</span>}
         </div>
-        <div className={styles.playerScore}>{playerData.finalScore}</div>
+        <div className={styles.playerScore}>
+          {playerData.finalScore}
+          {nthPlayer === 0 && (playerData.aheadBy?.score ?? 0) > 0 && <span className={styles.aheadBy}>
+            {playerData.aheadBy?.score}
+            {topPerformers.winByBiggestVp === playerData.aheadBy?.score &&
+              <span className={styles.marginRecord}>largest margin!</span>}
+          </span>}
+          {nthPlayer === 0 && (playerData.aheadBy?.score ?? 0) === 0 && <span className={cx(styles.aheadBy, styles.aheadByMegaCredits)}>
+            {playerData.aheadBy?.megaCredits}
+            {topPerformers.winBySmallestMc === playerData.aheadBy?.megaCredits && <span className={styles.marginRecord}>smallest margin!</span>}
+          </span>}
+        </div>
         <div className={styles.pointsBreakdown}>
           <span className={styles.victoryPoints}>
             {playerData.victoryPoints}

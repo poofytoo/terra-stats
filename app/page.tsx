@@ -38,6 +38,8 @@ const Home = () => {
   let highestTr = 0;
   let mostGreeneryPoints = 0;
   let mostConsecutiveWins = 0
+  let winByBiggestVp = 0;
+  let winBySmallestMc = Number.MAX_SAFE_INTEGER;
 
   data?.sort((a: Game, b: Game) => {
     // if dates are the same, sort by filename
@@ -80,7 +82,7 @@ const Home = () => {
       fastestWin = timeInSeconds;
     }
 
-    Object.entries(game.players ?? {}).forEach(([_, playerData]) => {
+    Object.entries(game.players ?? {}).forEach(([rank, playerData]) => {
       const playerTimeInSeconds = (playerData.timer.hours) * 60 * 60 + (playerData.timer.minutes) * 60 + (playerData.timer.seconds);
       if (playerTimeInSeconds < shortestTimeSeconds) {
         shortestTimeSeconds = playerTimeInSeconds;
@@ -99,6 +101,18 @@ const Home = () => {
       }
       if (playerData.greeneryPoints && (playerData.greeneryPoints ?? 0) > mostGreeneryPoints) {
         mostGreeneryPoints = playerData.greeneryPoints;
+      }
+      // check if the winner is ahead of the second place player by megacredits. if less than the current lowest, set it as the new lowest
+      if (winner.finalScore === playerData.finalScore
+        && playerData.gamePlace === 2
+        && (winner.megaCredits - playerData.megaCredits < winBySmallestMc)) {
+        winBySmallestMc = winner.megaCredits - playerData.megaCredits;
+      }
+
+      // check if the winner is ahead of the second place player by victory points. if more than the current highest, set it as the new highest
+      if (playerData.gamePlace === 2
+        && (winner.finalScore - playerData.finalScore > winByBiggestVp)) {
+        winByBiggestVp = winner.finalScore - playerData.finalScore;
       }
     });
   });
@@ -147,7 +161,9 @@ const Home = () => {
                       highestVp,
                       highestTr,
                       mostGreeneryPoints,
-                      mostConsecutiveWins
+                      mostConsecutiveWins,
+                      winByBiggestVp,
+                      winBySmallestMc
                     }} />
                 ))
               }

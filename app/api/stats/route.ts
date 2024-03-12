@@ -110,6 +110,8 @@ export async function GET(request: Request) {
                 [normalizedPlayerName]: {
                   displayName: playerName,
                   finalScore: 0,
+                  megaCredits: 0,
+                  gamePlace: 0,
                   timer: {
                     minutes: 0,
                     seconds: 0,
@@ -171,7 +173,6 @@ export async function GET(request: Request) {
             if (logIdMatch) {
               game.id = logIdMatch[1];
             }
-
 
           }
 
@@ -303,6 +304,23 @@ export async function GET(request: Request) {
       }
     }
   }
+
+  // for each game, look at the first player (the winner). Determine the difference in score between the first player and second. set the aheadBy object to the difference in score and megaCredits.
+  for (const game of processedData) {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const secondPlace = game.players[players[1]];
+    winner.aheadBy = {
+      score: winner.finalScore - secondPlace.finalScore,
+      megaCredits: winner.megaCredits - secondPlace.megaCredits,
+    }
+
+    players.forEach((player, key) => {
+      // set the place
+      game.players[player].gamePlace = key + 1;
+    });
+  }
+
 
   return new Response(JSON.stringify(processedData));
 }

@@ -13,14 +13,19 @@ export interface vpCard {
 
 export interface PlayerData {
   displayName?: string;
-  finalScore?: number;
+  finalScore: number;
   terraformingRating?: number;
   milestonePoints?: number;
   awardPoints?: number;
   greeneryPoints?: number;
   cityPoints?: number;
   victoryPoints?: number;
-  megaCredits?: number;
+  megaCredits: number;
+  gamePlace: number; // 1, 2, 3, 4
+  aheadBy?: {
+    score: number;
+    megaCredits: number;
+  }
   timer: {
     minutes: number;
     seconds: number;
@@ -55,6 +60,8 @@ export interface TopPerformers {
   highestTr: number;
   mostGreeneryPoints: number;
   mostConsecutiveWins: number;
+  winBySmallestMc: number;
+  winByBiggestVp: number;
 }
 
 export type processedData = Game[];
