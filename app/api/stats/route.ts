@@ -20,10 +20,10 @@ const normalizedPlayerNames = {
   Victor: ['Victor', 'Vic', 'VicVic', 'Victortor'],
   Yota: ['Yota', 'Haircut', 'flourer', 'Yoyo'],
   Vy: ['Vy', 'Vyvy', 'need bubs'],
-  Lindsey: ['Lindsey', 'LinLin', 'Lin', 'Lind',],
+  Lindsey: ['Lindsey', 'LinLin', 'Lin', 'Lind'],
   Landon: ['Landon', 'Lando', 'Lan', 'LanLan'],
   Ming: ['need nap'],
-}
+};
 
 export async function GET(request: Request) {
   const files = await getAllFilesInFolder('data');
@@ -52,6 +52,9 @@ export async function GET(request: Request) {
     try {
       const fileContent = await fsPromises.readFile(filePath, 'utf-8');
 
+      // see if this html "<th data-tooltip="Escape Velocity penalty" class="clock-icon tooltip tooltip-top">⏳</th>" is in the entire html
+      const hasEscapeVelocity = fileContent.includes('<th data-tooltip="Escape Velocity penalty" class="clock-icon tooltip tooltip-top">⏳</th>') ? 1 : 0;
+
       // grab contents within the table that has a class of "game_end_table"
       const tableRegex = /<table class=".*? game_end_table">(.*?)<\/table>/gs;
       const tableMatch = tableRegex.exec(fileContent);
@@ -62,8 +65,6 @@ export async function GET(request: Request) {
       if (tableMatch) {
         tbodyMatch = tbodyRegex.exec(tableMatch[1]);
       }
-
-
 
       // inside this table, ignore the first row (header row). place the rest of the rows into an array.
       const rowRegex = /<tr.*?>(.*?)<\/tr>/gs;
@@ -121,9 +122,6 @@ export async function GET(request: Request) {
               }
             }
 
-            // see if this html "<th data-tooltip="Escape Velocity penalty" class="clock-icon tooltip tooltip-top">⏳</th>" is in the entire html
-            const hasEscapeVelocity = fileContent.includes('<th data-tooltip="Escape Velocity penalty" class="clock-icon tooltip tooltip-top">⏳</th>') ? 1 : 0;
-
             // add the corporation name to the player object.
             game.players[normalizedPlayerName].corporations = corporationList;
 
@@ -173,7 +171,6 @@ export async function GET(request: Request) {
             if (logIdMatch) {
               game.id = logIdMatch[1];
             }
-
           }
 
           rows.push(tds);
