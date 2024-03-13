@@ -42,6 +42,7 @@ export const PlayerCard = ({
         <div className={styles.playerName}>
           {player}
           {nthPlayer === 0 && <span className={styles.winner}> 🏆</span>}
+          {player !== playerData.displayName && <span className={styles.displayName}>({playerData.displayName})</span>}
         </div>
         <div className={styles.playerScore}>
           {playerData.finalScore}
