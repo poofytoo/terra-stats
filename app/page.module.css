@@ -1,60 +1,28 @@
 
-.allDataContainer {}
-
-.columns {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 30px;
+.mainPageGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 1px; /* This creates the light gray border effect */
+  background-color: #dfddc6; /* Light gray background to show through the gaps */
 }
 
-.playerRow {
-  display: flex;
-  margin-top: 10px;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: flex-start;
+.mainPageGrid > div {
+  background-color: white;
+  padding: 40px;
 }
 
-.dateOfGame {
-  margin-top: 20px;
-  padding-top: 10px;
-  font-size: 12px;
-  line-height: 1.1em;
-  color: teal;
+.fullWidth {
+  grid-column: 1 / -1; /* Span all columns */
 }
 
-.highlight {
-  color: teal;
+.mainPageGrid .title {
+  padding: 20px 40px;
 }
 
-.generations {
-  color: teal;
-  display: inline-block;
-  margin-left: 5px;
-  padding: 2px 6px;
-  border-radius: 5px;
-  border: 1px solid teal;
-  line-height: normal;
-}
-
-.generations:hover {
-  opacity: 1;
-}
-
-.gameLink {
-  font-size: 12px;
-  line-height: 1.1em;
-  color: teal;
-  margin-left: 5px;
-  padding: 2px 6px;
-  border-radius: 5px;
-  text-decoration: none;
-  color: white;
-  background-color: teal;
-}
-
-.gameLink:hover {
-  opacity: 0.8;
-
+/* Responsive design for mobile devices */
+@media (max-width: 768px) {
+  .mainPageGrid {
+    grid-template-columns: 1fr;
+  }
 }
