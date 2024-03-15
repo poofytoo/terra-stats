@@ -1,7 +1,7 @@
 import styles from "@/components/Players/Players.module.css";
 
 import { Game } from "@/types";
-import { percentageWithTwoSigFigs, roundWithTwoSigFigs } from "@/utils";
+import { formatDate, percentageWithTwoSigFigs, roundWithTwoSigFigs } from "@/utils";
 import cx from "classnames";
 
 export const Players = ({ data }: { data: Game[] }) => {
@@ -9,16 +9,16 @@ export const Players = ({ data }: { data: Game[] }) => {
   const winsByPlayer: {
     [player: string]: {
       plays: number;
-      wins?: number;
+      wins: number;
       winPercentage?: number;
       totalCorporations: number;
       averageCorporations?: string;
+      lastWin?: Date;
     }
   } = {};
 
-  // Instantiate winsByPlayer with all players
   data?.forEach((game: Game) => {
-    Object.entries(game.players ?? {}).forEach(([player]) => {
+    Object.entries(game.players ?? {}).forEach(([player, playerData], id: number) => {
       if (!winsByPlayer[player]) {
         winsByPlayer[player] = {
           totalCorporations: 0,
@@ -26,34 +26,33 @@ export const Players = ({ data }: { data: Game[] }) => {
           wins: 0,
         };
       }
+
+      const playerStats = winsByPlayer[player];
+
+      if (id === 0) {
+        if (playerStats.lastWin) {
+          if (game.dateOfGame > playerStats.lastWin) {
+            playerStats.lastWin = game.dateOfGame;
+          }
+        } else {
+          playerStats.lastWin = game.dateOfGame;
+        }
+      }
+
+      playerStats.plays++;
+      playerStats.totalCorporations += (playerData.corporations ?? []).length;
+
+      if (id === 0) {
+        playerStats.wins++;
+      }
     });
   });
 
-  // loop through all games and count the number of corporations played by each player using a reduce function. then divide by the number of games played by that player to get the average corporations played by that player
-  data?.forEach((game: Game) => {
-    Object.entries(game.players ?? {}).forEach(([player, playerData]) => {
-      winsByPlayer[player].totalCorporations = winsByPlayer[player].totalCorporations + ((playerData.corporations ?? []).length ?? 0);
-    });
-  });
-
-  // Count the number of wins for each player
-  data?.forEach((game: Game) => {
-    Object.entries(game.players ?? {}).forEach(([player], id: number) => {
-      winsByPlayer[player].plays++;
-      winsByPlayer[player].wins = (winsByPlayer[player]?.wins ?? 0) + (id === 0 ? 1 : 0);
-    });
-  });
-
-
+  // After gathering all data, calculate win percentage and average corporations
   Object.entries(winsByPlayer).forEach(([player, playerStats]) => {
-    winsByPlayer[player].winPercentage = (playerStats.wins ?? 0) / playerStats.plays;
+    playerStats.winPercentage = playerStats.wins / playerStats.plays;
+    playerStats.averageCorporations = roundWithTwoSigFigs(playerStats.totalCorporations / playerStats.plays);
   });
-
-  // Calculate the average corporations played by each player
-  Object.entries(winsByPlayer).forEach(([player, playerStats]) => {
-    winsByPlayer[player].averageCorporations = roundWithTwoSigFigs(playerStats.totalCorporations / playerStats.plays);
-  });
-
 
   return <div className={styles.playersDataContainer}>
     <h2>Wins by Player</h2>
@@ -62,8 +61,9 @@ export const Players = ({ data }: { data: Game[] }) => {
         <span>Player</span>
         <span>Win Rate</span>
         <span>Wins</span>
-        <span>Total Plays</span>
+        <span>Plays</span>
         <span>Avg Corps</span>
+        <span>Last Win</span>
       </div>
       {
         Object.entries(winsByPlayer).sort((a, b) => {
@@ -75,6 +75,7 @@ export const Players = ({ data }: { data: Game[] }) => {
             <span>{playerStats.wins ?? 0}</span>
             <span>{playerStats.plays}</span>
             <span>{playerStats.averageCorporations}</span>
+            <span>{playerStats.lastWin ? formatDate(playerStats.lastWin) : 'n/a'}</span>
           </div>
         ))
       }

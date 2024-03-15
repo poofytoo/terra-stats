@@ -2,12 +2,12 @@
   box-shadow: 0 0 15px rgba(0,0,0,0.1);
   padding: 20px;
   border-radius: var(--round);
-  flex: 1 0 220px;
+  flex: 1 0 320px;
 }
 
 .playersTable {
   display: grid;
-  grid-template-columns: 80px 80px 40px 1fr 1fr;
+  grid-template-columns: 80px 80px 40px 40px 60px 1fr;
 }
 
 .row {
