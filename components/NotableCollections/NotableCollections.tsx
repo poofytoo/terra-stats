@@ -63,7 +63,7 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
         <div className={styles.holders}>
           Holders
         </div>
-        <div className="date">
+        <div>
           Date
         </div>
       </div>
@@ -78,8 +78,10 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
           <div className={styles.holders}>
             {collectionData.player}
           </div>
-          <div className={"date"}>
-            {formatDate(collectionData.dateOfGamePlayed)}
+          <div>
+            <div className="date">
+              {formatDate(collectionData.dateOfGamePlayed)}
+            </div>
           </div>
         </div>
       })}
