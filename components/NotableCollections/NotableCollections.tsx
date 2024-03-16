@@ -15,8 +15,8 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
 
   const highestNotableCollections: HighestNotableCollections =
     data.reduce((acc, game) => {
-      Object.entries(game.players).forEach(([name, player]) => {
-        player.vpCards?.forEach(card => {
+      Object.entries(game.players).forEach(([name, playerData]) => {
+        playerData.vpCards?.forEach(card => {
           if (card.isNotable) {
             if (!acc[card.cardName]) {
               acc[card.cardName] = {
@@ -24,15 +24,15 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
                 player: name,
                 dateOfGamePlayed: game.dateOfGame
               }
-            } else {
-              if (card.vp >= acc[card.cardName].highest && game.dateOfGame < acc[card.cardName].dateOfGamePlayed) {
-                acc[card.cardName] = {
-                  highest: card.vp,
-                  player: name,
-                  dateOfGamePlayed: game.dateOfGame
-                }
-              } 
             }
+            if (card.vp >= acc[card.cardName].highest && game.dateOfGame.getTime() > acc[card.cardName].dateOfGamePlayed.getTime()) {
+              acc[card.cardName] = {
+                highest: card.vp,
+                player: name,
+                dateOfGamePlayed: game.dateOfGame
+              }
+            }
+
           }
         })
       })
@@ -44,7 +44,6 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
   Object.keys(highestNotableCollections).sort().forEach(key => {
     sortedNotableCollections[key] = highestNotableCollections[key];
   });
-
 
   return <div className={styles.notableCollectionsContainer}>
     <h2>Notable Collections</h2>
