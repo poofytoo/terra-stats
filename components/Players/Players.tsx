@@ -3,6 +3,7 @@ import styles from "@/components/Players/Players.module.css";
 import { Game } from "@/types";
 import { formatDate, percentageWithTwoSigFigs, roundWithTwoSigFigs } from "@/utils";
 import cx from "classnames";
+import { DateChip } from "../DateChip/DateChip";
 
 export const Players = ({ data }: { data: Game[] }) => {
 
@@ -19,6 +20,7 @@ export const Players = ({ data }: { data: Game[] }) => {
       averageCorporations?: string;
       lastWin?: Date;
       maxStreak?: number;
+      lastWinId?: string;
     }
   } = {};
 
@@ -39,9 +41,11 @@ export const Players = ({ data }: { data: Game[] }) => {
         if (playerStats.lastWin) {
           if (game.dateOfGame > playerStats.lastWin) {
             playerStats.lastWin = game.dateOfGame;
+            playerStats.lastWinId = game.id;
           }
         } else {
           playerStats.lastWin = game.dateOfGame;
+          playerStats.lastWinId = game.id;
         }
 
         if (playerData?.aheadBy) {
@@ -95,7 +99,8 @@ export const Players = ({ data }: { data: Game[] }) => {
               <span>{playerStats.wins ?? 0}</span>
               <span>{playerStats.plays}</span>
               <span>{playerStats.averageCorporations}</span>
-              <span>{playerStats.lastWin ? formatDate(playerStats.lastWin) : 'n/a'}</span>
+              <span><DateChip gameId={playerStats.lastWinId} /></span>
+              {/* <span>{playerStats.lastWin ? formatDate(playerStats.lastWin) : 'n/a'}</span> */}
               <span>+{avgLead}</span>
               <span>{playerStats.maxStreak ?? 0}</span>
             </div>
