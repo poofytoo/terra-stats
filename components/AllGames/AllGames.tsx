@@ -1,11 +1,15 @@
 import { Game } from "@/types";
-import React from "react";
+import React, { useEffect } from "react";
 
 import styles from "./AllGames.module.css";
-import { formatDate } from "@/utils";
 import { PlayerCard } from "../PlayerCard";
 
-export const AllGames = ({ data }: { data: Game[] }) => {
+import { formatDate } from "@/utils";
+import { useGameData } from "@/hooks/useGameData";
+
+export const AllGames = () => {
+
+  const { data } = useGameData();
 
   let mostActions = 0;
   let shortestTimeSeconds = Number.MAX_SAFE_INTEGER;
@@ -69,7 +73,7 @@ export const AllGames = ({ data }: { data: Game[] }) => {
 
   return <div className={styles.allDataContainer}>
     <div className={styles.allDataContainer}>
-      {data.map((game: Game, id: number) => {
+      {data?.map((game: Game, id: number) => {
 
         const date = new Date(game.dateOfGame);
         const dateOfGame = formatDate(date);
@@ -77,7 +81,7 @@ export const AllGames = ({ data }: { data: Game[] }) => {
         // showGameResultsLink is only True if date is within the last 15 days 
         const showGameResultsLink = (new Date().getTime() - date.getTime()) / (1000 * 60 * 60 * 24) < 15;
 
-        return <React.Fragment key={id}>
+        return <div key={id} className={"gameRow"} id={game.id}>
           <div className={styles.dateOfGame}>
             <span>{dateOfGame}</span>
             <span className={styles.generations}>{game.generations} generations</span>{" "}
@@ -109,7 +113,7 @@ export const AllGames = ({ data }: { data: Game[] }) => {
             ))
           }
           </div>
-        </React.Fragment>
+        </div>
       })}
     </div>
   </div>

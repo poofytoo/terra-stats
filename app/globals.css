@@ -17,6 +17,7 @@
   --gray8: #212529;
 
   --highlight: gold;
+  --row-highlight: rgb(255, 250, 224);
   --highlight-dark: rgb(209, 168, 0);
 
   --round: 6px;
@@ -67,4 +68,12 @@ strong {
 .dem {
   font-weight: normal;
   color: var(--gray4);
+}
+
+.highlightedRow {
+  background-color: var(--row-highlight);
+}
+
+.gameRow {
+  padding: 30px 40px;
 }

@@ -6,6 +6,7 @@
   border-radius: var(--round);
   overflow: hidden;
   position: relative;
+  background-color: var(--white);
 }
 
 .streakAmount {

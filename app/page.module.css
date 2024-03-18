@@ -14,6 +14,16 @@
 
 .fullWidth {
   grid-column: 1 / -1; /* Span all columns */
+  padding: 0;
+  margin: 0;
+}
+
+.mainPageGrid .fullWidth {
+  padding: 0;
+}
+
+.mainPageGrid .fullWidth h2 {
+  padding: 40px 40px 0;
 }
 
 .mainPageGrid .title {

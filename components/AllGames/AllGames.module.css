@@ -1,3 +1,5 @@
+
+
 .playerRow {
   display: flex;
   margin-top: 10px;
@@ -7,14 +9,13 @@
 }
 
 .dateOfGame {
-  margin-top: 20px;
-  padding-top: 10px;
   font-size: 12px;
   line-height: 1.1em;
   color: teal;
 }
 
 .generations {
+  background-color: var(--white);
   color: teal;
   display: inline-block;
   margin-left: 5px;
@@ -43,3 +44,4 @@
 .gameLink:hover {
   opacity: 0.8;
 }
+

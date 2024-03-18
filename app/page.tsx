@@ -1,5 +1,7 @@
 "use client";
 
+import React from 'react';
+
 import useSWR from 'swr';
 import { Game } from '@/types';
 
@@ -9,15 +11,11 @@ import cx from 'classnames';
 import { Corporations } from '@/components/Corporations';
 import { Players } from '@/components/Players';
 import { NotableCollections } from '@/components/NotableCollections';
-import { PlayerCard } from '@/components/PlayerCard';
-import React from 'react';
-import { formatDate } from '@/utils';
 import { AllGames } from '@/components/AllGames';
+import { useGameData } from '@/hooks/useGameData';
 
 const Home = () => {
-  const fetcher = (url: string) => fetch(url).then((res) => res.json());
-  const { data, error } = useSWR('/api/stats', fetcher);
-
+  const { data, error } = useGameData();
   if (error) {
     return <div>Error loading data</div>;
   }
@@ -31,7 +29,7 @@ const Home = () => {
         <h2>Loading...</h2>
       </div>
     </div>;
-  } 
+  }
 
   data?.forEach((game: Game) => {
     game.dateOfGame = new Date(game.dateOfGame);
@@ -48,7 +46,7 @@ const Home = () => {
         <div><NotableCollections data={data} /></div>
         <div className={styles.fullWidth}>
           <h2>All Logged Games <span className="dem">({data.length})</span></h2>
-          <AllGames data={data} />
+          <AllGames />
         </div>
       </div>
     </div>
