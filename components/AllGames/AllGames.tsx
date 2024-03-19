@@ -23,6 +23,30 @@ export const AllGames = () => {
   let mostConsecutiveWins = 0;
 
 
+  //   // sort by date
+  //   return new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime();
+  // })
+
+  const streakTracker: {
+    [player: string]: number
+  } = {}
+
+  // iterate through data but reversed
+  data?.slice().reverse().forEach((game: Game) => {
+    const winner = Object.entries(game.players)[0][0];
+    const players = Object.keys(game.players);
+    players.map((player) => {
+      if (player === winner) {
+        streakTracker[player] = (streakTracker?.[player] ?? 0) + 1;
+      } else {
+        streakTracker[player] = 0;
+      }
+    })
+    game.streakCount = streakTracker[winner];
+    if (streakTracker[winner] > mostConsecutiveWins) {
+      mostConsecutiveWins = streakTracker[winner];
+    }
+  });
 
   data?.forEach((game: Game) => {
     const winner = Object.entries(game.players)[0][1];
