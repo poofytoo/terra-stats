@@ -8,6 +8,10 @@ export const Players = ({ data }: { data: Game[] }) => {
 
   const winsByPlayer: {
     [player: string]: {
+      aheadBys: {
+        score: number;
+        megaCredits: number;
+      }[];
       plays: number;
       wins: number;
       winPercentage?: number;
@@ -21,6 +25,7 @@ export const Players = ({ data }: { data: Game[] }) => {
     Object.entries(game.players ?? {}).forEach(([player, playerData], id: number) => {
       if (!winsByPlayer[player]) {
         winsByPlayer[player] = {
+          aheadBys: [],
           totalCorporations: 0,
           plays: 0,
           wins: 0,
@@ -36,6 +41,10 @@ export const Players = ({ data }: { data: Game[] }) => {
           }
         } else {
           playerStats.lastWin = game.dateOfGame;
+        }
+
+        if (playerData?.aheadBy) {
+          playerStats.aheadBys.push(playerData.aheadBy);
         }
       }
 
@@ -64,21 +73,29 @@ export const Players = ({ data }: { data: Game[] }) => {
         <span>Plays</span>
         <span>Avg Corps</span>
         <span>Last Win</span>
+        <span>Avg&nbsp;Lead</span>
       </div>
       {
         Object.entries(winsByPlayer).sort((a, b) => {
           return (b[1].winPercentage ?? 0) - (a[1].winPercentage ?? 0);
-        }).map(([player, playerStats]) => (
-          <div key={player} className={styles.row}>
-            <span>{player}</span>
-            <span><strong>{percentageWithTwoSigFigs(playerStats.winPercentage ?? 0)}</strong></span>
-            <span>{playerStats.wins ?? 0}</span>
-            <span>{playerStats.plays}</span>
-            <span>{playerStats.averageCorporations}</span>
-            <span>{playerStats.lastWin ? formatDate(playerStats.lastWin) : 'n/a'}</span>
-          </div>
-        ))
-      }
+        }).map(([player, playerStats]) => {
+          const avgLead = roundWithTwoSigFigs(playerStats.aheadBys.reduce((val, acc) => {
+            return val + acc.score;
+          }, 0) /
+            playerStats.aheadBys.length || 0)
+
+          return (
+            <div key={player} className={styles.row}>
+              <span>{player}</span>
+              <span><strong>{percentageWithTwoSigFigs(playerStats.winPercentage ?? 0)}</strong></span>
+              <span>{playerStats.wins ?? 0}</span>
+              <span>{playerStats.plays}</span>
+              <span>{playerStats.averageCorporations}</span>
+              <span>{playerStats.lastWin ? formatDate(playerStats.lastWin) : 'n/a'}</span>
+              <span>+{avgLead}</span>
+            </div>
+          );
+        })}
     </div>
   </div>
 }
