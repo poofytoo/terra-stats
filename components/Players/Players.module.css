@@ -1,6 +1,6 @@
 .playersTable {
   display: grid;
-  grid-template-columns: 70px 70px 40px 40px 60px 75px 50px;
+  grid-template-columns: 70px 70px 40px 40px 60px 75px 55px 55px;
 }
 
 .row {

@@ -6,7 +6,7 @@ import cx from "classnames";
 
 export const Players = ({ data }: { data: Game[] }) => {
 
-  const winsByPlayer: {
+  const stats: {
     [player: string]: {
       aheadBys: {
         score: number;
@@ -18,13 +18,14 @@ export const Players = ({ data }: { data: Game[] }) => {
       totalCorporations: number;
       averageCorporations?: string;
       lastWin?: Date;
+      maxStreak?: number;
     }
   } = {};
 
   data?.forEach((game: Game) => {
     Object.entries(game.players ?? {}).forEach(([player, playerData], id: number) => {
-      if (!winsByPlayer[player]) {
-        winsByPlayer[player] = {
+      if (!stats[player]) {
+        stats[player] = {
           aheadBys: [],
           totalCorporations: 0,
           plays: 0,
@@ -32,7 +33,7 @@ export const Players = ({ data }: { data: Game[] }) => {
         };
       }
 
-      const playerStats = winsByPlayer[player];
+      const playerStats = stats[player];
 
       if (id === 0) {
         if (playerStats.lastWin) {
@@ -46,19 +47,21 @@ export const Players = ({ data }: { data: Game[] }) => {
         if (playerData?.aheadBy) {
           playerStats.aheadBys.push(playerData.aheadBy);
         }
+
+        const playerStreak = game.streakCount ?? 0;
+        if (playerStreak > (playerStats.maxStreak ?? 0)) {
+          playerStats.maxStreak = playerStreak;
+        }
+        playerStats.wins++;
       }
 
       playerStats.plays++;
       playerStats.totalCorporations += (playerData.corporations ?? []).length;
-
-      if (id === 0) {
-        playerStats.wins++;
-      }
     });
   });
 
   // After gathering all data, calculate win percentage and average corporations
-  Object.entries(winsByPlayer).forEach(([player, playerStats]) => {
+  Object.entries(stats).forEach(([player, playerStats]) => {
     playerStats.winPercentage = playerStats.wins / playerStats.plays;
     playerStats.averageCorporations = roundWithTwoSigFigs(playerStats.totalCorporations / playerStats.plays);
   });
@@ -74,9 +77,10 @@ export const Players = ({ data }: { data: Game[] }) => {
         <span>Avg Corps</span>
         <span>Last Win</span>
         <span>Avg&nbsp;Lead</span>
+        <span>Max&nbsp;Streak</span>
       </div>
       {
-        Object.entries(winsByPlayer).sort((a, b) => {
+        Object.entries(stats).sort((a, b) => {
           return (b[1].winPercentage ?? 0) - (a[1].winPercentage ?? 0);
         }).map(([player, playerStats]) => {
           const avgLead = roundWithTwoSigFigs(playerStats.aheadBys.reduce((val, acc) => {
@@ -93,6 +97,7 @@ export const Players = ({ data }: { data: Game[] }) => {
               <span>{playerStats.averageCorporations}</span>
               <span>{playerStats.lastWin ? formatDate(playerStats.lastWin) : 'n/a'}</span>
               <span>+{avgLead}</span>
+              <span>{playerStats.maxStreak}</span>
             </div>
           );
         })}
