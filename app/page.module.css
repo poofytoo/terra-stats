@@ -9,7 +9,7 @@
 
 .mainPageGrid > div {
   background-color: white;
-  padding: 40px;
+  padding: 30px;
 }
 
 .fullWidth {
@@ -17,7 +17,7 @@
 }
 
 .mainPageGrid .title {
-  padding: 20px 40px;
+  padding: 20px 30px;
 }
 
 /* Responsive design for mobile devices */
