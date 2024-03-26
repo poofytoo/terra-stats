@@ -47,7 +47,7 @@ const Home = () => {
         <div><Corporations data={data} /></div>
         <div><NotableCollections data={data} /></div>
         <div className={styles.fullWidth}>
-          <h2>All Games</h2>
+          <h2>All Logged Games <span className="dem">({data.length})</span></h2>
           <AllGames data={data} />
         </div>
       </div>

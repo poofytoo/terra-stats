@@ -6,6 +6,16 @@
   --black: #000;
   --white: #fff;
 
+  --gray0: #f8f9fa;
+  --gray1: #e9ecef;
+  --gray2: #dee2e6;
+  --gray3: #ced4da;
+  --gray4: #adb5bd;
+  --gray5: #868e96;
+  --gray6: #495057;
+  --gray7: #343a40;
+  --gray8: #212529;
+  
   --round: 6px;
 }
 
@@ -35,4 +45,9 @@ strong {
 .date {
   font-size: 11px;  
   color: #999;
+}
+
+.dem {
+  font-weight: normal;
+  color: var(--gray4);
 }
