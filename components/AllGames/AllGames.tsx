@@ -14,42 +14,11 @@ export const AllGames = ({ data }: { data: Game[] }) => {
   let highestVp = 0;
   let highestTr = 0;
   let mostGreeneryPoints = 0;
-  let mostConsecutiveWins = 0
   let winByBiggestVp = 0;
   let winBySmallestMc = Number.MAX_SAFE_INTEGER;
+  let mostConsecutiveWins = 0;
 
-  data?.sort((a: Game, b: Game) => {
-    // if dates are the same, sort by filename
-    if (new Date(b.dateOfGame).getTime() === new Date(a.dateOfGame).getTime()) {
-      return (b.fileName.split("-")[3] ?? "0").localeCompare(a.fileName.split("-")[3] ?? "0");
-    }
 
-    // sort by date
-    return new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime();
-  })
-
-  const streakTracker: {
-    [player: string]: number
-  } = {
-
-  }
-
-  // iterate through data but reversed
-  data?.slice().reverse().forEach((game: Game) => {
-    const winner = Object.entries(game.players)[0][0];
-    const players = Object.keys(game.players);
-    players.map((player) => {
-      if (player === winner) {
-        streakTracker[player] = (streakTracker?.[player] ?? 0) + 1;
-      } else {
-        streakTracker[player] = 0;
-      }
-    })
-    game.streakCount = streakTracker[winner];
-    if (streakTracker[winner] > mostConsecutiveWins) {
-      mostConsecutiveWins = streakTracker[winner];
-    }
-  });
 
   data?.forEach((game: Game) => {
     const winner = Object.entries(game.players)[0][1];
@@ -91,6 +60,10 @@ export const AllGames = ({ data }: { data: Game[] }) => {
         && (winner.finalScore - playerData.finalScore > winByBiggestVp)) {
         winByBiggestVp = winner.finalScore - playerData.finalScore;
       }
+
+      if (game.streakCount > mostConsecutiveWins) {
+        mostConsecutiveWins = game.streakCount;
+      }
     });
   });
 
@@ -129,7 +102,7 @@ export const AllGames = ({ data }: { data: Game[] }) => {
                   highestVp,
                   highestTr,
                   mostGreeneryPoints,
-                  mostConsecutiveWins,
+                  mostConsecutiveWins: 0, // fix
                   winByBiggestVp,
                   winBySmallestMc
                 }} />

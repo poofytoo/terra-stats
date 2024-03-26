@@ -97,7 +97,7 @@ export const Players = ({ data }: { data: Game[] }) => {
               <span>{playerStats.averageCorporations}</span>
               <span>{playerStats.lastWin ? formatDate(playerStats.lastWin) : 'n/a'}</span>
               <span>+{avgLead}</span>
-              <span>{playerStats.maxStreak}</span>
+              <span>{playerStats.maxStreak ?? 0}</span>
             </div>
           );
         })}

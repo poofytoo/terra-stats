@@ -45,6 +45,7 @@ export async function GET(request: Request) {
 
     const game: Game = {
       dateOfGame,
+      streakCount: 0,
       fileName: file,
       players: {}
     }
@@ -315,6 +316,45 @@ export async function GET(request: Request) {
     });
   }
 
+  const streakTracker: {
+    [player: string]: {
+      wins: number;
+      losses: number;
+    }
+  } = {};
+
+  // let mostConsecutiveWins = 0
+
+  processedData?.sort((a: Game, b: Game) => {
+    // if dates are the same, sort by filename
+    if (new Date(b.dateOfGame).getTime() === new Date(a.dateOfGame).getTime()) {
+      return (b.fileName.split("-")[3] ?? "0").localeCompare(a.fileName.split("-")[3] ?? "0");
+    }
+
+    // sort by date
+    return new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime();
+  })
+
+  // iterate through data but reversed
+  processedData?.slice().reverse().forEach((game: Game) => {
+    const winner = Object.entries(game.players)[0][0];
+    const players = Object.keys(game.players);
+    players.map((player) => {
+      if (!streakTracker[player]) {
+        streakTracker[player] = {
+          wins: 0,
+          losses: 0
+        }
+      }
+
+      if (player === winner) {
+        streakTracker[player].wins = (streakTracker?.[player].wins ?? 0) + 1;
+      } else {
+        streakTracker[player].wins = 0;
+      }
+    })
+    game.streakCount = streakTracker[winner].wins;
+  });
 
   return new Response(JSON.stringify(processedData));
 }
