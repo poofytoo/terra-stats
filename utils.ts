@@ -41,3 +41,10 @@ export const percentageWithTwoSigFigs = (num: number): string => {
 export const roundWithTwoSigFigs = (num: number): string => {
   return round(num).toFixed(2);
 }
+
+import { Gabarito } from "next/font/google";
+
+export const gab = Gabarito({
+  subsets: ["latin"],
+  adjustFontFallback: false,
+});

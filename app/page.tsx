@@ -2,11 +2,12 @@
 
 import React, { useContext } from 'react';
 
-import useSWR from 'swr';
 import { Game } from '@/types';
 
 import styles from './page.module.css';
 import cx from 'classnames';
+
+import { gab } from '@/utils';
 
 import { Corporations } from '@/components/Corporations';
 import { Players } from '@/components/Players';
@@ -19,7 +20,7 @@ const Home = () => {
 
 
   if (!gameData) {
-    return <div className={styles.mainPageGrid}>
+    return <div className={cx(styles.mainPageGrid, gab.className)}>
       <div className={cx(styles.fullWidth, styles.title)}>
         <h1>Terra-Stats!</h1>
       </div>
@@ -35,7 +36,7 @@ const Home = () => {
 
   return (
     <div>
-      <div className={styles.mainPageGrid}>
+      <div className={cx(styles.mainPageGrid, gab.className)}>
         <div className={cx(styles.fullWidth, styles.title)}>
           <h1>Terra-Stats!</h1>
         </div>

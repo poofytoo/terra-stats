@@ -1,9 +1,9 @@
 .date {
-  font-size: 12px;  
+  font-size: 11px;  
   color: #999;
-  border: 2px solid var(--highlight);
+  border: 1px solid var(--vp);
   display: inline-block;
-  padding: 2px 1px 1px;
+  padding: 1px 1px 1px;
   line-height: normal;
   font-weight: bold;
   width: 65px;
