@@ -66,7 +66,7 @@ export const NotableCollections = () => {
           Record
         </div>
         <div className={styles.holders}>
-          Holders
+          Holder
         </div>
         <div>
           Date

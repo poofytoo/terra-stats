@@ -13,7 +13,12 @@
   letter-spacing: 0.3px;
 }
 
-.date:hover {
+.date:hover:not(.disabled) {
   background-color: var(--highlight);
   cursor: pointer;
+}
+
+.disabled {
+  border-color: var(--gray3);
+  color: var(--gray2);
 }

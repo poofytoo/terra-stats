@@ -1,4 +1,5 @@
 import styles from './DateChip.module.css';
+import cx from 'classnames';
 
 import { formatDate } from '@/utils';
 import { useRouter } from 'next/navigation';
@@ -11,7 +12,7 @@ export const DateChip = ({ gameId }: { gameId?: string }) => {
 
   if (!gameId) {
     return (
-      <div className={styles.date}>
+      <div className={cx(styles.date, styles.disabled)}>
         n/a
       </div>
     )

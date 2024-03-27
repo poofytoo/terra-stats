@@ -57,7 +57,7 @@ strong {
 
 .highlightedRow {
   background-color: var(--row-highlight);
-  animation: pulsing 0.4s infinite;
+  animation: pulsing 1.5s infinite;
 }
 
 .gameRow {
