@@ -25,14 +25,17 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
                 dateOfGamePlayed: game.dateOfGame
               }
             }
-            if (card.vp >= acc[card.cardName].highest && game.dateOfGame.getTime() > acc[card.cardName].dateOfGamePlayed.getTime()) {
+            if (card.cardName === "Venusian Insects") {
+              console.log(card.vp, acc[card.cardName].highest, game.dateOfGame.getTime(), acc[card.cardName].dateOfGamePlayed.getTime())
+            }
+
+            if (card.vp > acc[card.cardName].highest) {
               acc[card.cardName] = {
                 highest: card.vp,
                 player: name,
                 dateOfGamePlayed: game.dateOfGame
               }
             }
-
           }
         })
       })
@@ -44,6 +47,8 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
   Object.keys(highestNotableCollections).sort().forEach(key => {
     sortedNotableCollections[key] = highestNotableCollections[key];
   });
+
+  console.log(sortedNotableCollections);
 
   return <div className={styles.notableCollectionsContainer}>
     <h2>Notable Collections</h2>
