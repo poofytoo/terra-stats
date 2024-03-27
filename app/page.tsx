@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useContext } from 'react';
 
 import useSWR from 'swr';
 import { Game } from '@/types';
@@ -12,15 +12,13 @@ import { Corporations } from '@/components/Corporations';
 import { Players } from '@/components/Players';
 import { NotableCollections } from '@/components/NotableCollections';
 import { AllGames } from '@/components/AllGames';
-import { useGameData } from '@/hooks/useGameData';
+import { GameDataContext } from '@/hooks/GameDataProvider';
 
 const Home = () => {
-  const { data, error } = useGameData();
-  if (error) {
-    return <div>Error loading data</div>;
-  }
+  const { gameData } = useContext(GameDataContext);
 
-  if (!data) {
+
+  if (!gameData) {
     return <div className={styles.mainPageGrid}>
       <div className={cx(styles.fullWidth, styles.title)}>
         <h1>Terra-Stats!</h1>
@@ -31,7 +29,7 @@ const Home = () => {
     </div>;
   }
 
-  data?.forEach((game: Game) => {
+  gameData?.forEach((game: Game) => {
     game.dateOfGame = new Date(game.dateOfGame);
   });
 
@@ -41,11 +39,11 @@ const Home = () => {
         <div className={cx(styles.fullWidth, styles.title)}>
           <h1>Terra-Stats!</h1>
         </div>
-        <div><Players data={data} /></div>
-        <div><Corporations data={data} /></div>
-        <div><NotableCollections data={data} /></div>
+        <div><Players /></div>
+        <div><Corporations /></div>
+        <div><NotableCollections /></div>
         <div className={styles.fullWidth}>
-          <h2>All Logged Games <span className="dem">({data.length})</span></h2>
+          <h2>All Logged Games <span className="dem">({gameData.length})</span></h2>
           <AllGames />
         </div>
       </div>

@@ -1,11 +1,13 @@
-import { useGameData } from '@/hooks/useGameData';
 import styles from './DateChip.module.css';
+
 import { formatDate } from '@/utils';
 import { useRouter } from 'next/navigation';
+import { useContext } from 'react';
+import { GameDataContext } from '@/hooks/GameDataProvider';
 
 export const DateChip = ({ gameId }: { gameId?: string }) => {
-  const { getGameById, setHighlightedGameId } = useGameData();
   const router = useRouter();
+  const { getGameById, setHighlightedGameId, highlightedGameId } = useContext(GameDataContext);
 
   if (!gameId) {
     return (
@@ -24,7 +26,7 @@ export const DateChip = ({ gameId }: { gameId?: string }) => {
         router.push(`/#${gameData.id}`)
       }
     }}>
-      {formatDate(gameData.dateOfGame)}
+      {formatDate(gameData?.dateOfGame)}
     </div>
   )
 }

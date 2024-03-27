@@ -1,20 +1,25 @@
 import styles from "@/components/NotableCollections/NotableCollections.module.css";
+import { GameDataContext } from "@/hooks/GameDataProvider";
 import { Game } from "@/types";
 import { formatDate } from "@/utils";
 import cx from "classnames";
+import { useContext } from "react";
+import { DateChip } from "../DateChip/DateChip";
 
 interface HighestNotableCollections {
   [collection: string]: {
     highest: number;
     dateOfGamePlayed: Date;
+    gameId: string;
     player: string;
   }
 }
 
-export const NotableCollections = ({ data }: { data: Game[] }) => {
+export const NotableCollections = () => {
+  const { gameData } = useContext(GameDataContext);
 
-  const highestNotableCollections: HighestNotableCollections =
-    data.reduce((acc, game) => {
+  const highestNotableCollections =
+    gameData?.reduce((acc, game) => {
       Object.entries(game.players).forEach(([name, playerData]) => {
         playerData.vpCards?.forEach(card => {
           if (card.isNotable) {
@@ -22,17 +27,16 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
               acc[card.cardName] = {
                 highest: card.vp,
                 player: name,
+                gameId: game.id ?? "",
                 dateOfGamePlayed: game.dateOfGame
               }
-            }
-            if (card.cardName === "Venusian Insects") {
-              console.log(card.vp, acc[card.cardName].highest, game.dateOfGame.getTime(), acc[card.cardName].dateOfGamePlayed.getTime())
             }
 
             if (card.vp > acc[card.cardName].highest) {
               acc[card.cardName] = {
                 highest: card.vp,
                 player: name,
+                gameId: game.id ?? "",
                 dateOfGamePlayed: game.dateOfGame
               }
             }
@@ -44,11 +48,12 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
 
   // sort highestNotable Collections alphabetically by collection name
   const sortedNotableCollections: HighestNotableCollections = {};
-  Object.keys(highestNotableCollections).sort().forEach(key => {
-    sortedNotableCollections[key] = highestNotableCollections[key];
-  });
 
-  console.log(sortedNotableCollections);
+  if (highestNotableCollections) {
+    Object.keys(highestNotableCollections).sort().forEach(key => {
+      sortedNotableCollections[key] = highestNotableCollections[key];
+    });
+  }
 
   return <div className={styles.notableCollectionsContainer}>
     <h2>Notable Collections</h2>
@@ -80,7 +85,7 @@ export const NotableCollections = ({ data }: { data: Game[] }) => {
           </div>
           <div>
             <div className="date">
-              {formatDate(collectionData.dateOfGamePlayed)}
+              <DateChip gameId={collectionData.gameId} />
             </div>
           </div>
         </div>

@@ -1,11 +1,14 @@
 import styles from "@/components/Players/Players.module.css";
 
 import { Game } from "@/types";
-import { formatDate, percentageWithTwoSigFigs, roundWithTwoSigFigs } from "@/utils";
+import { percentageWithTwoSigFigs, roundWithTwoSigFigs } from "@/utils";
 import cx from "classnames";
 import { DateChip } from "../DateChip/DateChip";
+import { useContext } from "react";
+import { GameDataContext } from "@/hooks/GameDataProvider";
 
-export const Players = ({ data }: { data: Game[] }) => {
+export const Players = () => {
+  const { gameData: data } = useContext(GameDataContext);
 
   const stats: {
     [player: string]: {

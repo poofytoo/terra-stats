@@ -18,9 +18,13 @@
 
   --highlight: gold;
   --row-highlight: rgb(255, 250, 224);
-  --highlight-dark: rgb(209, 168, 0);
+  --highlight-dark: rgb(244, 232, 185);
 
   --round: 6px;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -53,8 +57,26 @@ strong {
 
 .highlightedRow {
   background-color: var(--row-highlight);
+  animation: pulsing 0.4s infinite;
 }
 
 .gameRow {
   padding: 30px 40px;
+}
+
+.shifted {
+  transform: translateY(-100px);
+  display: inline-block;
+}
+
+@keyframes pulsing {
+  0% {
+    background-color: var(--row-highlight);
+  }
+  50% {
+    background-color: var(--highlight-dark);
+  }
+  100% {
+    background-color: var(--row-highlight);
+  }
 }

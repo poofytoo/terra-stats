@@ -24,7 +24,8 @@ export const notableCollections = [
   "Security Fleet"
 ];
 
-export const formatDate = (date: Date) => {
+export const formatDate = (date?: Date) => {
+  if (!date) return 'n/a';
   return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 }
 

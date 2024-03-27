@@ -1,15 +1,15 @@
 import { Game } from "@/types";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 
 import styles from "./AllGames.module.css";
 import { PlayerCard } from "../PlayerCard";
+import cx from "classnames";
 
 import { formatDate } from "@/utils";
-import { useGameData } from "@/hooks/useGameData";
+import { GameDataContext } from "@/hooks/GameDataProvider";
 
 export const AllGames = () => {
-
-  const { data } = useGameData();
+  const { gameData, highlightedGameId } = useContext(GameDataContext);
 
   let mostActions = 0;
   let shortestTimeSeconds = Number.MAX_SAFE_INTEGER;
@@ -22,7 +22,7 @@ export const AllGames = () => {
   let winBySmallestMc = Number.MAX_SAFE_INTEGER;
   let mostConsecutiveWins = 0;
 
-  data?.sort((a: Game, b: Game) => {
+  gameData?.sort((a: Game, b: Game) => {
     return new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime();
   })
 
@@ -31,7 +31,7 @@ export const AllGames = () => {
   } = {}
 
   // iterate through data but reversed
-  data?.slice().reverse().forEach((game: Game) => {
+  gameData?.slice().reverse().forEach((game: Game) => {
     const winner = Object.entries(game.players)[0][0];
     const players = Object.keys(game.players);
     players.map((player) => {
@@ -47,7 +47,7 @@ export const AllGames = () => {
     }
   });
 
-  data?.forEach((game: Game) => {
+  gameData?.forEach((game: Game) => {
     const winner = Object.entries(game.players)[0][1];
 
     const timeInSeconds = (winner.timer.hours) * 60 * 60 + (winner.timer.minutes) * 60 + (winner.timer.seconds);
@@ -96,7 +96,7 @@ export const AllGames = () => {
 
   return <div className={styles.allDataContainer}>
     <div className={styles.allDataContainer}>
-      {data?.map((game: Game, id: number) => {
+      {gameData?.map((game: Game, id: number) => {
 
         const date = new Date(game.dateOfGame);
         const dateOfGame = formatDate(date);
@@ -104,7 +104,10 @@ export const AllGames = () => {
         // showGameResultsLink is only True if date is within the last 15 days 
         const showGameResultsLink = (new Date().getTime() - date.getTime()) / (1000 * 60 * 60 * 24) < 15;
 
-        return <div key={id} className={"gameRow"} id={game.id}>
+        return <div key={id} className={cx("gameRow", {
+          highlightedRow: game.id === highlightedGameId
+        })}>
+          <a href="#" className="shifted" id={game.id} />
           <div className={styles.dateOfGame}>
             <span>{dateOfGame}</span>
             <span className={styles.generations}>{game.generations} generations</span>{" "}

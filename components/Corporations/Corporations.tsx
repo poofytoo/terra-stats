@@ -1,10 +1,12 @@
 import { Game } from '@/types';
 
 import styles from './Corporations.module.css';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { percentageWithTwoSigFigs } from '@/utils';
+import { GameDataContext } from '@/hooks/GameDataProvider';
 
-export const Corporations = ({ data }: { data: Game[] }) => {
+export const Corporations = () => {
+  const { gameData: data } = useContext(GameDataContext);
   const [showAll, setShowAll] = useState(false);
 
   // Count the number of wins for each corporation
