@@ -1,18 +1,19 @@
-.date {
+/* .date {
   font-size: 12px;  
   color: #999;
   border: 2px solid var(--highlight);
   display: inline-block;
-  padding: 4px 1px 2px;
+  padding: 2px 1px 1px;
   line-height: normal;
   font-weight: bold;
-  width: 70px;
+  width: 65px;
   text-align: center;
-  border-radius: 15px;
+  border-radius: 20px;
   color: rgb(63, 46, 5);
+  letter-spacing: 0.3px;
 }
 
 .date:hover {
   background-color: var(--highlight);
   cursor: pointer;
-}
+} */

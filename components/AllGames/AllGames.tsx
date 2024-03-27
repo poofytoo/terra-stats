@@ -22,10 +22,9 @@ export const AllGames = () => {
   let winBySmallestMc = Number.MAX_SAFE_INTEGER;
   let mostConsecutiveWins = 0;
 
-
-  //   // sort by date
-  //   return new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime();
-  // })
+  data?.sort((a: Game, b: Game) => {
+    return new Date(b.dateOfGame).getTime() - new Date(a.dateOfGame).getTime();
+  })
 
   const streakTracker: {
     [player: string]: number

@@ -46,25 +46,6 @@ strong {
   font-weight: bold;
 }
 
-.date {
-  font-size: 11px;  
-  color: #999;
-  border: 2px solid var(--highlight);
-  display: inline-block;
-  padding: 4px 1px 2px;
-  line-height: normal;
-  font-weight: bold;
-  width: 65px;
-  text-align: center;
-  border-radius: 10px;
-  color: rgb(63, 46, 5);
-}
-
-.date:hover {
-  background-color: var(--highlight);
-  cursor: pointer;
-}
-
 .dem {
   font-weight: normal;
   color: var(--gray4);
