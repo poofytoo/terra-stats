@@ -17,10 +17,10 @@ async function getAllFilesInFolder(folderPath: string): Promise<string[]> {
 }
 
 const normalizedPlayerNames = {
-  Victor: ['Victor', 'Vic', 'VicVic', 'Victortor', 'Yogurt', 'notsuspicious', 'Vanadium'],
+  Victor: ['Victor', 'Vic', 'VicVic', 'Victortor', 'Yogurt', 'notsuspicious', 'Vanadium', 'McVictor'],
   Yota: ['Yota', 'Haircut', 'flourer', 'Yoyo'],
   Vy: ['Vy', 'Vyvy', 'need bubs', 'Vynus'],
-  Lindsey: ['Lindsey', 'LinLin', 'Lin', 'Lind', 'Lithium'],
+  Lindsey: ['Lindsey', 'LinLin', 'Lin', 'Lind', 'Lithium', 'McLindsey'],
   Landon: ['Landon', 'Lando', 'Lan', 'LanLan', 'Lanthanum'],
   Ming: ['need nap'],
   Amy: ['Amy', 'Americium'],
