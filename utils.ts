@@ -21,7 +21,8 @@ export const notableCollections = [
   "Neptunian Power Consultants",
   "Asteroid Deflection System",
   "Decomposers",
-  "Security Fleet"
+  "Security Fleet",
+  "Predators",
 ];
 
 export const formatDate = (date?: Date) => {
