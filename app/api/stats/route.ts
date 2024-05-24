@@ -285,7 +285,7 @@ export async function GET(request: Request) {
       }
       for (const vpCard of player.vpCards) {
         const notableCollectionRecord = notableCollectionRecords.find(collection => collection.collection === vpCard.cardName);
-        if (notableCollectionRecord && vpCard.vp >= notableCollectionRecord.vp - 5 && (vpCard.vp > 5 || vpCard.cardName === "Tardigrades")) {
+        if (notableCollectionRecord && vpCard.vp >= notableCollectionRecord.vp - 5 && (vpCard.vp > 2 || vpCard.cardName === "Tardigrades")) {
           vpCard.isNotable = true;
           if (vpCard.vp === notableCollectionRecord.vp) {
             vpCard.isTop = true;
