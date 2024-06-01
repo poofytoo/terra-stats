@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
-import cx from 'classnames';
 import styles from '@/components/NotableCollections/NotableCollections.module.css'; // Ensure this path is correct
 import { GameDataContext } from '@/hooks/GameDataProvider'; // Ensure this path is correct
-import { Game } from '@/types'; // Ensure this path is correct
 import { DateChip } from '../DateChip/DateChip'; // Ensure this path is correct
 import TableGrid, { TableData, TableColumn } from '../TableGrid/TableGrid'; // Ensure this path is correct
 
