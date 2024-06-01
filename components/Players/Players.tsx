@@ -1,21 +1,62 @@
-import styles from "@/components/Players/Players.module.css";
+import React, { useContext } from 'react';
+import cx from 'classnames';
+import styles from '@/components/Players/Players.module.css'; // Ensure this path is correct
+import { Game } from '@/types'; // Ensure this path is correct
+import { percentageWithTwoSigFigs, roundWithTwoSigFigs } from '@/utils'; // Ensure these utility functions are correct
+import { DateChip } from '../DateChip/DateChip'; // Ensure this path is correct
+import { GameDataContext } from '@/hooks/GameDataProvider'; // Ensure this path is correct
+import TableGrid, { TableData, TableColumn } from '../TableGrid/TableGrid'; // Ensure this path is correct
 
-import { Game } from "@/types";
-import { percentageWithTwoSigFigs, roundWithTwoSigFigs } from "@/utils";
-import cx from "classnames";
-import { DateChip } from "../DateChip/DateChip";
-import { useContext } from "react";
-import { GameDataContext } from "@/hooks/GameDataProvider";
+const convertStatsToTableData = (stats: {
+  [player: string]: {
+    aheadBys: { score: number; megaCredits: number }[];
+    plays: number;
+    wins: number;
+    winPercentage?: number;
+    totalCorporations: number;
+    averageCorporations?: string;
+    lastWin?: Date;
+    maxStreak?: number;
+    lastWinId?: string;
+  }
+}): TableData => {
+  const columns: TableColumn[] = [
+    { header: 'Player', key: 'player' },
+    { header: 'Win Rate', key: 'winRate' },
+    { header: 'Wins', key: 'wins' },
+    { header: 'Plays', key: 'plays' },
+    { header: 'Avg Corps', key: 'avgCorps' },
+    { header: 'Last Win', key: 'lastWin' },
+    { header: 'Avg Lead', key: 'avgLead' },
+    { header: 'Max Streak', key: 'maxStreak' },
+  ];
 
-export const Players = () => {
+  const rows = Object.entries(stats).sort((a, b) => {
+    return (b[1].winPercentage ?? 0) - (a[1].winPercentage ?? 0);
+  }).map(([player, playerStats]) => {
+    const avgLead = roundWithTwoSigFigs(playerStats.aheadBys.reduce((val, acc) => val + acc.score, 0) / playerStats.aheadBys.length || 0);
+
+    return {
+      player: player,
+      winRate: <strong>{percentageWithTwoSigFigs(playerStats.winPercentage ?? 0)}</strong>,
+      wins: playerStats.wins ?? 0,
+      plays: playerStats.plays,
+      avgCorps: playerStats.averageCorporations,
+      lastWin: <DateChip gameId={playerStats.lastWinId} />,
+      avgLead: `+${avgLead}`,
+      maxStreak: playerStats.maxStreak ?? 0,
+    };
+  });
+
+  return { columns, rows };
+};
+
+export const Players: React.FC = () => {
   const { gameData: data } = useContext(GameDataContext);
 
   const stats: {
     [player: string]: {
-      aheadBys: {
-        score: number;
-        megaCredits: number;
-      }[];
+      aheadBys: { score: number; megaCredits: number }[];
       plays: number;
       wins: number;
       winPercentage?: number;
@@ -68,47 +109,18 @@ export const Players = () => {
   });
 
   // After gathering all data, calculate win percentage and average corporations
-  Object.entries(stats).forEach(([player, playerStats]) => {
+  Object.entries(stats).forEach(([_, playerStats]) => {
     playerStats.winPercentage = playerStats.wins / playerStats.plays;
     playerStats.averageCorporations = roundWithTwoSigFigs(playerStats.totalCorporations / playerStats.plays);
   });
 
-  return <div className={styles.playersDataContainer}>
-    <h2>Wins by Player</h2>
-    <div className={styles.playersTable}>
-      <div className={cx(styles.row, styles.header)}>
-        <span>Player</span>
-        <span>Win Rate</span>
-        <span>Wins</span>
-        <span>Plays</span>
-        <span>Avg Corps</span>
-        <span>Last Win</span>
-        <span>Avg&nbsp;Lead</span>
-        <span>Max&nbsp;Streak</span>
-      </div>
-      {
-        Object.entries(stats).sort((a, b) => {
-          return (b[1].winPercentage ?? 0) - (a[1].winPercentage ?? 0);
-        }).map(([player, playerStats]) => {
-          const avgLead = roundWithTwoSigFigs(playerStats.aheadBys.reduce((val, acc) => {
-            return val + acc.score;
-          }, 0) /
-            playerStats.aheadBys.length || 0)
+  const tableData = convertStatsToTableData(stats);
 
-          return (
-            <div key={player} className={styles.row}>
-              <span>{player}</span>
-              <span><strong>{percentageWithTwoSigFigs(playerStats.winPercentage ?? 0)}</strong></span>
-              <span>{playerStats.wins ?? 0}</span>
-              <span>{playerStats.plays}</span>
-              <span>{playerStats.averageCorporations}</span>
-              <span><DateChip gameId={playerStats.lastWinId} /></span>
-              {/* <span>{playerStats.lastWin ? formatDate(playerStats.lastWin) : 'n/a'}</span> */}
-              <span>+{avgLead}</span>
-              <span>{playerStats.maxStreak ?? 0}</span>
-            </div>
-          );
-        })}
+  return (
+    <div className={styles.playersDataContainer}>
+      <h2>Wins by Player</h2>
+      <TableGrid data={tableData} />
     </div>
-  </div>
-}
+  );
+};
+

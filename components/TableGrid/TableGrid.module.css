@@ -1,0 +1,28 @@
+.tableContainer {
+  display: grid;
+  gap: 0;
+  width: 100%;
+}
+
+.row {
+  display: contents;
+}
+
+.tableHeader {
+  font-size: 11px;
+  color: #999;
+  line-height: 1.2em;
+  border-bottom: 1px solid #ddd;
+  padding: 3px 10px 3px 1px;
+}
+
+.tableHeader span {
+  display: flex;
+  align-items: flex-end;
+}
+
+.tableCell {
+  border-bottom: 1px solid #ddd;
+  padding: 3px 10px 3px 1px;
+  line-height: normal;
+}

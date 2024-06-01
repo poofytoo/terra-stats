@@ -1,10 +1,10 @@
-import styles from "@/components/NotableCollections/NotableCollections.module.css";
-import { GameDataContext } from "@/hooks/GameDataProvider";
-import { Game } from "@/types";
-import { formatDate } from "@/utils";
-import cx from "classnames";
-import { useContext } from "react";
-import { DateChip } from "../DateChip/DateChip";
+import React, { useContext } from 'react';
+import cx from 'classnames';
+import styles from '@/components/NotableCollections/NotableCollections.module.css'; // Ensure this path is correct
+import { GameDataContext } from '@/hooks/GameDataProvider'; // Ensure this path is correct
+import { Game } from '@/types'; // Ensure this path is correct
+import { DateChip } from '../DateChip/DateChip'; // Ensure this path is correct
+import TableGrid, { TableData, TableColumn } from '../TableGrid/TableGrid'; // Ensure this path is correct
 
 interface HighestNotableCollections {
   [collection: string]: {
@@ -15,36 +15,53 @@ interface HighestNotableCollections {
   }
 }
 
-export const NotableCollections = () => {
+const convertCollectionsToTableData = (collections: HighestNotableCollections): TableData => {
+  const columns: TableColumn[] = [
+    { header: 'Collection', key: 'collection', className: styles.collectionName },
+    { header: 'Record', key: 'record' },
+    { header: 'Holder', key: 'holder' },
+    { header: 'Date', key: 'date' },
+  ];
+
+  const rows = Object.entries(collections).sort(([a], [b]) => a.localeCompare(b)).map(([collectionName, collectionData]) => ({
+    collection: collectionName,
+    record: collectionData.highest,
+    holder: collectionData.player,
+    date: <DateChip gameId={collectionData.gameId} />,
+  }));
+
+  return { columns, rows };
+};
+
+export const NotableCollections: React.FC = () => {
   const { gameData } = useContext(GameDataContext);
 
-  const highestNotableCollections =
-    gameData?.reduce((acc, game) => {
-      Object.entries(game.players).forEach(([name, playerData]) => {
-        playerData.vpCards?.forEach(card => {
-          if (card.isNotable) {
-            if (!acc[card.cardName]) {
-              acc[card.cardName] = {
-                highest: card.vp,
-                player: name,
-                gameId: game.id ?? "",
-                dateOfGamePlayed: game.dateOfGame
-              }
-            }
-
-            if (card.vp > acc[card.cardName].highest) {
-              acc[card.cardName] = {
-                highest: card.vp,
-                player: name,
-                gameId: game.id ?? "",
-                dateOfGamePlayed: game.dateOfGame
-              }
-            }
+  const highestNotableCollections = gameData?.reduce((acc, game) => {
+    Object.entries(game.players).forEach(([name, playerData]) => {
+      playerData.vpCards?.forEach(card => {
+        if (card.isNotable) {
+          if (!acc[card.cardName]) {
+            acc[card.cardName] = {
+              highest: card.vp,
+              player: name,
+              gameId: game.id ?? "",
+              dateOfGamePlayed: game.dateOfGame
+            };
           }
-        })
-      })
-      return acc;
-    }, {} as HighestNotableCollections)
+
+          if (card.vp > acc[card.cardName].highest) {
+            acc[card.cardName] = {
+              highest: card.vp,
+              player: name,
+              gameId: game.id ?? "",
+              dateOfGamePlayed: game.dateOfGame
+            };
+          }
+        }
+      });
+    });
+    return acc;
+  }, {} as HighestNotableCollections);
 
   // sort highestNotable Collections alphabetically by collection name
   const sortedNotableCollections: HighestNotableCollections = {};
@@ -55,41 +72,14 @@ export const NotableCollections = () => {
     });
   }
 
-  return <div className={styles.notableCollectionsContainer}>
-    <h2>Notable Collections</h2>
-    <div className={styles.notableCollectionsTable}>
-      <div className={cx(styles.row, styles.header)}>
-        <div className={styles.collectionName}>
-          Collection
-        </div>
-        <div className={styles.record}>
-          Record
-        </div>
-        <div className={styles.holders}>
-          Holder
-        </div>
-        <div>
-          Date
-        </div>
-      </div>
-      {Object.entries(sortedNotableCollections).map(([collectionName, collectionData], i) => {
-        return <div className={styles.row} key={i}>
-          <div className={styles.collectionName}>
-            {collectionName}
-          </div>
-          <div className={styles.record}>
-            {collectionData.highest}
-          </div>
-          <div className={styles.holders}>
-            {collectionData.player}
-          </div>
-          <div>
-            <div className="date">
-              <DateChip gameId={collectionData.gameId} />
-            </div>
-          </div>
-        </div>
-      })}
+  const tableData = convertCollectionsToTableData(sortedNotableCollections);
+
+  return (
+    <div className={styles.notableCollectionsContainer}>
+      <h2>Notable Collections</h2>
+      <TableGrid data={tableData} />
     </div>
-  </div>
-}
+  );
+};
+
+export default NotableCollections;
