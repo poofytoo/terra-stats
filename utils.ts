@@ -24,6 +24,7 @@ export const notableCollections = [
   "Security Fleet",
   "Predators",
   "Commercial District",
+  "Cloud Tourism",
 ];
 
 export const formatDate = (date?: Date) => {
