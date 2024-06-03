@@ -17,13 +17,13 @@ async function getAllFilesInFolder(folderPath: string): Promise<string[]> {
 }
 
 const normalizedPlayerNames = {
-  Victor: ['Victor', 'Vic', 'VicVic', 'Victortor', 'Yogurt', 'notsuspicious', 'Vanadium', 'McVictor'],
+  Victor: ['Victor', 'Vic', 'VicVic', 'Victortor', 'Yogurt', 'notsuspicious', 'Vanadium', 'McVictor', 'V'],
   Yota: ['Yota', 'Haircut', 'flourer', 'Yoyo'],
   Vy: ['Vy', 'Vyvy', 'need bubs', 'Vynus'],
   Lindsey: ['Lindsey', 'LinLin', 'Lin', 'Lind', 'Lithium', 'McLindsey'],
-  Landon: ['Landon', 'Lando', 'Lan', 'LanLan', 'Lanthanum'],
+  Landon: ['Landon', 'Lando', 'Lan', 'LanLan', 'Lanthanum', 'L'],
   Ming: ['need nap'],
-  Amy: ['Amy', 'Americium'],
+  Amy: ['Amy', 'Americium', 'A'],
 };
 
 export async function GET(request: Request) {
