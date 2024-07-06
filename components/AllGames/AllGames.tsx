@@ -5,8 +5,8 @@ import styles from "./AllGames.module.css";
 import { PlayerCard } from "../PlayerCard";
 import cx from "classnames";
 
-import { formatDate } from "@/utils";
 import { GameDataContext } from "@/hooks/GameDataProvider";
+import { formatDate } from "@/libs/util";
 
 export const AllGames = () => {
   const { gameData, highlightedGameId } = useContext(GameDataContext);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './TableGrid.module.css';
-import { gab } from '@/utils';
+import { gab } from '@/libs/util';
 
 export interface TableColumn {
   header: string;

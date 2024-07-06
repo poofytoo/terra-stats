@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import styles from './Corporations.module.css'; // Ensure this path is correct
 import { GameDataContext } from '@/hooks/GameDataProvider'; // Ensure this path is correct
 import { Game } from '@/types'; // Ensure this path is correct
-import { percentageWithTwoSigFigs } from '@/utils'; // Ensure this path is correct
 import TableGrid, { TableData, TableColumn } from '../TableGrid/TableGrid'; // Ensure this path is correct
+import { percentageWithTwoSigFigs } from '@/libs/util';
 
 const convertCorporationsToTableData = (corporationWins: {
   [corporation: string]: {

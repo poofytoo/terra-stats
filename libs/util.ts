@@ -1,3 +1,27 @@
+import { Gabarito } from "next/font/google";
+import path from "path";
+
+export const normalizedPlayerNames = {
+  Victor: ['Victor', 'Vic', 'VicVic', 'Victortor', 'Yogurt', 'notsuspicious', 'Vanadium', 'McVictor', 'V'],
+  Yota: ['Yota', 'Haircut', 'flourer', 'Yoyo'],
+  Vy: ['Vy', 'Vyvy', 'need bubs', 'Vynus'],
+  Lindsey: ['Lindsey', 'LinLin', 'Lin', 'Lind', 'Lithium', 'McLindsey'],
+  Landon: ['Landon', 'Lando', 'Lan', 'LanLan', 'Lanthanum', 'L'],
+  Ming: ['need nap'],
+  Amy: ['Amy', 'Americium', 'A'],
+};
+
+export async function getAllFilesInFolder(fs: typeof import('fs/promises'), folderPath: string): Promise<string[]> {
+  const fullPath = path.join(process.cwd(), folderPath);
+  try {
+    const fileNames = await fs.readdir(fullPath);
+    return fileNames;
+  } catch (error) {
+    console.error("Error reading directory:", error);
+    return [];
+  }
+}
+
 export const notableCollections = [
   "Stratospheric Birds",
   "Venusian Animals",
@@ -44,8 +68,6 @@ export const percentageWithTwoSigFigs = (num: number): string => {
 export const roundWithTwoSigFigs = (num: number): string => {
   return round(num).toFixed(2);
 }
-
-import { Gabarito } from "next/font/google";
 
 export const gab = Gabarito({
   subsets: ["latin"],

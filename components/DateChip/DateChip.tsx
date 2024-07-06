@@ -1,10 +1,10 @@
 import styles from './DateChip.module.css';
 import cx from 'classnames';
 
-import { formatDate } from '@/utils';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import { GameDataContext } from '@/hooks/GameDataProvider';
+import { formatDate } from '@/libs/util';
 
 export const DateChip = ({ gameId }: { gameId?: string }) => {
   const router = useRouter();

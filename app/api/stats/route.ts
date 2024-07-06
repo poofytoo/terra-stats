@@ -1,33 +1,13 @@
-import fs from 'fs/promises';
+
 import path from 'path';
+import fs from 'fs/promises';
+
 import { promises as fsPromises } from 'fs';
 import { Game, processedData, vpCard, vpCardType } from '@/types';
-import { notableCollections } from '@/utils';
-
-async function getAllFilesInFolder(folderPath: string): Promise<string[]> {
-  const fullPath = path.join(process.cwd(), folderPath);
-  try {
-    const fileNames = await fs.readdir(fullPath);
-    // Optionally filter the files here if needed
-    return fileNames;
-  } catch (error) {
-    console.error("Error reading directory:", error);
-    return [];
-  }
-}
-
-const normalizedPlayerNames = {
-  Victor: ['Victor', 'Vic', 'VicVic', 'Victortor', 'Yogurt', 'notsuspicious', 'Vanadium', 'McVictor', 'V'],
-  Yota: ['Yota', 'Haircut', 'flourer', 'Yoyo'],
-  Vy: ['Vy', 'Vyvy', 'need bubs', 'Vynus'],
-  Lindsey: ['Lindsey', 'LinLin', 'Lin', 'Lind', 'Lithium', 'McLindsey'],
-  Landon: ['Landon', 'Lando', 'Lan', 'LanLan', 'Lanthanum', 'L'],
-  Ming: ['need nap'],
-  Amy: ['Amy', 'Americium', 'A'],
-};
+import { getAllFilesInFolder, normalizedPlayerNames, notableCollections } from '@/libs/util';
 
 export async function GET(request: Request) {
-  const files = await getAllFilesInFolder('data');
+  const files = await getAllFilesInFolder(fs, 'data');
   const htmlFiles = files.filter(file => file.endsWith('.html'));
   const processedData: processedData = [];
 

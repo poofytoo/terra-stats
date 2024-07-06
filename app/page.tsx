@@ -7,7 +7,7 @@ import { Game } from '@/types';
 import styles from './page.module.css';
 import cx from 'classnames';
 
-import { gab } from '@/utils';
+import { gab } from '@/libs/util';
 
 import { Corporations } from '@/components/Corporations';
 import { Players } from '@/components/Players';

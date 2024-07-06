@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import styles from '@/components/Players/Players.module.css'; // Ensure this path is correct
 import { Game } from '@/types'; // Ensure this path is correct
-import { percentageWithTwoSigFigs, roundWithTwoSigFigs } from '@/utils'; // Ensure these utility functions are correct
 import { DateChip } from '../DateChip/DateChip'; // Ensure this path is correct
 import { GameDataContext } from '@/hooks/GameDataProvider'; // Ensure this path is correct
 import TableGrid, { TableData, TableColumn } from '../TableGrid/TableGrid'; // Ensure this path is correct
+import { percentageWithTwoSigFigs, roundWithTwoSigFigs } from '@/libs/util';
 
 const convertStatsToTableData = (stats: {
   [player: string]: {
