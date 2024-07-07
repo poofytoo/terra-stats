@@ -67,7 +67,7 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     const score = winner.victoryPoints ?? Infinity;
     if (score < acc.vp) {
       return {
-        player: winner.displayName,
+        player: players[0],
         vp: score,
         game
       }
@@ -79,10 +79,32 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     game: undefined
   });
 
+  const highestVp = gameData?.reduce((acc: {
+    player: string | undefined,
+    vp: number,
+    game: Game | undefined
+  }, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const score = winner.victoryPoints ?? 0;
+    if (score > acc.vp) {
+      return {
+        player: players[0],
+        vp: score,
+        game
+      }
+    }
+    return acc;
+  }, {
+    player: undefined,
+    vp: 0,
+    game: undefined
+  });
 
   const gamesMetaData = {
     totalGames: gameData?.length,
-    lowestVp
+    lowestVp,
+    highestVp
   }
 
   return (

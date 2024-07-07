@@ -23,11 +23,18 @@ const GameRecords = () => {
           [
             {
               metric: 'Lowest VP Win',
-              value: gamesMetaData.lowestVp.vp,
+              value: <strong>{gamesMetaData.lowestVp.vp}</strong>,
               player: gamesMetaData.lowestVp.player,
               date:
                 <DateChip gameId={gamesMetaData.lowestVp.game.id} />
-            }
+            },
+            {
+              metric: 'Highest VP Win',
+              value: <strong>{gamesMetaData.highestVp.vp}</strong>,
+              player: gamesMetaData.highestVp.player,
+              date:
+                <DateChip gameId={gamesMetaData.highestVp.game.id} />
+            },
           ]
       }
     } />

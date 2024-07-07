@@ -19,7 +19,6 @@ import GameRecords from '@/components/GameRecords/GameRecords';
 const Home = () => {
   const { gameData } = useContext(GameDataContext);
 
-
   if (!gameData) {
     return <div className={cx(gab.className)}>
       <div className={cx(styles.fullWidth, styles.title)}>
