@@ -20,7 +20,7 @@ const convertStatsToTableData = (stats: {
   }
 }): TableData => {
   const columns: TableColumn[] = [
-    { header: 'Player', key: 'player' },
+    { header: 'Player', key: 'player', shrinkable: true },
     { header: 'Win Rate', key: 'winRate' },
     { header: 'Wins', key: 'wins' },
     { header: 'Plays', key: 'plays' },

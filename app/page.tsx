@@ -20,13 +20,9 @@ const Home = () => {
   const { gameData } = useContext(GameDataContext);
 
   if (!gameData) {
-    return <div className={cx(gab.className)}>
-      <div className={cx(styles.fullWidth, styles.title)}>
-        <h1>Terra-Stats!</h1>
-      </div>
-      <div className={styles.fullWidth}>
-        <h2>Loading...</h2>
-      </div>
+    return <div className={cx(styles.loading, gab.className)}>
+      <h1>Terra-Stats!</h1>
+      <p>Loading...</p>
     </div>;
   }
 
@@ -37,7 +33,7 @@ const Home = () => {
   return (
     <div>
       <div className={cx(styles.mainPageGrid, gab.className)}>
-        <div className={cx(styles.fullWidth, styles.title)}>
+        <div className={cx(styles.title)}>
           <h1>Terra-Stats!</h1>
         </div>
         <div className={cx(styles.cell, styles.players)}><Players /></div>
@@ -46,7 +42,7 @@ const Home = () => {
         <div className={cx(styles.cell, styles.notableCollections)}><NotableCollections />
         </div>
         <div className={styles.allLoggedGames}>
-          <h2>All Logged Games <span className="dem">({gameData.length})</span></h2>
+          <h2 className={styles.h2WithPadding}>All Logged Games <span className="dem">({gameData.length})</span></h2>
           <AllGames />
         </div>
       </div>
