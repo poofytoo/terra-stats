@@ -19,11 +19,13 @@ interface TableProps {
   condensable?: boolean;
 }
 
+// For condensable
+const topCount = 5;
+const bottomCount = 5;
+
 const TableGrid: React.FC<TableProps> = ({ data, condensable }) => {
 
   const [showAll, setShowAll] = useState(false);
-  const topCount = 5;
-  const bottomCount = 5;
 
   useEffect(() => {
     if (typeof window !== "undefined") {

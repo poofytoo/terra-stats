@@ -9,11 +9,13 @@ interface GameDataContextType {
   setGameData: Dispatch<SetStateAction<Game[] | undefined>>;
   setHighlightedGameId: Dispatch<SetStateAction<string | undefined>>;
   getGameById: (id: string) => Game | undefined;
+  gamesMetaData: any;
   highlightedGameId?: string;
 }
 
 const defaultState: GameDataContextType = {
   gameData: undefined,
+  gamesMetaData: {},
   setGameData: () => { },
   setHighlightedGameId: () => { },
   getGameById: () => undefined,
@@ -55,11 +57,38 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [data, getGameById]);
 
+  const lowestVp = gameData?.reduce((acc: {
+    player: string | undefined,
+    vp: number,
+    game: Game | undefined
+  }, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const score = winner.victoryPoints ?? Infinity;
+    if (score < acc.vp) {
+      return {
+        player: winner.displayName,
+        vp: score,
+        game
+      }
+    }
+    return acc;
+  }, {
+    player: undefined,
+    vp: Infinity,
+    game: undefined
+  });
 
+
+  const gamesMetaData = {
+    totalGames: gameData?.length,
+    lowestVp
+  }
 
   return (
     <GameDataContext.Provider value={{
       gameData,
+      gamesMetaData,
       setGameData,
       setHighlightedGameId,
       highlightedGameId,

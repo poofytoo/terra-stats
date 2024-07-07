@@ -1,15 +1,15 @@
-
 .mainPageGrid {
   width: 100%;
   display: grid;
   grid-template-columns: 1.4fr 1.3fr 1fr;
+  grid-template-rows: auto min-content 1fr auto; /* Adjust the row sizes */
   gap: 1px;
   background-color: #dfddc6; 
   grid-template-areas:
-  "title title title"
-  "players corporations notableCollections"
-  "gameRecords corporations notableCollections"
-  "loggedGames loggedGames loggedGames";
+    "title title title"
+    "players corporations notableCollections"
+    "gameRecords corporations notableCollections"
+    "loggedGames loggedGames loggedGames";
 }
 
 .mainPageGrid > div {
@@ -22,7 +22,7 @@
   grid-area: title;
 }
 
-.mainPageGrid .title  h2 {
+.mainPageGrid .title h2 {
   padding: 30px 30px 0;
 }
 
@@ -53,5 +53,13 @@
 @media (max-width: 768px) {
   .mainPageGrid {
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto auto auto auto; /* Adjust rows for mobile */
+    grid-template-areas:
+      "title"
+      "players"
+      "corporations"
+      "notableCollections"
+      "gameRecords"
+      "loggedGames";
   }
 }
