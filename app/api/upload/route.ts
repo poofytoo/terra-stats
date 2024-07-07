@@ -8,7 +8,6 @@ import { NextRequest } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const fileUrl = request.nextUrl.searchParams.get('fileUrl') ?? "";
-  console.log('fileUrl', fileUrl)
 
   const response = await fetch(fileUrl);
   if (!response.ok) throw new Error(`Failed to fetch ${fileUrl}: ${response.statusText}`);

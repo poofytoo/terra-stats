@@ -330,7 +330,5 @@ export async function GET(request: Request) {
     game.streakCount = streakTracker[winner].wins;
   });
 
-  console.log(processedData);
-
   return new Response(JSON.stringify(processedData));
 }
