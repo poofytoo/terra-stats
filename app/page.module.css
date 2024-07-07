@@ -2,7 +2,7 @@
 .mainPageGrid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1.4fr 1.3fr 1fr;
   gap: 1px;
   background-color: #dfddc6; 
   grid-template-areas:
@@ -14,16 +14,16 @@
 
 .mainPageGrid > div {
   background-color: white;
-  padding: 30px;
+  padding: 25px;
 }
 
 .mainPageGrid .title {
-  padding: 20px 30px;
+  padding: 25px 25px;
   grid-area: title;
 }
 
 .mainPageGrid .title  h2 {
-  padding: 40px 40px 0;
+  padding: 30px 30px 0;
 }
 
 .players {
