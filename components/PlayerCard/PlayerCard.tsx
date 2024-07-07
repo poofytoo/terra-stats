@@ -26,7 +26,16 @@ export const PlayerCard = ({
   topPerformers: TopPerformers,
   streakAmount: number
 }) => {
-  const { mostActions, shortestTimeSeconds, fastestWin, lowestVpWin, highestVp, highestTr, mostGreeneryPoints, mostConsecutiveWins } = topPerformers;
+  const {
+    mostActions,
+    shortestTimeSeconds,
+    fastestWin,
+    lowestVpWin,
+    highestVp,
+    highestTr,
+    mostGreeneryPoints,
+    mostConsecutiveWins
+  } = topPerformers;
   return (
     <div className={styles.playerCard}>
       <div className={cx(styles.player,

@@ -15,7 +15,12 @@ interface HighestNotableCollections {
 
 const convertCollectionsToTableData = (collections: HighestNotableCollections): TableData => {
   const columns: TableColumn[] = [
-    { header: 'Collection', key: 'collection', className: styles.collectionName },
+    {
+      header: 'Collection',
+      key: 'collection',
+      className: styles.collectionName,
+      shrinkable: true
+    },
     { header: 'Record', key: 'record' },
     { header: 'Holder', key: 'holder' },
     { header: 'Date', key: 'date' },

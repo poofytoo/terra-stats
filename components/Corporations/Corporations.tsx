@@ -15,13 +15,13 @@ const convertCorporationsToTableData = (corporationWins: {
   }
 }): TableData => {
   const columns: TableColumn[] = [
-    { header: 'Corporation', key: 'corporation', className: styles.corporationName },
+    { header: 'Corporation', key: 'corporation', className: styles.corporationName, shrinkable: true },
     { header: 'Wins', key: 'wins', className: styles.wins },
     { header: 'Plays', key: 'plays', className: styles.plays },
     { header: 'Win %', key: 'winPercentage', className: styles.winPercentage },
-    { header: 'Main Wins', key: 'mainWins', className: styles.mainWins },
-    { header: 'Main Plays', key: 'mainPlays', className: styles.mainPlays },
-    { header: 'Main Win %', key: 'mainWinPercentage', className: styles.mainWinPercentage }
+    { header: <>Main<br />Wins</>, key: 'mainWins', className: styles.mainWins },
+    { header: <>Main<br />Plays</>, key: 'mainPlays', className: styles.mainPlays },
+    { header: <>Main<br />Win %</>, key: 'mainWinPercentage', className: styles.mainWinPercentage }
   ];
 
   const rows = Object.entries(corporationWins).map(([corporation, stats]) => ({
@@ -89,9 +89,6 @@ export const Corporations: React.FC = () => {
   return (
     <div className={styles.corporationDataContainer}>
       <h2>Wins by Corporation</h2>
-      <p>
-        This section currently under construction. Please pardon the dust.
-      </p>
       <TableGrid data={tableData} condensed={true} />
     </div>
   );

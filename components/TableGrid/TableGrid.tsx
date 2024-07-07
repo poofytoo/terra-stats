@@ -3,9 +3,10 @@ import styles from './TableGrid.module.css';
 import { gab } from '@/libs/util';
 
 export interface TableColumn {
-  header: string;
+  header: string | JSX.Element;
   key: string;
   className?: string; // updated the property name to follow convention
+  shrinkable?: boolean;
 }
 
 export interface TableData {
@@ -24,7 +25,11 @@ const TableGrid: React.FC<TableProps> = ({ data, condensed }) => {
   const topCount = 5;
   const bottomCount = 5;
 
-  const gridTemplateColumns = `repeat(${data.columns.length}, minmax(max-content, 1fr))`;
+
+  const gridTemplateColumns = `${[...Array(data.columns.length)].map((_, key) => {
+    if (data.columns[key].shrinkable) return `minmax(50px, auto)`
+    return `minmax(max-content, 1fr)`
+  }).join(' ')}`;
   const rowsToDisplay = condensed && !showAll
     ? [...data.rows.slice(0, topCount), 'break', ...data.rows.slice(-bottomCount)]
     : data.rows;

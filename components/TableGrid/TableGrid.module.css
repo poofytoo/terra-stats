@@ -14,6 +14,11 @@
   line-height: 1.2em;
   border-bottom: 1px solid #ddd;
   padding: 3px 10px 3px 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: flex-end;
 }
 
 .tableHeader span {
@@ -25,4 +30,13 @@
   border-bottom: 1px solid #ddd;
   padding: 3px 10px 3px 1px;
   line-height: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .tableContainer {
+    grid-template-columns: 1fr;
+  }
 }

@@ -60,10 +60,6 @@ strong {
   animation: pulsing 1.5s infinite;
 }
 
-.gameRow {
-  padding: 30px 40px;
-}
-
 .shifted {
   transform: translateY(-100px);
   display: inline-block;

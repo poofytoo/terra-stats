@@ -104,21 +104,14 @@ export async function GET(request: Request) {
               }
             }
 
-            // add the corporation name to the player object.
             game.players[normalizedPlayerName].corporations = corporationList;
-
-            // add the score to the player object.
             game.players[normalizedPlayerName].terraformingRating = parseInt(tds[1]);
             game.players[normalizedPlayerName].milestonePoints = parseInt(tds[2]);
             game.players[normalizedPlayerName].awardPoints = parseInt(tds[3]);
             game.players[normalizedPlayerName].greeneryPoints = parseInt(tds[4]);
             game.players[normalizedPlayerName].cityPoints = parseInt(tds[5]);
-
-            // add the victory points to the player object.
             game.players[normalizedPlayerName].victoryPoints = parseInt(tds[6].replace(/<\/?div.*?>/g, '').trim());
-            // add the score to the player object.
             game.players[normalizedPlayerName].finalScore = parseInt(tds[7 + hasEscapeVelocity]);
-            // add the score to the player object.
             game.players[normalizedPlayerName].megaCredits = parseInt(tds[8 + hasEscapeVelocity].replace(/<\/?div.*?>/g, '').trim());
             // add the timer to the player object. replace any <div> or </div> with a space, and trim the string.
             const timerString = tds[9 + hasEscapeVelocity].replace(/<\/?div.*?>/g, '').trim();
@@ -336,6 +329,8 @@ export async function GET(request: Request) {
     })
     game.streakCount = streakTracker[winner].wins;
   });
+
+  console.log(processedData);
 
   return new Response(JSON.stringify(processedData));
 }

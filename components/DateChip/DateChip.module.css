@@ -3,10 +3,10 @@
   color: #999;
   border: 1px solid var(--vp);
   display: inline-block;
-  padding: 1px 1px 1px;
+  padding: 1px 0px 1px;
   line-height: normal;
   font-weight: bold;
-  width: 65px;
+  width: 62px;
   text-align: center;
   border-radius: 20px;
   color: rgb(63, 46, 5);

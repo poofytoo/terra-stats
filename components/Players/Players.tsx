@@ -24,10 +24,10 @@ const convertStatsToTableData = (stats: {
     { header: 'Win Rate', key: 'winRate' },
     { header: 'Wins', key: 'wins' },
     { header: 'Plays', key: 'plays' },
-    { header: 'Avg Corps', key: 'avgCorps' },
+    { header: <>Avg<br />Corps</>, key: 'avgCorps' },
     { header: 'Last Win', key: 'lastWin' },
     { header: 'Avg Lead', key: 'avgLead' },
-    { header: 'Max Streak', key: 'maxStreak' },
+    { header: <>Max<br />Streak</>, key: 'maxStreak' },
   ];
 
   const rows = Object.entries(stats).sort((a, b) => {
