@@ -89,7 +89,7 @@ export const Corporations: React.FC = () => {
   return (
     <div className={styles.corporationDataContainer}>
       <h2>Wins by Corporation</h2>
-      <TableGrid data={tableData} condensed={true} />
+      <TableGrid data={tableData} condensable={true} />
     </div>
   );
 };

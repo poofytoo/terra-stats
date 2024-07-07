@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './TableGrid.module.css';
 import { gab } from '@/libs/util';
 
@@ -16,25 +16,44 @@ export interface TableData {
 
 interface TableProps {
   data: TableData;
-  condensed?: boolean;
+  condensable?: boolean;
 }
 
-const TableGrid: React.FC<TableProps> = ({ data, condensed }) => {
+const TableGrid: React.FC<TableProps> = ({ data, condensable }) => {
 
   const [showAll, setShowAll] = useState(false);
   const topCount = 5;
   const bottomCount = 5;
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const showAll = window.localStorage.getItem('showAll');
+      if (showAll) {
+        setShowAll(JSON.parse(showAll));
+      }
+    }
+  }, []);
 
   const gridTemplateColumns = `${[...Array(data.columns.length)].map((_, key) => {
     if (data.columns[key].shrinkable) return `minmax(50px, auto)`
     return `minmax(max-content, 1fr)`
   }).join(' ')}`;
-  const rowsToDisplay = condensed && !showAll
+  const rowsToDisplay = condensable && !showAll
     ? [...data.rows.slice(0, topCount), 'break', ...data.rows.slice(-bottomCount)]
     : data.rows;
 
   return (<>
+    {condensable && (showAll ?
+      <button className={gab.className} onClick={() => {
+        setShowAll(false);
+        window.localStorage.setItem('showAll', JSON.stringify(false));
+      }}>Condense</button>
+      : (
+        <button className={gab.className} onClick={() => {
+          setShowAll(true);
+          window.localStorage.setItem('showAll', JSON.stringify(true));
+        }}>Show All</button>
+      ))}
     <div className={styles.tableContainer} style={{ gridTemplateColumns }}>
       {data.columns.map((column) => (
         <div key={column.key} className={`${styles.tableHeader} ${column.className || ''}`}>
@@ -58,13 +77,6 @@ const TableGrid: React.FC<TableProps> = ({ data, condensed }) => {
         </div>
       })}
     </div>
-    {condensed && !showAll && (
-      <button className={gab.className} onClick={() => {
-        if (condensed) {
-          setShowAll(true)
-        }
-      }}>Show All</button>
-    )}
   </>
   );
 };
