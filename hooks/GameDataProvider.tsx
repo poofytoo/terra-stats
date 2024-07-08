@@ -1,21 +1,39 @@
 "use client"
 
+import { Icon } from '@/components/Icon';
 import { Game } from '@/types';
 import { useState, createContext, ReactNode, Dispatch, SetStateAction, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
+
+interface GameRecord {
+  metricName: string | JSX.Element;
+  value: number;
+  player?: string;
+  game?: Game;
+}
+
+interface GamesMetaData {
+  totalGames: number;
+  gameRecords: {
+    [metric: string]: GameRecord
+  }
+}
 
 interface GameDataContextType {
   gameData: Game[] | undefined;
   setGameData: Dispatch<SetStateAction<Game[] | undefined>>;
   setHighlightedGameId: Dispatch<SetStateAction<string | undefined>>;
   getGameById: (id: string) => Game | undefined;
-  gamesMetaData: any;
+  gamesMetaData: GamesMetaData
   highlightedGameId?: string;
 }
 
 const defaultState: GameDataContextType = {
   gameData: undefined,
-  gamesMetaData: {},
+  gamesMetaData: {
+    totalGames: 0,
+    gameRecords: {}
+  },
   setGameData: () => { },
   setHighlightedGameId: () => { },
   getGameById: () => undefined,
@@ -28,7 +46,7 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
   const [gameData, setGameData] = useState<Game[] | undefined>();
 
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
-  let { data, error } = useSWR('/api/stats', fetcher);
+  let { data } = useSWR('/api/stats', fetcher);
 
   const getGameById = useCallback((id: string) => {
     return data?.find((game: Game) => game.id === id);
@@ -57,54 +75,136 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [data, getGameById]);
 
-  const lowestVp = gameData?.reduce((acc: {
-    player: string | undefined,
-    vp: number,
-    game: Game | undefined
-  }, game: Game) => {
+  const lowestVp: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
     const players = Object.keys(game.players);
     const winner = game.players[players[0]];
     const score = winner.victoryPoints ?? Infinity;
-    if (score < acc.vp) {
+    if (score < acc.value) {
       return {
+        metricName: <>Lowest <Icon type="VP" /> Win</>,
         player: players[0],
-        vp: score,
+        value: score,
         game
       }
     }
     return acc;
   }, {
+    metricName: <>Lowest <Icon type="VP" /> Win</>,
     player: undefined,
-    vp: Infinity,
+    value: Infinity,
     game: undefined
   });
 
-  const highestVp = gameData?.reduce((acc: {
-    player: string | undefined,
-    vp: number,
-    game: Game | undefined
-  }, game: Game) => {
+  const highestVp: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
     const players = Object.keys(game.players);
     const winner = game.players[players[0]];
     const score = winner.victoryPoints ?? 0;
-    if (score > acc.vp) {
+    if (score > acc.value) {
       return {
+        metricName: <>Highest <Icon type="VP" /> Win</>,
         player: players[0],
-        vp: score,
+        value: score,
         game
       }
     }
     return acc;
   }, {
+    metricName: <>Highest <Icon type="VP" /> Win</>,
     player: undefined,
-    vp: 0,
+    value: 0,
     game: undefined
   });
 
-  const gamesMetaData = {
-    totalGames: gameData?.length,
-    lowestVp,
-    highestVp
+  const lowestTr: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const tr = winner.terraformingRating ?? Infinity;
+    if (tr < acc.value) {
+      return {
+        metricName: <>Lowest <Icon type="TR" /> Win</>,
+        player: players[0],
+        value: tr,
+        game
+      }
+    }
+    return acc;
+  }, {
+    metricName: <>Lowest <Icon type="TR" /> Win</>,
+    player: undefined,
+    value: Infinity,
+    game: undefined
+  });
+
+  const highestTr: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const tr = winner.terraformingRating ?? 0;
+    if (tr > acc.value) {
+      return {
+        metricName: <>Highest <Icon type="TR" /> Win</>,
+        player: players[0],
+        value: tr,
+        game
+      }
+    }
+    return acc;
+  }, {
+    metricName: <>Highest <Icon type="TR" /> Win</>,
+    player: undefined,
+    value: 0,
+    game: undefined
+  });
+
+  const highestScore: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const score = winner.finalScore;
+    if (score > acc.value) {
+      return {
+        metricName: <>Highest Score Win</>,
+        player: players[0],
+        value: score,
+        game
+      }
+    }
+    return acc;
+  }, {
+    metricName: <>Highest Score Win</>,
+    player: undefined,
+    value: 0,
+    game: undefined
+  });
+
+  const lowestScore: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const score = winner.finalScore;
+    if (score < acc.value) {
+      return {
+        metricName: <>Lowest Score Win</>,
+        player: players[0],
+        value: score,
+        game
+      }
+    }
+    return acc;
+  }, {
+    metricName: <>Lowest Score Win</>,
+    player: undefined,
+    value: Infinity,
+    game: undefined
+  });
+
+  const gamesMetaData: GamesMetaData = {
+    totalGames: gameData?.length ?? 0,
+    gameRecords: {
+      ...highestScore && { highestScore },
+      ...lowestScore && { lowestScore },
+      ...highestVp && { highestVp },
+      ...lowestVp && { lowestVp },
+      ...highestTr && { highestTr },
+      ...lowestTr && { lowestTr },
+    }
   }
 
   return (

@@ -1,0 +1,29 @@
+.terraformingRatingIcon {
+  width: 19px;
+  font-size: 8px;
+  height: 13px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--tr);
+  color: white;
+  position: relative;
+  top: -1px;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+.victoryPointsIcon {
+  width: 16px;
+  font-size: 8px;
+  height: 16px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--vp);
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  position: relative;
+  top: -1px;
+}

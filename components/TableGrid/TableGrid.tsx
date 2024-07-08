@@ -26,6 +26,7 @@ const bottomCount = 5;
 const TableGrid: React.FC<TableProps> = ({ data, condensable }) => {
 
   const [showAll, setShowAll] = useState(false);
+  const [sortBy, setSortBy] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {

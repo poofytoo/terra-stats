@@ -6,35 +6,27 @@ import TableGrid from "../TableGrid/TableGrid";
 const GameRecords = () => {
   const { gamesMetaData } = useContext(GameDataContext);
 
-  console.log(gamesMetaData);
-
   return <div>
     <h2>Game Records</h2>
     <p>Coming soon...</p>
     <TableGrid data={
       {
         columns: [
-          { header: 'Metric', key: 'metric' },
+          { header: 'Metric', key: 'metricName' },
           { header: 'Value', key: 'value' },
           { header: 'Player', key: 'player' },
           { header: 'Date', key: 'date' },
         ],
         rows:
           [
-            {
-              metric: 'Lowest VP Win',
-              value: <strong>{gamesMetaData.lowestVp.vp}</strong>,
-              player: gamesMetaData.lowestVp.player,
-              date:
-                <DateChip gameId={gamesMetaData.lowestVp.game.id} />
-            },
-            {
-              metric: 'Highest VP Win',
-              value: <strong>{gamesMetaData.highestVp.vp}</strong>,
-              player: gamesMetaData.highestVp.player,
-              date:
-                <DateChip gameId={gamesMetaData.highestVp.game.id} />
-            },
+            ...Object.entries(gamesMetaData.gameRecords).map((
+              [_, record]
+            ) => ({
+              metricName: record.metricName,
+              value: <strong>{record.value}</strong>,
+              player: record.player,
+              date: <DateChip gameId={record.game?.id} />
+            }))
           ]
       }
     } />

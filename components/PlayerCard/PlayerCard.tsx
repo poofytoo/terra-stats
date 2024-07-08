@@ -2,6 +2,7 @@ import { PlayerData, TopPerformers } from '@/types';
 import styles from './PlayerCard.module.css';
 
 import cx from 'classnames';
+import { Icon } from '../Icon';
 
 const streakMessage = (streakAmount: number, mostConsecutiveWins: number) => {
   if (streakAmount === 1) {
@@ -67,9 +68,11 @@ export const PlayerCard = ({
         </div>
         <div className={styles.pointsBreakdown}>
           <span className={styles.victoryPoints}>
+            <Icon type="VP" />
             {playerData.victoryPoints}
           </span>{" "}
           <span className={styles.terraformingRating}>
+            <Icon type="TR" />
             {playerData.terraformingRating}
           </span>{" "}
           <span className={styles.megaCredits}>

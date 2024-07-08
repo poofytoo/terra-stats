@@ -74,36 +74,6 @@
   opacity: 0.5
 }
 
-.victoryPoints:before {
-  content: "VP";
-  width: 16px;
-  font-size: 8px;
-  height: 16px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--vp);
-  color: white;
-  border-radius: 10px;
-  font-weight: bold;
-  margin-right: 5px;
-}
-
-.terraformingRating:before {
-  content: "TR";
-  width: 19px;
-  font-size: 8px;
-  height: 13px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--tr);
-  color: white;
-  border-radius: 2px;
-  font-weight: bold;
-  margin-right: 5px;
-}
-
 .megaCredits:before {
   content: "$";
   width: 14px;
@@ -146,6 +116,10 @@
   margin-right: 2px;
   font-size: 12px;
   position: relative;
+}
+
+.terraformingRating, .victoryPoints {
+  gap: 5px;
 }
 
 .greeneryPoints {
