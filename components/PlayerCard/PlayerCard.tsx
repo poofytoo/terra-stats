@@ -3,6 +3,7 @@ import styles from './PlayerCard.module.css';
 
 import cx from 'classnames';
 import { Icon } from '../Icon';
+import { humanizeTimeTaken } from '@/libs/util';
 
 const streakMessage = (streakAmount: number, mostConsecutiveWins: number) => {
   if (streakAmount === 1) {
@@ -89,8 +90,7 @@ export const PlayerCard = ({
           </span>{" "}
           <span title="time taken">
             <span className={styles.subtle}>⏱️&nbsp;</span>
-            {playerData.timer.hours ? `${playerData.timer.hours}:` : ""}
-            {playerData.timer?.minutes.toString().padStart(2, "0")}:{(playerData.timer?.seconds).toString().padStart(2, "0")}
+            {humanizeTimeTaken(playerData.timer)}
           </span>
         </div>
         <div className={styles.playerCorporation}>

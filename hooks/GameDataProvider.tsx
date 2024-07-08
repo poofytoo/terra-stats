@@ -1,6 +1,7 @@
 "use client"
 
 import { Icon } from '@/components/Icon';
+import { humanizeTimeTaken } from '@/libs/util';
 import { Game } from '@/types';
 import { useState, createContext, ReactNode, Dispatch, SetStateAction, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
@@ -8,6 +9,7 @@ import useSWR from 'swr';
 interface GameRecord {
   metricName: string | JSX.Element;
   value: number;
+  displayValue?: string;
   player?: string;
   game?: Game;
 }
@@ -195,6 +197,66 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     game: undefined
   });
 
+  const fastestWin: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
+    const winner = Object.values(game.players)[0];
+    const timeInSeconds = (winner.timer.hours) * 60 * 60 + (winner.timer.minutes) * 60 + (winner.timer.seconds);
+    if (timeInSeconds < acc.value) {
+      return {
+        metricName: <>Fastest Win</>,
+        player: Object.keys(game.players)[0],
+        displayValue: humanizeTimeTaken(winner.timer),
+        value: timeInSeconds,
+        game
+      }
+    }
+    return acc;
+  }, {
+    metricName: <>Fastest Win</>,
+    player: undefined,
+    value: Infinity,
+    game: undefined
+  });
+
+  const mostActions: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const actions = winner.actionsTaken ?? 0;
+    if (actions > acc.value) {
+      return {
+        metricName: <>Most Actions</>,
+        player: players[0],
+        value: actions,
+        game
+      }
+    }
+    return acc;
+  }, {
+    metricName: <>Most Actions</>,
+    player: undefined,
+    value: 0,
+    game: undefined
+  });
+
+  const fewestActions: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const actions = winner.actionsTaken ?? Infinity;
+    if (actions < acc.value) {
+      return {
+        metricName: <>Fewest Actions</>,
+        player: players[0],
+        value: actions,
+        game
+      }
+    }
+    return acc;
+  }, {
+    metricName: <>Fewest Actions</>,
+    player: undefined,
+    value: Infinity,
+    game: undefined
+  });
+
   const gamesMetaData: GamesMetaData = {
     totalGames: gameData?.length ?? 0,
     gameRecords: {
@@ -204,6 +266,9 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
       ...lowestVp && { lowestVp },
       ...highestTr && { highestTr },
       ...lowestTr && { lowestTr },
+      ...mostActions && { mostActions },
+      ...fewestActions && { fewestActions },
+      ...fastestWin && { fastestWin }
     }
   }
 

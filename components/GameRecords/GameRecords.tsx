@@ -8,7 +8,6 @@ const GameRecords = () => {
 
   return <div>
     <h2>Game Records</h2>
-    <p>Coming soon...</p>
     <TableGrid data={
       {
         columns: [
@@ -23,7 +22,7 @@ const GameRecords = () => {
               [_, record]
             ) => ({
               metricName: record.metricName,
-              value: <strong>{record.value}</strong>,
+              value: record.displayValue ? <strong>{record.displayValue}</strong> : <strong>{record.value}</strong>,
               player: record.player,
               date: <DateChip gameId={record.game?.id} />
             }))

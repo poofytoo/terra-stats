@@ -73,3 +73,12 @@ export const gab = Gabarito({
   subsets: ["latin"],
   adjustFontFallback: false,
 });
+
+export const humanizeTimeTaken = (timer: {
+  hours: number,
+  minutes: number,
+  seconds: number
+}) => {
+  return (timer.hours ? `${timer.hours}:` : "") + timer?.minutes.toString().padStart(2, "0") + ":" + (timer?.seconds).toString().padStart(2, "0")
+}
+
