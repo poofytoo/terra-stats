@@ -31,6 +31,7 @@ export const notableCollections = [
   "Birds",
   "Livestock",
   "Physics Complex",
+  "Ecological Zone",
   "Pets",
   "Fish",
   "Immigration Shuttles",
