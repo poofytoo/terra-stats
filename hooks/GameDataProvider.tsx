@@ -223,7 +223,7 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     const actions = winner.actionsTaken ?? 0;
     if (actions > acc.value) {
       return {
-        metricName: <>Most Actions</>,
+        metricName: <>Most Actions Win</>,
         player: players[0],
         value: actions,
         game
@@ -231,7 +231,7 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     }
     return acc;
   }, {
-    metricName: <>Most Actions</>,
+    metricName: <>Most Actions Win</>,
     player: undefined,
     value: 0,
     game: undefined
@@ -243,7 +243,7 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     const actions = winner.actionsTaken ?? Infinity;
     if (actions < acc.value) {
       return {
-        metricName: <>Fewest Actions</>,
+        metricName: <>Fewest Actions Win</>,
         player: players[0],
         value: actions,
         game
@@ -251,7 +251,7 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     }
     return acc;
   }, {
-    metricName: <>Fewest Actions</>,
+    metricName: <>Fewest Actions Win</>,
     player: undefined,
     value: Infinity,
     game: undefined
@@ -265,7 +265,7 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     const timePerAction = timeInSeconds / actions;
     if (timePerAction < acc.value) {
       return {
-        metricName: <>Lowest Time Per Action</>,
+        metricName: <>Lowest Time Per Action Win</>,
         player: players[0],
         displayValue: `${roundWithTwoSigFigs(timePerAction)}s`,
         value: timePerAction,
@@ -274,7 +274,7 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     }
     return acc;
   }, {
-    metricName: <>Lowest Time Per Action</>,
+    metricName: <>Lowest Time Per Action Win</>,
     player: undefined,
     value: Infinity,
     game: undefined
@@ -324,6 +324,26 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     game: undefined
   });
 
+  const winWithMostGreeneries: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const greeneries = winner.greeneryPoints ?? 0;
+    if (greeneries > acc.value) {
+      return {
+        metricName: <>Most Greeneries</>,
+        player: players[0],
+        value: greeneries,
+        game
+      }
+    }
+    return acc;
+  }, {
+    metricName: <>Most Greeneries Win</>,
+    player: undefined,
+    value: 0,
+    game: undefined
+  });
+
   const gamesMetaData: GamesMetaData = {
     totalGames: gameData?.length ?? 0,
     gameRecords: {
@@ -338,7 +358,8 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
       ...fastestWin && { fastestWin },
       ...largestWinMargin && { largestWinMargin },
       ...smallestWinMargin && { smallestWinMargin },
-      ...lowestTimePerAction && { lowestTimePerAction }
+      ...lowestTimePerAction && { lowestTimePerAction },
+      ...winWithMostGreeneries && { winWithMostGreeneries }
     }
   }
 
