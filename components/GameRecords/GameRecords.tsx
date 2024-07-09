@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { DateChip } from "../DateChip/DateChip";
 import TableGrid from "../TableGrid/TableGrid";
 
-const GameRecords = () => {
+export const GameRecords = () => {
   const { gamesMetaData } = useContext(GameDataContext);
 
   return <div>
@@ -31,5 +31,3 @@ const GameRecords = () => {
     } />
   </div>
 }
-
-export default GameRecords;

@@ -14,7 +14,8 @@ import { Players } from '@/components/Players';
 import { NotableCollections } from '@/components/NotableCollections';
 import { AllGames } from '@/components/AllGames';
 import { GameDataContext } from '@/hooks/GameDataProvider';
-import GameRecords from '@/components/GameRecords/GameRecords';
+import { GameRecords } from '@/components/GameRecords';
+import { NumberOfCorps } from '@/components/NumberOfCorps';
 
 const Home = () => {
   const { gameData } = useContext(GameDataContext);
@@ -38,6 +39,7 @@ const Home = () => {
         </div>
         <div className={cx(styles.cell, styles.players)}><Players /></div>
         <div className={cx(styles.cell, styles.gameRecords)}><GameRecords /></div>
+        <div className={cx(styles.cell, styles.numberOfCorporations)}><NumberOfCorps /></div>
         <div className={cx(styles.cell, styles.corporations)}><Corporations /></div>
         <div className={cx(styles.cell, styles.notableCollections)}><NotableCollections />
         </div>
