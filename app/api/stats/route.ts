@@ -209,6 +209,8 @@ export async function GET(request: Request) {
           }
         }
 
+        console.log(vpCards);
+
         game.players[Object.keys(game.players)[id]].vpCards = vpCards;
       }
 
