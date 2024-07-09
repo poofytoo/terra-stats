@@ -1,7 +1,7 @@
 "use client"
 
 import { Icon } from '@/components/Icon';
-import { humanizeTimeTaken } from '@/libs/util';
+import { humanizeTimeTaken, roundWithTwoSigFigs } from '@/libs/util';
 import { Game } from '@/types';
 import { useState, createContext, ReactNode, Dispatch, SetStateAction, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
@@ -257,6 +257,73 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     game: undefined
   });
 
+  const lowestTimePerAction: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const actions = winner.actionsTaken ?? 0;
+    const timeInSeconds = (winner.timer.hours) * 60 * 60 + (winner.timer.minutes) * 60 + (winner.timer.seconds);
+    const timePerAction = timeInSeconds / actions;
+    if (timePerAction < acc.value) {
+      return {
+        metricName: <>Lowest Time Per Action</>,
+        player: players[0],
+        displayValue: `${roundWithTwoSigFigs(timePerAction)}s`,
+        value: timePerAction,
+        game
+      }
+    }
+    return acc;
+  }, {
+    metricName: <>Lowest Time Per Action</>,
+    player: undefined,
+    value: Infinity,
+    game: undefined
+  });
+
+  const largestWinMargin: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const loser = game.players[players[1]];
+    const scoreDifference = winner.finalScore - loser.finalScore;
+    if (scoreDifference > acc.value) {
+      return {
+        metricName: <>Largest Win Margin</>,
+        displayValue: `${scoreDifference} points`,
+        player: players[0],
+        value: scoreDifference,
+        game
+      }
+    }
+    return acc;
+  }, {
+    metricName: <>Largest Win Margin</>,
+    player: undefined,
+    value: 0,
+    game: undefined
+  });
+
+  const smallestWinMargin: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const loser = game.players[players[1]];
+    const scoreDifference = winner.megaCredits - loser.megaCredits;
+    if (scoreDifference < acc.value && winner.finalScore === loser.finalScore) {
+      return {
+        metricName: <>Smallest Win Margin</>,
+        displayValue: `${scoreDifference} MC`,
+        player: players[0],
+        value: scoreDifference,
+        game
+      }
+    }
+    return acc;
+  }, {
+    metricName: <>Smallest Win Margin</>,
+    player: undefined,
+    value: Infinity,
+    game: undefined
+  });
+
   const gamesMetaData: GamesMetaData = {
     totalGames: gameData?.length ?? 0,
     gameRecords: {
@@ -268,7 +335,10 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
       ...lowestTr && { lowestTr },
       ...mostActions && { mostActions },
       ...fewestActions && { fewestActions },
-      ...fastestWin && { fastestWin }
+      ...fastestWin && { fastestWin },
+      ...largestWinMargin && { largestWinMargin },
+      ...smallestWinMargin && { smallestWinMargin },
+      ...lowestTimePerAction && { lowestTimePerAction }
     }
   }
 
