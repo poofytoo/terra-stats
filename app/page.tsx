@@ -21,9 +21,9 @@ const Home = () => {
 
   if (!gameData) {
     return <div className={cx(styles.loading, gab.className)}>
-      <h1>Terra-Stats!</h1>
+      <h1><a href="/">Terra Stats!</a></h1>
       <p>Loading...</p>
-    </div>;
+    </div>
   }
 
   gameData?.forEach((game: Game) => {
@@ -34,7 +34,7 @@ const Home = () => {
     <div>
       <div className={cx(styles.mainPageGrid, gab.className)}>
         <div className={cx(styles.title)}>
-          <h1>Terra-Stats!</h1>
+          <h1><a href="/">Terra Stats!</a></h1>
         </div>
         <div className={cx(styles.cell, styles.players)}><Players /></div>
         <div className={cx(styles.cell, styles.gameRecords)}><GameRecords /></div>
