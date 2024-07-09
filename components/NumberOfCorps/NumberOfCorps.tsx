@@ -58,7 +58,6 @@ export const NumberOfCorps = () => {
     };
   });
 
-  console.log(winsByNumberOfCorps);
   return (
     <div>
       <h2>Wins by Number of Corporations</h2>
