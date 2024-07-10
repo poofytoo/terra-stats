@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { GameDataContext } from '@/hooks/GameDataProvider';
 import { formatDate } from '@/libs/util';
 
-const pastNumberofDays = 3;
+const daysThresholdForRecent = 3;
 
 export const DateChip = ({ gameId }: { gameId?: string }) => {
   const router = useRouter();
@@ -21,7 +21,7 @@ export const DateChip = ({ gameId }: { gameId?: string }) => {
   }
 
   const gameData = getGameById(gameId);
-  const recent = (gameData?.dateOfGame ?? new Date()) > new Date(Date.now() - 1000 * 60 * 60 * 24 * pastNumberofDays);
+  const recent = (gameData?.dateOfGame ?? new Date()) > new Date(Date.now() - 1000 * 60 * 60 * 24 * daysThresholdForRecent);
 
   return (
     <div className={cx(styles.date, { [styles.recent]: recent })} onClick={() => {
