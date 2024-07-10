@@ -13,6 +13,11 @@
   letter-spacing: 0.3px;
 }
 
+.recent {
+  background-color: var(--highlight-light)
+
+}
+
 .date:hover:not(.disabled) {
   background-color: var(--highlight);
   cursor: pointer;
