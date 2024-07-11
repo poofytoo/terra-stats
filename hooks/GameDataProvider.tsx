@@ -344,6 +344,32 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
     game: undefined
   });
 
+  const mostAwardAndMilestonePoints: GameRecord | undefined = gameData?.reduce((acc: GameRecord, game: Game) => {
+    const players = Object.keys(game.players);
+    const winner = game.players[players[0]];
+    const awardPoints = winner.awards?.reduce((acc, award) => {
+      return acc + (award.points ?? 0)
+    }, 0)
+    const milestonePoints = winner.milestones?.reduce((acc, milestone) => {
+      return acc + (milestone.points ?? 0)
+    }, 0)
+    const totalPoints = (awardPoints ?? 0) + (milestonePoints ?? 0);
+    if (totalPoints > acc.value) {
+      return {
+        metricName: <>Most Award & Milestone Points</>,
+        player: players[0],
+        value: totalPoints,
+        game
+      }
+    }
+    return acc;
+  }, {
+    metricName: <>Most Award & Milestone Points</>,
+    player: undefined,
+    value: 0,
+    game: undefined
+  });
+
   const gamesMetaData: GamesMetaData = {
     totalGames: gameData?.length ?? 0,
     gameRecords: {
@@ -359,7 +385,8 @@ const GameDataProvider = ({ children }: { children: ReactNode }) => {
       ...largestWinMargin && { largestWinMargin },
       ...smallestWinMargin && { smallestWinMargin },
       ...lowestTimePerAction && { lowestTimePerAction },
-      ...winWithMostGreeneries && { winWithMostGreeneries }
+      ...winWithMostGreeneries && { winWithMostGreeneries },
+      ...mostAwardAndMilestonePoints && { mostAwardAndMilestonePoints }
     }
   }
 

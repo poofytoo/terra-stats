@@ -11,6 +11,18 @@ export interface vpCard {
   isTop?: boolean;
 }
 
+export interface Award {
+  place: number;
+  fundedBy: string;
+  name: string;
+  points: number;
+}
+
+export interface Milestone {
+  points: number;
+  name: string;
+}
+
 export interface PlayerData {
   displayName?: string;
   finalScore: number;
@@ -34,8 +46,8 @@ export interface PlayerData {
   actionsTaken?: number;
   corporations?: string[];
   vpCards?: vpCard[];
-  milestones?: number;
-  awards?: number
+  milestones?: Milestone[];
+  awards?: Award[];
 }
 
 export interface Game {

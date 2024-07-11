@@ -3,8 +3,34 @@ import path from 'path';
 import fs from 'fs/promises';
 
 import { promises as fsPromises } from 'fs';
-import { Game, processedData, vpCard, vpCardType } from '@/types';
+import { Award, Game, Milestone, processedData, vpCard, vpCardType } from '@/types';
 import { getAllFilesInFolder, normalizedPlayerNames, notableCollections } from '@/libs/util';
+
+function extractMilestone(text: string): Milestone {
+  const regex = /Claimed (.+?) milestone/;
+  const match = text.match(regex);
+
+  if (match && match.length === 2) {
+    return { name: match[1], points: 5 }; // Returns the captured milestone text
+  } else {
+    return { name: "", points: 0 }; // Returns null if no match found
+  }
+}
+
+function extractAwardDetails(text: string): Award {
+  const regex = /(\d+)(?:st|nd|rd|th) place for (.+?) award \(funded by (.+?)\)/;
+  const match = text.match(regex);
+
+  if (match && match.length === 4) {
+    const place = parseInt(match[1], 10);
+    const award = match[2]?.trim() || ""; // Use optional chaining and fallback to null
+    const fundedBy = match[3]?.trim() || ""; // Use optional chaining and fallback to null
+
+    return { place, name: award, fundedBy, points: place === 1 ? 5 : 2 };
+  } else {
+    return { place: 0, name: "", fundedBy: "", points: 0 };
+  }
+}
 
 export async function GET(request: Request) {
   const files = await getAllFilesInFolder(fs, 'data');
@@ -180,6 +206,8 @@ export async function GET(request: Request) {
         }
 
         const vpCards: vpCard[] = [];
+        const awards: Award[] = [];
+        const milestones: Milestone[] = []
 
         for (let i = 0; i < vpMatches.length; i++) {
           // ignore white space like &nbsp;
@@ -207,11 +235,22 @@ export async function GET(request: Request) {
               cardName
             });
           }
+
+          if (cardName.indexOf('funded') > -1) {
+            // Example usage:
+            awards.push(extractAwardDetails(cardName));
+          }
+          if (cardName.indexOf('milestone') > -1) {
+            milestones.push(extractMilestone(cardName));
+          }
         }
 
-        console.log(vpCards);
-
-        game.players[Object.keys(game.players)[id]].vpCards = vpCards;
+        game.players[Object.keys(game.players)[id]] = {
+          ...game.players[Object.keys(game.players)[id]],
+          milestones,
+          vpCards,
+          awards
+        } 
       }
 
       // look through each player's vp cards. if the card name is in the notableCollections array. if the vp is greater than the existing value in the corresponding notableCollectionRecords array, replace it.
