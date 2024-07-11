@@ -16,17 +16,16 @@ export const GameRecords = () => {
           { header: 'Player', key: 'player' },
           { header: 'Date', key: 'date' },
         ],
-        rows:
-          [
-            ...Object.entries(gamesMetaData.gameRecords).map((
-              [_, record]
-            ) => ({
-              metricName: record.metricName,
-              value: record.displayValue ? <strong>{record.displayValue}</strong> : <strong>{record.value}</strong>,
-              player: record.player,
-              date: <DateChip gameId={record.game?.id} />
-            }))
-          ]
+        rows: [
+          ...Object.entries(gamesMetaData.gameRecords).map((
+            [_, record]
+          ) => ({
+            metricName: record.metricName,
+            value: record.displayValue ? <strong>{record.displayValue}</strong> : <strong>{record.value}</strong>,
+            player: record.player,
+            date: <DateChip gameId={record.game?.id} />
+          }))
+        ]
       }
     } />
   </div>

@@ -17,18 +17,20 @@ function extractMilestone(text: string): Milestone {
   }
 }
 
-function extractAwardDetails(text: string): Award {
+function extractAwardDetails(text: string): Award | null {
   const regex = /(\d+)(?:st|nd|rd|th) place for (.+?) award \(funded by (.+?)\)/;
   const match = text.match(regex);
 
   if (match && match.length === 4) {
     const place = parseInt(match[1], 10);
-    const award = match[2]?.trim() || ""; // Use optional chaining and fallback to null
+    const award = match[2]?.trim() || ""; // Use optional chaining and fallback to null;
     const fundedBy = match[3]?.trim() || ""; // Use optional chaining and fallback to null
+
+    if (fundedBy === "") console.log(text);
 
     return { place, name: award, fundedBy, points: place === 1 ? 5 : 2 };
   } else {
-    return { place: 0, name: "", fundedBy: "", points: 0 };
+    return null;
   }
 }
 
@@ -132,8 +134,9 @@ export async function GET(request: Request) {
 
             game.players[normalizedPlayerName].corporations = corporationList;
             game.players[normalizedPlayerName].terraformingRating = parseInt(tds[1]);
-            game.players[normalizedPlayerName].milestonePoints = parseInt(tds[2]);
-            game.players[normalizedPlayerName].awardPoints = parseInt(tds[3]);
+            // temporarily remove this as it's inaccurate
+            // game.players[normalizedPlayerName].milestonePoints = parseInt(tds[2]);
+            // game.players[normalizedPlayerName].awardPoints = parseInt(tds[3]);
             game.players[normalizedPlayerName].greeneryPoints = parseInt(tds[4]);
             game.players[normalizedPlayerName].cityPoints = parseInt(tds[5]);
             game.players[normalizedPlayerName].victoryPoints = parseInt(tds[6].replace(/<\/?div.*?>/g, '').trim());
@@ -237,8 +240,10 @@ export async function GET(request: Request) {
           }
 
           if (cardName.indexOf('funded') > -1) {
-            // Example usage:
-            awards.push(extractAwardDetails(cardName));
+            const award = extractAwardDetails(cardName);
+            if (extractAwardDetails(cardName)) {
+              awards.push(award as Award);
+            }
           }
           if (cardName.indexOf('milestone') > -1) {
             milestones.push(extractMilestone(cardName));
@@ -250,7 +255,7 @@ export async function GET(request: Request) {
           milestones,
           vpCards,
           awards
-        } 
+        }
       }
 
       // look through each player's vp cards. if the card name is in the notableCollections array. if the vp is greater than the existing value in the corresponding notableCollectionRecords array, replace it.

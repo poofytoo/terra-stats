@@ -6,7 +6,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: 1.4fr 1.3fr 1fr;
-  grid-template-rows: auto min-content min-content 1fr auto;
+  grid-template-rows: auto min-content min-content min-content 1fr auto;
   gap: 1px;
   background-color: #c6b9b9; 
   grid-template-areas:
@@ -14,6 +14,7 @@
     "players corporations notableCollections"
     "gameRecords corporations notableCollections"
     "numberOfCorps corporations notableCollections"
+    "awardStats corporations notableCollections"
     "loggedGames loggedGames loggedGames";
 }
 
@@ -44,6 +45,10 @@
   grid-area: gameRecords;
 }
 
+.awardStats {
+  grid-area: awardStats;
+}
+
 .corporations {
   grid-area: corporations;
   min-width: 0;
@@ -66,12 +71,12 @@
 @media (max-width: 900px) {
   .mainPageGrid {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto auto auto auto;
     grid-template-areas:
       "title title"
       "players corporations"
       "gameRecords notableCollections"
-      "numberOfCorps numberOfCorps"
+      "awardStats numberOfCorps"
       "loggedGames loggedGames";
   }
 }
@@ -87,6 +92,7 @@
       "notableCollections"
       "gameRecords"
       "numberOfCorps"
+      "awardStats"
       "loggedGames";
   }
 }
