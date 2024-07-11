@@ -67,7 +67,7 @@ export const AwardStats = () => {
       }, { player: '', count: 0 })
 
       return {
-        award: award.awardName,
+        award: <a target='_BLANK' href={`https://terraforming-mars.herokuapp.com/cards#${award.awardName}`}>{award.awardName}</a>,
         count: award.count,
         percent: percentageWithTwoSigFigs(award.count / (gameData?.length ?? 1)),
         mostClaimedBy: `${mostClaimedBy.player} (${mostClaimedBy.count})`
