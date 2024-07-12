@@ -19,6 +19,7 @@
   --highlight: gold;
   --highlight-light: rgb(255, 245, 188);
   --highlight-light-2: rgb(253, 250, 236);
+  
   --row-highlight: rgb(255, 250, 224);
   --highlight-dark: rgb(244, 232, 185);
 
@@ -97,6 +98,19 @@ strong {
 
 button {
   margin-top: 10px;
+  font-size: 12px;
+  border: 1px solid var(--gray5);
+  border-radius: 4px;
+  
+}
+
+button.active {
+  background-color: var(--highlight);
+}
+
+button:hover {
+  cursor: pointer;
+  opacity: 0.9;
 }
 
 a {
