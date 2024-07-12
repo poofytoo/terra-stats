@@ -252,7 +252,6 @@ export const AwardStats = () => {
 
   return <div>
     <h2>Award & Milestone Stats</h2>
-    <p>Under construction! Pardon the dust. Milestone claims count both 1st and 2nd place.</p>
     <p>
       <button className={cx(gab.className, {
         "active": showAwards
