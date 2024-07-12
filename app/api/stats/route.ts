@@ -6,14 +6,14 @@ import { promises as fsPromises } from 'fs';
 import { Award, Game, Milestone, processedData, vpCard, vpCardType } from '@/types';
 import { getAllFilesInFolder, normalizedPlayerNames, notableCollections } from '@/libs/util';
 
-function extractMilestone(text: string): Milestone {
+function extractMilestone(text: string, gameId: string): Milestone {
   const regex = /Claimed (.+?) milestone/;
   const match = text.match(regex);
 
   if (match && match.length === 2) {
-    return { name: match[1], points: 5 }; // Returns the captured milestone text
+    return { name: match[1], points: 5, gameId }; // Returns the captured milestone text
   } else {
-    return { name: "", points: 0 }; // Returns null if no match found
+    return { name: "", points: 0, gameId }; // Returns null if no match found
   }
 }
 
@@ -28,7 +28,7 @@ function extractAwardDetails(text: string): Award | null {
 
     if (fundedBy === "") console.log(text);
 
-    return { place, name: award, fundedBy, points: place === 1 ? 5 : 2 };
+    return { place, name: award, points: place === 1 ? 5 : 2 };
   } else {
     return null;
   }
@@ -53,8 +53,10 @@ export async function GET(request: Request) {
     dateOfGame.setHours(dateOfGame.getHours() + 6);
 
     const game: Game = {
+      id: "",
       dateOfGame,
       streakCount: 0,
+
       fileName: file,
       players: {}
     }
@@ -246,7 +248,7 @@ export async function GET(request: Request) {
             }
           }
           if (cardName.indexOf('milestone') > -1) {
-            milestones.push(extractMilestone(cardName));
+            milestones.push(extractMilestone(cardName, game.id ?? ""));
           }
         }
 

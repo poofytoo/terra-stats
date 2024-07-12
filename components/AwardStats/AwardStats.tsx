@@ -48,6 +48,7 @@ export const AwardStats = () => {
     Object.keys(game.players).forEach((playerName) => {
       const player = game.players[playerName] as PlayerData;
       player?.awards?.forEach((award) => {
+        if (award.place !== 1) return;
         if (acc[award.name]) {
           acc[award.name].total += 1
         } else {
@@ -81,6 +82,67 @@ export const AwardStats = () => {
     return awardB.count - awardA.count
   });
 
+  interface GameIdToAward {
+    [gameId: string]: [{
+      milestone: string,
+      fundedBy: string
+    }]
+  }
+
+  const gameIdToAward: GameIdToAward = gameData?.reduce((
+    acc: GameIdToAward,
+    game: Game) => {
+    Object.keys(game.players).forEach((playerName) => {
+      const player = game.players[playerName] as PlayerData;
+      player?.awards?.forEach((award) => {
+        if (acc[game.id]) {
+          // check to make sure the milestone isn't already in the array
+          const found = acc[game.id].find((awardEntry) => awardEntry.milestone === award.name)
+          if (!found) {
+            acc[game.id].push({
+              milestone: award.name,
+              fundedBy: playerName
+            })
+          }
+        } else {
+          acc[game.id] = [{
+            milestone: award.name,
+            fundedBy: playerName
+          }]
+        }
+      });
+    })
+    return acc
+  }, {}) ?? {};
+
+  interface AwardToFundedBy {
+    [award: string]: {
+      [player: string]: number
+    }
+  }
+
+
+
+  const mostFundedByMap = Object.keys(gameIdToAward).reduce((
+    ac: AwardToFundedBy,
+    gameId: string
+  ) => {
+    gameIdToAward[gameId].forEach((award) => {
+      if (ac[award.milestone]) {
+        if (ac[award.milestone][award.fundedBy]) {
+          ac[award.milestone][award.fundedBy] += 1
+        } else {
+          ac[award.milestone][award.fundedBy] = 1
+        }
+      } else {
+        ac[award.milestone] = {
+          [award.fundedBy]: 1
+        }
+      }
+    })
+    return ac
+  }, {})
+
   const awardRows = [
     ...awards.map((award) => {
       const mostClaimedBy = Object.keys(awardStats[award.awardName].playerCounts).reduce((acc, player) => {
@@ -93,19 +155,31 @@ export const AwardStats = () => {
         return acc
       }, { player: '', count: 0 })
 
+      const mostFundedBy = Object.keys(mostFundedByMap[award.awardName]).reduce((acc, player) => {
+        if (mostFundedByMap[award.awardName][player] > acc.count) {
+          acc = {
+            player: player,
+            count: mostFundedByMap[award.awardName][player]
+          }
+        }
+        return acc
+      }, { player: '', count: 0 });
+
       return {
         award: <a target='_BLANK' href={`https://terraforming-mars.herokuapp.com/cards#${award.awardName}`}>{award.awardName}</a>,
         count: award.count,
         percent: percentageWithTwoSigFigs(award.count / (gameData?.length ?? 1)),
-        mostClaimedBy: `${mostClaimedBy.player} (${mostClaimedBy.count})`
+        mostClaimedBy: `${mostClaimedBy.player} (${mostClaimedBy.count})`,
+        mostFundedBy: `${mostFundedBy.player} (${mostFundedBy.count})`
       }
     })];
 
   const awardColumns = [
     { header: 'Award', key: 'award' },
-    { header: <>Times<br />Claimed</>, key: 'count' },
+    { header: <>Times<br />Funded</>, key: 'count' },
     { header: '% of Games', key: 'percent' },
-    { header: 'Most Claimed By', key: 'mostClaimedBy' },
+    { header: 'Most Firsts in', key: 'mostClaimedBy' },
+    { header: 'Most Funded By', key: 'mostFundedBy' },
   ];
 
   const milestoneStats: AggregateMilestoneStats = gameData?.reduce((
@@ -174,7 +248,6 @@ export const AwardStats = () => {
     { header: <>Times<br />Claimed</>, key: 'count' },
     { header: '% of Games', key: 'percent' },
     { header: 'Most Claimed By', key: 'mostClaimedBy' },
-    { header: 'Most Funded By', key: 'mostFundedBy' }
   ];
 
   return <div>

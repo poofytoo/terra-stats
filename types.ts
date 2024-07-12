@@ -13,12 +13,12 @@ export interface vpCard {
 
 export interface Award {
   place: number;
-  fundedBy: string;
   name: string;
   points: number;
 }
 
 export interface Milestone {
+  gameId: string;
   points: number;
   name: string;
 }
@@ -51,7 +51,7 @@ export interface PlayerData {
 }
 
 export interface Game {
-  id?: string;
+  id: string;
   dateOfGame: Date;
   playerCount?: number;
   generations?: number;
