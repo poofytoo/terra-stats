@@ -14,7 +14,8 @@
 }
 
 .recent {
-  background-color: var(--highlight-light)
+  background-color: var(--highlight-light);
+  animation: pulsate 1.5s infinite;
 
 }
 
@@ -26,4 +27,13 @@
 .disabled {
   border-color: var(--gray3);
   color: var(--gray2);
+}
+
+@keyframes pulsate {
+  0% {
+    background-color: var(--highlight-light);
+  }
+  50% {
+    background-color: var(--highlight-light-2);
+  }
 }

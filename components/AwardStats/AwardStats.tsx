@@ -2,7 +2,7 @@ import { GameDataContext } from "@/hooks/GameDataProvider";
 import { useContext } from "react";
 import TableGrid from "../TableGrid/TableGrid";
 import { Game, PlayerData } from "@/types";
-import { percentageWithTwoSigFigs } from "@/libs/util";
+import { gab, percentageWithTwoSigFigs } from "@/libs/util";
 
 interface AwardStats { [awardName: string]: number }
 interface AggregateAwardStats {
@@ -75,7 +75,12 @@ export const AwardStats = () => {
     })];
 
   return <div>
-    <h2>Award Stats</h2>
+    <h2>Award & Milestone Stats</h2>
+    <p>
+      <button className={gab.className}>Awards</button>{" "}
+      <button className={gab.className}>Milestones</button>
+    </p>
+    <p>Milestones coming soon...</p>
     <TableGrid data={
       {
         columns: [

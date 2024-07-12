@@ -17,7 +17,8 @@
   --gray8: #212529;
 
   --highlight: gold;
-  --highlight-light: rgb(255, 250, 224);
+  --highlight-light: rgb(255, 245, 188);
+  --highlight-light-2: rgb(253, 250, 236);
   --row-highlight: rgb(255, 250, 224);
   --highlight-dark: rgb(244, 232, 185);
 
