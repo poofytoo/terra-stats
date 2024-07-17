@@ -17,6 +17,7 @@ import { GameDataContext } from '@/hooks/GameDataProvider';
 import { GameRecords } from '@/components/GameRecords';
 import { NumberOfCorps } from '@/components/NumberOfCorps';
 import { AwardStats } from '@/components/AwardStats';
+import { MatchUps } from '@/components/MatchUps';
 
 const Home = () => {
   const { gameData } = useContext(GameDataContext);
@@ -44,6 +45,9 @@ const Home = () => {
         <div className={cx(styles.cell, styles.awardStats)}><AwardStats /></div>
         <div className={cx(styles.cell, styles.corporations)}><Corporations /></div>
         <div className={cx(styles.cell, styles.notableCollections)}><NotableCollections />
+        </div>
+        <div className={styles.matchUps}>
+          <MatchUps />
         </div>
         <div className={styles.allLoggedGames}>
           <h2 className={styles.h2WithPadding}>All Logged Games <span className="dem">({gameData.length})</span></h2>

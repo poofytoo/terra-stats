@@ -84,6 +84,18 @@ strong {
   padding: 20px var(--global-padding);
 }
 
+.left {
+  text-align: left;
+}
+
+td {
+  text-align: center;
+}
+
+th {
+  text-align: center;
+}
+
 @keyframes pulsing {
   0% {
     background-color: var(--row-highlight);

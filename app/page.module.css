@@ -15,6 +15,7 @@
     "gameRecords corporations notableCollections"
     "numberOfCorps corporations notableCollections"
     "awardStats corporations notableCollections"
+    "matchUps matchUps matchUps" 
     "loggedGames loggedGames loggedGames";
 }
 
@@ -64,6 +65,10 @@
   padding: 0;
 }
 
+.mainPageGrid .matchUps {
+  grid-area: matchUps;
+}
+
 .h2WithPadding {
   padding: var(--global-padding) var(--global-padding) 0;
 }
@@ -71,12 +76,13 @@
 @media (max-width: 900px) {
   .mainPageGrid {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto auto auto auto auto;
     grid-template-areas:
       "title title"
       "players corporations"
       "gameRecords notableCollections"
       "awardStats numberOfCorps"
+      "matchUps matchUps"
       "loggedGames loggedGames";
   }
 }
@@ -93,6 +99,7 @@
       "gameRecords"
       "numberOfCorps"
       "awardStats"
+      "matchUps"
       "loggedGames";
   }
 }
