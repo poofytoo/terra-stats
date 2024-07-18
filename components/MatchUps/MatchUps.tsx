@@ -25,31 +25,32 @@ export const MatchUps = () => {
   const matchUps: MatchUps = gameData.reduce((acc: MatchUps, game: Game) => {
 
     const players = Object.keys(game.players);
-    const winnerName = players[0];
-
-    if (!acc[winnerName]) {
-      acc[winnerName] = {};
-    }
-
-    for (let i = 1; i < players.length; i++) {
-      const loserName = players[i];
-
-      if (!allPlayers.includes(loserName)) {
-        allPlayers.push(loserName);
-      }
-
-      if (!acc[winnerName][loserName]) {
-        acc[winnerName][loserName] = {
-          count: 0,
-          games: []
+    for (let i = 0; i < players.length; i++) {
+      for (let j = i + 1; j < players.length; j++) {
+        const higherScoredPlayer = players[i];
+        const lowerScoredPlayer = players[j];
+        if (!allPlayers.includes(higherScoredPlayer)) {
+          allPlayers.push(higherScoredPlayer);
         }
+        if (!allPlayers.includes(lowerScoredPlayer)) {
+          allPlayers.push(lowerScoredPlayer);
+        }
+
+        if (!acc[higherScoredPlayer]) {
+          acc[higherScoredPlayer] = {};
+        }
+
+        if (!acc[higherScoredPlayer][lowerScoredPlayer]) {
+          acc[higherScoredPlayer][lowerScoredPlayer] = {
+            count: 0,
+            games: []
+          }
+        }
+
+        acc[higherScoredPlayer][lowerScoredPlayer].games.push(game.id);
+        acc[higherScoredPlayer][lowerScoredPlayer].count += 1;
       }
-
-      acc[winnerName][loserName].games.push(game.id);
-      acc[winnerName][loserName].count += 1;
-
     }
-
     return acc;
   }, {});
 
