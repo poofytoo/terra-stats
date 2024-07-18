@@ -118,7 +118,10 @@ export const Players: React.FC = () => {
   return (
     <div className={styles.playersDataContainer}>
       <h2>Wins by Player</h2>
-      <TableGrid data={tableData} />
+      <TableGrid
+        data={tableData}
+        tableId='players'
+      />
     </div>
   );
 };

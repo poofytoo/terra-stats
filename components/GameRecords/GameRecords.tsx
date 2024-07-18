@@ -27,6 +27,7 @@ export const GameRecords = () => {
           }))
         ]
       }
-    } />
+    } tableId="gameRecords"
+    />
   </div>
 }

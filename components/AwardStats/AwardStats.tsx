@@ -268,11 +268,13 @@ export const AwardStats = () => {
         }}
       >Milestones</button>
     </p>
-    <TableGrid data={
-      {
-        columns: showAwards ? awardColumns : milestoneColumns,
-        rows: showAwards ? awardRows : milestoneRows,
-      }}
+    <TableGrid
+      data={
+        {
+          columns: showAwards ? awardColumns : milestoneColumns,
+          rows: showAwards ? awardRows : milestoneRows,
+        }}
+      tableId="awardStats"
     />
   </div>
 }

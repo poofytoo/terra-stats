@@ -61,17 +61,20 @@ export const NumberOfCorps = () => {
   return (
     <div>
       <h2>Wins by Number of Corporations</h2>
-      <TableGrid data={
-        {
-          columns: [
-            { header: '# of Corps', key: 'numberOfCorps' },
-            { header: 'Wins', key: 'wins' },
-            { header: 'Total Plays', key: 'plays' },
-            { header: 'Percentage', key: 'percentage' },
-          ],
-          rows: rows
+      <TableGrid
+        data={
+          {
+            columns: [
+              { header: '# of Corps', key: 'numberOfCorps' },
+              { header: 'Wins', key: 'wins' },
+              { header: 'Total Plays', key: 'plays' },
+              { header: 'Percentage', key: 'percentage' },
+            ],
+            rows: rows
+          }
         }
-      } />
+        tableId="numberOfCorps"
+      />
     </div>
   );
 };

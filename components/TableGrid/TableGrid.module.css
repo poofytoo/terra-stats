@@ -19,11 +19,17 @@
   white-space: nowrap;
   display: flex;
   align-items: flex-end;
+  cursor: pointer;
 }
 
 .tableHeader span {
   display: flex;
   align-items: flex-end;
+}
+
+.sortArrow {
+  margin-left: 5px;
+  font-size: 10px;
 }
 
 .tableCell {

@@ -80,7 +80,7 @@ export const NotableCollections: React.FC = () => {
   return (
     <div className={styles.notableCollectionsContainer}>
       <h2>Notable Collections</h2>
-      <TableGrid data={tableData} />
+      <TableGrid data={tableData} tableId='notableCollections' />
     </div>
   );
 };
