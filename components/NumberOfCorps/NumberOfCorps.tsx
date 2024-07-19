@@ -14,20 +14,24 @@ interface Player {
 }
 
 interface WinsByNumberOfCorps {
-  winners: { [key: number]: number };
-  plays: { [key: number]: number };
+  winners: { [numberOfCorps: number]: number };
+  plays: { [numberOfCorps: number]: number };
 }
 
 export const NumberOfCorps = () => {
   const { gameData } = useContext(GameDataContext);
 
-  const initialWinsByNumberOfCorps: WinsByNumberOfCorps = { winners: {}, plays: {} };
+  const initialWinsByNumberOfCorps: WinsByNumberOfCorps = {
+    winners: {},
+    plays: {}
+  };
 
   const winsByNumberOfCorps: WinsByNumberOfCorps = gameData?.reduce((acc, game: Game) => {
     const players = Object.keys(game.players);
     const winner = game.players[players[0]];
 
     const numberOfCorps = winner?.corporations?.length ?? 1;
+
     if (acc.winners[numberOfCorps]) {
       acc.winners[numberOfCorps]++;
     } else {
@@ -35,10 +39,11 @@ export const NumberOfCorps = () => {
     }
 
     players.forEach(player => {
-      if (acc.plays[numberOfCorps]) {
-        acc.plays[numberOfCorps]++;
+      const playerNumberOfCorps = game.players[player]?.corporations?.length ?? 1;
+      if (acc.plays[playerNumberOfCorps]) {
+        acc.plays[playerNumberOfCorps]++;
       } else {
-        acc.plays[numberOfCorps] = 1;
+        acc.plays[playerNumberOfCorps] = 1;
       }
     });
     return acc;
