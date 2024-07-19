@@ -169,6 +169,7 @@ export const AwardStats = () => {
         award: <a target='_BLANK' href={`https://terraforming-mars.herokuapp.com/cards#${award.awardName}`}>{award.awardName}</a>,
         count: award.count,
         percent: percentageWithTwoSigFigs(award.count / (gameData?.length ?? 1)),
+        percent_raw: award.count / (gameData?.length ?? 1),
         mostClaimedBy: `${mostClaimedBy.player} (${mostClaimedBy.count})`,
         mostFundedBy: `${mostFundedBy.player} (${mostFundedBy.count})`
       }
@@ -238,6 +239,7 @@ export const AwardStats = () => {
         milestone: <a target='_BLANK' href={`https://terraforming-mars.herokuapp.com/cards#${milestone.milestoneName}`}>{milestone.milestoneName}</a>,
         count: milestone.count,
         percent: percentageWithTwoSigFigs(milestone.count / (gameData?.length ?? 1)),
+        percent_raw: milestone.count / (gameData?.length ?? 1),
         mostClaimedBy: `${mostClaimedBy.player} (${mostClaimedBy.count})`,
         mostFundedBy: 'N/A'
       }

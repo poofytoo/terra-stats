@@ -9,6 +9,7 @@ export const normalizedPlayerNames = {
   Landon: ['Landon', 'Lando', 'Lan', 'LanLan', 'Lanthanum', 'L'],
   Ming: ['need nap'],
   Amy: ['Amy', 'Americium', 'A'],
+  Chris: ['Chras'],
 };
 
 export async function getAllFilesInFolder(fs: typeof import('fs/promises'), folderPath: string): Promise<string[]> {
@@ -50,6 +51,7 @@ export const notableCollections = [
   "Predators",
   "Commercial District",
   "Cloud Tourism",
+  "Main Belt Asteroids",
 ];
 
 export const formatDate = (date?: Date) => {
