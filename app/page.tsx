@@ -18,6 +18,7 @@ import { GameRecords } from '@/components/GameRecords';
 import { NumberOfCorps } from '@/components/NumberOfCorps';
 import { AwardStats } from '@/components/AwardStats';
 import { MatchUps } from '@/components/MatchUps';
+import Head from 'next/head';
 
 const Home = () => {
   const { gameData } = useContext(GameDataContext);
@@ -35,6 +36,12 @@ const Home = () => {
 
   return (
     <div>
+      <Head>
+        <link rel="shortcut icon" href="/images/favicon.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.svg" />
+        <link rel="icon" type="image/svg" sizes="32x32" href="/images/favicon.svg" />
+        <link rel="icon" type="image/svg" sizes="16x16" href="/images/favicon.svg" />
+      </Head>
       <div className={cx(styles.mainPageGrid, gab.className)}>
         <div className={cx(styles.title)}>
           <h1><a href="/">Terra Stats!</a></h1>
