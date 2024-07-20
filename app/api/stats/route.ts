@@ -36,7 +36,7 @@ function extractAwardDetails(text: string): Award | null {
 
 export async function GET(request: Request) {
   const files = await getAllFilesInFolder(fs, 'data');
-  const htmlFiles = files.filter(file => file.endsWith('.html'));
+  const htmlFiles = files.filter(file => file.endsWith('.html') || file.endsWith('.htm'));
   const processedData: processedData = [];
 
   const notableCollectionRecords = notableCollections.map(collection => {
