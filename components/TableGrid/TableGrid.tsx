@@ -73,7 +73,7 @@ const TableGrid: React.FC<TableProps> = ({ data, condensable, tableId }) => {
     : sortedRows;
 
   const gridTemplateColumns = `${[...Array(data.columns.length)].map((_, key) => {
-    if (data.columns[key].shrinkable) return `minmax(50px, auto)`;
+    if (data.columns[key].shrinkable) return `minmax(10px, auto)`;
     return `minmax(max-content, 1fr)`;
   }).join(' ')}`;
 
