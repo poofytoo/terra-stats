@@ -25,7 +25,7 @@ const convertCorporationsToTableData = (corporationWins: {
   ];
 
   const rows = Object.entries(corporationWins).map(([corporation, stats]) => ({
-    corporation,
+    corporation: <a target='_BLANK' href={`https://terraforming-mars.herokuapp.com/cards#${corporation}`}>{corporation}</a>,
     wins: stats.wins ?? 0,
     plays: stats.plays,
     mainWins: stats.mainWins ?? 0,

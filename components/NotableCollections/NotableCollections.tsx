@@ -27,7 +27,7 @@ const convertCollectionsToTableData = (collections: HighestNotableCollections): 
   ];
 
   const rows = Object.entries(collections).sort(([a], [b]) => a.localeCompare(b)).map(([collectionName, collectionData]) => ({
-    collection: collectionName,
+    collection: <a target='_BLANK' href={`https://terraforming-mars.herokuapp.com/cards#${collectionName}`}>{collectionName}</a>,
     record: collectionData.highest,
     holder: collectionData.player,
     date: <DateChip gameId={collectionData.gameId} />,
