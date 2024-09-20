@@ -78,8 +78,10 @@ export const Corporations: React.FC = () => {
     });
   });
 
-  Object.entries(corporationWins).forEach(([corporation, stats]) => {
-    stats.winPercentage = ((stats.wins ?? 0) / stats.plays) ?? 0;
+  Object.entries(corporationWins).forEach(([_, stats]) => {
+    const wins = stats.wins ?? 0;
+    const plays = stats.plays || 1;    
+    stats.winPercentage = wins / plays;
   });
 
   const sortedCorporations = Object.entries(corporationWins).sort((a, b) => {
