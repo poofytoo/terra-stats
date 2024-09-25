@@ -52,6 +52,8 @@ export const notableCollections = [
   "Commercial District",
   "Cloud Tourism",
   "Main Belt Asteroids",
+  "Herbivores",
+  "Small Animals"
 ];
 
 export const formatDate = (date?: Date) => {
