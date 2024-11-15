@@ -101,7 +101,7 @@ export async function GET(request: Request) {
 
             // also get the normalized player name based on the normalizedPlayerNames object. if the player name is not in the object, use the original name.
             let normalizedPlayerName = playerName;
-            Object.entries(normalizedPlayerNames).forEach(([normalizedName, names]) => {
+            Object.entries(normalizedPlayerNames()).forEach(([normalizedName, names]) => {
               if (names.map(name => name.toLowerCase()).includes(playerName.toLowerCase())) {
                 normalizedPlayerName = normalizedName;
               }
@@ -224,7 +224,7 @@ export async function GET(request: Request) {
           if (fundedByMatch) {
             const originalPlayerName = fundedByMatch[1];
             let normalizedPlayerName = originalPlayerName;
-            Object.entries(normalizedPlayerNames).forEach(([normalizedName, names]) => {
+            Object.entries(normalizedPlayerNames()).forEach(([normalizedName, names]) => {
               if (names.map(name => name.toLowerCase()).includes(originalPlayerName.toLowerCase())) {
                 normalizedPlayerName = normalizedName;
               }

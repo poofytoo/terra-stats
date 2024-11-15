@@ -1,15 +1,23 @@
 import { Gabarito } from "next/font/google";
 import path from "path";
 
-export const normalizedPlayerNames = {
-  Victor: ['Victor', 'Vic', 'VicVic', 'Victortor', 'Yogurt', 'notsuspicious', 'Vanadium', 'McVictor', 'V'],
-  Yota: ['Yota', 'Haircut', 'flourer', 'Yoyo'],
-  Vy: ['Vy', 'Vyvy', 'need bubs', 'Vynus'],
-  Lindsey: ['Lindsey', 'LinLin', 'Lin', 'Lind', 'Lithium', 'McLindsey'],
-  Landon: ['Landon', 'Lando', 'Lan', 'LanLan', 'Lanthanum', 'L'],
-  Ming: ['Ming', 'need nap'],
-  Amy: ['Amy', 'Americium', 'A'],
+const playerAliases: { [key: string]: string[] } = {
+  Victor: ['Vic', 'VicVic', 'Victortor', 'Yogurt', 'notsuspicious', 'Vanadium', 'McVictor', 'V'],
+  Yota: ['Haircut', 'flourer', 'Yoyo'],
+  Vy: ['Vyvy', 'need bubs', 'Vynus'],
+  Lindsey: ['LinLin', 'Lin', 'Lind', 'Lithium', 'McLindsey'],
+  Landon: ['Lando', 'Lan', 'LanLan', 'Lanthanum', 'L'],
+  Ming: ['need nap'],
+  Amy: ['Americium', 'A'],
   Chris: ['Chras'],
+};
+
+export const normalizedPlayerNames = () => {
+  const result: { [key: string]: string[] } = {};
+  for (const name in playerAliases) {
+    result[name] = [name, ...playerAliases[name]];
+  }
+  return result;
 };
 
 export async function getAllFilesInFolder(fs: typeof import('fs/promises'), folderPath: string): Promise<string[]> {
