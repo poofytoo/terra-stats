@@ -7,7 +7,7 @@ export const normalizedPlayerNames = {
   Vy: ['Vy', 'Vyvy', 'need bubs', 'Vynus'],
   Lindsey: ['Lindsey', 'LinLin', 'Lin', 'Lind', 'Lithium', 'McLindsey'],
   Landon: ['Landon', 'Lando', 'Lan', 'LanLan', 'Lanthanum', 'L'],
-  Ming: ['need nap'],
+  Ming: ['Ming', 'need nap'],
   Amy: ['Amy', 'Americium', 'A'],
   Chris: ['Chras'],
 };
