@@ -188,15 +188,15 @@ export async function GET(request: Request) {
 
   // second digit 
 
-  const secondDigit = hourIn12HourFormat % 10;
-  placeDigit(grid, secondDigit, 3, 1);
-  // colon
-  grid[3][7] = [255, 255, 255];
-  grid[6][7] = [255, 255, 255];
-  const thirdDigit = Math.floor(minute / 10);
-  placeDigit(grid, thirdDigit, 9, 1);
-  const fourthDigit = minute % 10;
-  placeDigit(grid, fourthDigit, 13, 1);
+  // const secondDigit = hourIn12HourFormat % 10;
+  // placeDigit(grid, secondDigit, 3, 1);
+  // // colon
+  // grid[3][7] = [255, 255, 255];
+  // grid[6][7] = [255, 255, 255];
+  // const thirdDigit = Math.floor(minute / 10);
+  // placeDigit(grid, thirdDigit, 9, 1);
+  // const fourthDigit = minute % 10;
+  // placeDigit(grid, fourthDigit, 13, 1);
 
   const buffer = convertGridToBuffer(grid);
 
