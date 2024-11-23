@@ -3,6 +3,119 @@ export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 export const revalidate = false
 
+const condensedOne = [
+  [1, 1],
+  [0, 1],
+  [0, 1],
+  [0, 1],
+  [0, 1],
+  [0, 1],
+  [0, 1],
+]
+
+const pixelNumbers = [
+  // 0
+  [
+    [1, 1, 1],
+    [1, 0, 1],
+    [1, 0, 1],
+    [1, 0, 1],
+    [1, 0, 1],
+    [1, 0, 1],
+    [1, 1, 1],
+  ],
+  // 1
+  [
+    [0, 1, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+  ],
+  // 2
+  [
+    [1, 1, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [1, 1, 1],
+    [1, 0, 0],
+    [1, 0, 0],
+    [1, 1, 1],
+  ],
+  // 3
+  [
+    [1, 1, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [1, 1, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [1, 1, 1],
+  ],
+  // 4
+  [
+    [1, 0, 1],
+    [1, 0, 1],
+    [1, 0, 1],
+    [1, 1, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+  ],
+  // 5
+  [
+    [1, 1, 1],
+    [1, 0, 0],
+    [1, 0, 0],
+    [1, 1, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [1, 1, 1],
+  ],
+  // 6
+  [
+    [1, 1, 1],
+    [1, 0, 0],
+    [1, 0, 0],
+    [1, 1, 1],
+    [1, 0, 1],
+    [1, 0, 1],
+    [1, 1, 1],
+  ],
+  // 7
+  [
+    [1, 1, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+  ],
+  // 8
+  [
+    [1, 1, 1],
+    [1, 0, 1],
+    [1, 0, 1],
+    [1, 1, 1],
+    [1, 0, 1],
+    [1, 0, 1],
+    [1, 1, 1],
+  ],
+  // 9
+  [
+    [1, 1, 1],
+    [1, 0, 1],
+    [1, 0, 1],
+    [1, 1, 1],
+    [0, 0, 1],
+    [0, 0, 1],
+    [1, 1, 1],
+  ],
+];
+
 const convertGridToBuffer = (grid: number[][][]): Buffer => {
   const buffer = Buffer.alloc(16 * 16 * 3); // Allocate buffer for 768 bytes
 
@@ -31,6 +144,15 @@ const clearAll = (): number[][][] => {
   return grid;
 };
 
+const placeDigit = (grid: number[][][], digit: number, c: number, r: number) => {
+  const digitDisplay2 = pixelNumbers[digit];
+  for (let i = r; i < r + 7; i++) {
+    for (let j = c; j < c + 3; j++) {
+      grid[i][j] = digitDisplay2[i - r][j - c] === 1 ? [255, 255, 255] : [0, 0, 0];
+    }
+  }
+}
+
 export async function GET(request: Request) {
 
   const grid = clearAll(); // Clear all LEDs
@@ -38,6 +160,39 @@ export async function GET(request: Request) {
   grid[0][15] = [0, 255, 0]; // Set top-right LED to green
   grid[15][0] = [0, 0, 255]; // Set bottom-left LED to blue
   grid[15][15] = [255, 255, 255]; // Set bottom-right LED to white
+
+
+  const now = new Date();
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone: "America/New_York", // Eastern Time (ET)
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  };
+  const formatter = new Intl.DateTimeFormat("en-US", options);
+  const currentETTime = formatter.format(now);
+  const minute = now.getMinutes();
+  const hourIn12HourFormat = parseInt(currentETTime.split(":")[0]);
+
+  // first digit
+  // if (hourIn12HourFormat >= 10) {
+  //   for (let i = 1; i < 3; i ++)}{
+  //     for (let j = 1; j < 8; j++) {
+  //       grid[i][j] = condensedOne[i][j];
+  //     }
+  //   }
+
+  // second digit 
+
+  const secondDigit = hourIn12HourFormat % 10;
+  placeDigit(grid, secondDigit, 3, 1);
+  // colon
+  grid[3][7] = [255, 255, 255];
+  grid[6][7] = [255, 255, 255];
+  const thirdDigit = Math.floor(minute / 10);
+  placeDigit(grid, thirdDigit, 9, 1);
+  const fourthDigit = minute % 10;
+  placeDigit(grid, fourthDigit, 13, 1);
 
   const buffer = convertGridToBuffer(grid);
 
