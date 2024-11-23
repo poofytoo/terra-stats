@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 export const revalidate = false
 
-const ON_COLOR = [150, 150, 100];
+const ON_COLOR = [200, 150, 20];
 
 const condensedOne = [
   [1, 1],
@@ -162,10 +162,11 @@ const placeDigit = (grid: number[][][], digit: number, c: number, r: number) => 
 export async function GET(request: Request) {
 
   const grid = clearAll(); // Clear all LEDs
-  grid[0][0] = [255, 0, 0]; // Set top-left LED to red
-  grid[0][15] = [0, 255, 0]; // Set top-right LED to green
-  grid[15][0] = [0, 0, 255]; // Set bottom-left LED to blue
-  grid[15][15] = [255, 255, 255]; // Set bottom-right LED to white
+
+  // grid[0][0] = [255, 0, 0]; // Set top-left LED to red
+  // grid[0][15] = [0, 255, 0]; // Set top-right LED to green
+  // grid[15][0] = [0, 0, 255]; // Set bottom-left LED to blue
+  // grid[15][15] = [255, 255, 255]; // Set bottom-right LED to white
 
 
   const now = new Date();
