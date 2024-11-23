@@ -1,6 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-
 export const runtime = 'nodejs'; // Specify the runtime explicitly
+export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
+export const revalidate = false
 
 export async function GET(request: Request) {
   const gridSize = 16 * 16;
