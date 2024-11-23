@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+export const runtime = 'nodejs'; // Specify the runtime explicitly
+
 export async function GET(request: Request) {
   const gridSize = 16 * 16;
   const buffer = Buffer.alloc(gridSize * 3); // Allocate buffer for 768 bytes
@@ -24,9 +26,3 @@ export async function GET(request: Request) {
     },
   });
 }
-
-// Vercel-specific configuration to disable caching
-export const config = {
-  runtime: 'nodejs', // Ensure using Node.js runtime
-  revalidate: 0,     // Disable caching completely
-};
