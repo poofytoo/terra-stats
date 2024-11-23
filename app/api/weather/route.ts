@@ -3,6 +3,8 @@ export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 export const revalidate = false
 
+const ON_COLOR = [150, 150, 100];
+
 const condensedOne = [
   [1, 1],
   [0, 1],
@@ -152,7 +154,7 @@ const placeDigit = (grid: number[][][], digit: number, c: number, r: number) => 
   const digitDisplay2 = pixelNumbers[digit];
   for (let i = r; i < r + 7; i++) {
     for (let j = c; j < c + 3; j++) {
-      grid[i][j] = digitDisplay2[i - r][j - c] === 1 ? [255, 255, 255] : [0, 0, 0];
+      grid[i][j] = digitDisplay2[i - r][j - c] === 1 ? ON_COLOR : [0, 0, 0];
     }
   }
 }
@@ -175,8 +177,11 @@ export async function GET(request: Request) {
   };
   const formatter = new Intl.DateTimeFormat("en-US", options);
   const currentETTime = formatter.format(now);
-  const minute = now.getMinutes();
   const hourIn12HourFormat = parseInt(currentETTime.split(":")[0]);
+  const minute = now.getMinutes();
+  const seconds = now.getSeconds();
+
+  console.log("Current time in ET:", currentETTime);
 
   // first digit
   // if (hourIn12HourFormat >= 10) {
@@ -191,8 +196,10 @@ export async function GET(request: Request) {
   const secondDigit = hourIn12HourFormat % 10;
   placeDigit(grid, secondDigit, 3, 1);
   // colon
-  grid[3][7] = [255, 255, 255];
-  grid[6][7] = [255, 255, 255];
+  if (seconds % 2 === 0) {
+    grid[3][7] = ON_COLOR;
+    grid[6][7] = ON_COLOR;
+  }
   const thirdDigit = Math.floor(minute / 10);
   placeDigit(grid, thirdDigit, 9, 1);
   const fourthDigit = minute % 10;
