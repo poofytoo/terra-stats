@@ -1,22 +1,20 @@
-// app/api/weather/route.ts
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 export async function GET(request: Request) {
-  const gridSize = 256;
+  const gridSize = 16 * 16;
+  const buffer = Buffer.alloc(gridSize * 3); // Allocate buffer for 768 bytes
 
-  // Helper function to generate a random RGB color
-  const getRandomColor = () => ({
-    r: Math.floor(Math.random() * 256),
-    g: Math.floor(Math.random() * 256),
-    b: Math.floor(Math.random() * 256),
-  });
+  // Fill buffer with random RGB values
+  for (let i = 0; i < gridSize; i++) {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    buffer[i * 3] = r;     // Red
+    buffer[i * 3 + 1] = g; // Green
+    buffer[i * 3 + 2] = b; // Blue
+  }
 
-  // Create a 256x256 grid of random RGB colors
-  const grid = Array.from({ length: gridSize }, () =>
-    Array.from({ length: gridSize }, getRandomColor)
-  );
-
-  // Return the JSON response
-  return new Response(JSON.stringify(grid), {
-    headers: { 'Content-Type': 'application/json' },
+  return new Response(buffer, {
+    headers: { 'Content-Type': 'application/octet-stream' },
   });
 }
