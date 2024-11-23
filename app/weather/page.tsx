@@ -13,19 +13,24 @@ const LEDGridSimulator: React.FC = () => {
         const buffer = await response.arrayBuffer(); // Fetch raw binary data
         const data = new Uint8Array(buffer);
 
-        // Parse the RGB data into a 2D array
+        // Parse the RGB data into a 2D array with serpentine layout
         const grid: number[][][] = [];
-        for (let i = 0; i < gridSize; i++) {
-          const row: number[][] = [];
-          for (let j = 0; j < gridSize; j++) {
-            const index = (i * gridSize + j) * 3;
+        for (let row = 0; row < gridSize; row++) {
+          const rowArray: number[][] = [];
+          for (let col = 0; col < gridSize; col++) {
+            // Handle serpentine style
+            const serpentineCol = row % 2 === 0 ? gridSize - col - 1 : col; // Reverse column for even rows
+            const index = (row * gridSize + serpentineCol) * 3;
+
             const r = data[index];
             const g = data[index + 1];
             const b = data[index + 2];
-            row.push([r, g, b]); // Push RGB tuple
+
+            rowArray.push([r, g, b]); // Push RGB tuple
           }
-          grid.push(row);
+          grid.push(rowArray);
         }
+
         setGridData(grid);
       } catch (error) {
         console.error("Error fetching grid data:", error);
