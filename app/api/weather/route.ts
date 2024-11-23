@@ -14,7 +14,6 @@ export async function GET(request: Request) {
     buffer[i * 3 + 2] = b; // Blue
   }
 
-  // Disable caching for this response
   return new Response(buffer, {
     headers: {
       'Content-Type': 'application/octet-stream',
@@ -25,3 +24,9 @@ export async function GET(request: Request) {
     },
   });
 }
+
+// Vercel-specific configuration to disable caching
+export const config = {
+  runtime: 'nodejs', // Ensure using Node.js runtime
+  revalidate: 0,     // Disable caching completely
+};
