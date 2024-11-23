@@ -14,7 +14,14 @@ export async function GET(request: Request) {
     buffer[i * 3 + 2] = b; // Blue
   }
 
+  // Disable caching for this response
   return new Response(buffer, {
-    headers: { 'Content-Type': 'application/octet-stream' },
+    headers: {
+      'Content-Type': 'application/octet-stream',
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+      'Surrogate-Control': 'no-store',
+    },
   });
 }
