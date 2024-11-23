@@ -122,7 +122,11 @@ const convertGridToBuffer = (grid: number[][][]): Buffer => {
   for (let row = 0; row < 16; row++) {
     for (let col = 0; col < 16; col++) {
       const [r, g, b] = grid[row][col];
-      const index = (row * 16 + col) * 3;
+
+      // Calculate the index based on serpentine layout
+      const serpentineCol = row % 2 === 0 ? 15 - col : col; // Reverse column for even rows
+      const index = (row * 16 + serpentineCol) * 3;
+
       buffer[index] = r;     // Red
       buffer[index + 1] = g; // Green
       buffer[index + 2] = b; // Blue
