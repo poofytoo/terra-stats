@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 export const revalidate = false
 
-const ON_COLOR = [200, 150, 20];
+const ON_COLOR = [220, 130, 10];
 
 const condensedOne = [
   [1, 1],
@@ -168,7 +168,6 @@ export async function GET(request: Request) {
   // grid[15][0] = [0, 0, 255]; // Set bottom-left LED to blue
   // grid[15][15] = [255, 255, 255]; // Set bottom-right LED to white
 
-
   const now = new Date();
   const options: Intl.DateTimeFormatOptions = {
     timeZone: "America/New_York", // Eastern Time (ET)
@@ -176,6 +175,7 @@ export async function GET(request: Request) {
     minute: "2-digit",
     hour12: true,
   };
+
   const formatter = new Intl.DateTimeFormat("en-US", options);
   const currentETTime = formatter.format(now);
   const hourIn12HourFormat = parseInt(currentETTime.split(":")[0]);
@@ -183,28 +183,25 @@ export async function GET(request: Request) {
   const seconds = now.getSeconds();
 
   console.log("Current time in ET:", currentETTime);
+  let xOffset = 0;
 
-  // first digit
-  // if (hourIn12HourFormat >= 10) {
-  //   for (let i = 1; i < 3; i ++)}{
-  //     for (let j = 1; j < 8; j++) {
-  //       grid[i][j] = condensedOne[i][j];
-  //     }
-  //   }
-
-  // second digit 
+  if (hourIn12HourFormat >= 10) {
+    const firstDigit = Math.floor(hourIn12HourFormat / 10);
+    placeDigit(grid, firstDigit, -1, 1);
+  } else {
+    xOffset = -1;
+  }
 
   const secondDigit = hourIn12HourFormat % 10;
-  placeDigit(grid, secondDigit, 3, 1);
-  // colon
+  placeDigit(grid, secondDigit, 3 + xOffset, 1);
   if (seconds % 2 === 0) {
-    grid[3][7] = ON_COLOR;
-    grid[6][7] = ON_COLOR;
+    grid[3][7 + xOffset] = ON_COLOR;
+    grid[6][7 + xOffset] = ON_COLOR;
   }
   const thirdDigit = Math.floor(minute / 10);
-  placeDigit(grid, thirdDigit, 9, 1);
+  placeDigit(grid, thirdDigit, 9 + xOffset, 1);
   const fourthDigit = minute % 10;
-  placeDigit(grid, fourthDigit, 13, 1);
+  placeDigit(grid, fourthDigit, 13 + xOffset, 1);
 
   const buffer = convertGridToBuffer(grid);
 
