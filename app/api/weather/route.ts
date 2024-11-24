@@ -1,9 +1,14 @@
+import { text } from "stream/consumers";
+
 export const runtime = 'nodejs'; // Specify the runtime explicitly
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 export const revalidate = false
 
-const ON_COLOR = [220, 90, 10];
+const ON_COLOR = [225, 75, 6];
+const ON_COLOR_2 = [0, 150, 155];
+
+let t = 0;
 
 const condensedOne = [
   [1, 1],
@@ -211,6 +216,21 @@ const smallPixelNumbers = [
   ],
 ];
 
+const units = {
+  c: [
+    [1, 1, 1],
+    [1, 0, 0],
+    [1, 0, 0],
+    [1, 1, 1],
+  ],
+  f: [
+    [1, 1, 1],
+    [1, 0, 0],
+    [1, 1, 0],
+    [1, 0, 0],
+  ],
+}
+
 const convertGridToBuffer = (grid: number[][][]): Buffer => {
   const buffer = Buffer.alloc(16 * 16 * 3); // Allocate buffer for 768 bytes
 
@@ -243,14 +263,46 @@ const clearAll = (): number[][][] => {
   return grid;
 };
 
-const placeDigit = (grid: number[][][], digit: number, c: number, r: number) => {
-  const digitDisplay2 = pixelNumbers[digit];
-  for (let i = r; i < r + 7; i++) {
-    for (let j = c; j < c + 3; j++) {
-      grid[i][j] = digitDisplay2[i - r][j - c] === 1 ? ON_COLOR : [0, 0, 0];
+type TextType = 'REGULAR' | 'SMALL' | 'UNITS';
+
+const placeDigit = (
+  grid: number[][][], 
+  digit: number | string, 
+  c: number, 
+  r: number, 
+  textType: TextType = 'REGULAR'
+) => {
+  let digitDisplay2: number[][];
+  const color =
+    textType === 'REGULAR' ? ON_COLOR : ON_COLOR_2;
+
+  if (textType === 'REGULAR' || textType === 'SMALL') {
+    // Handle numeric digits (0–9)
+    const digitIndex = typeof digit === 'number' ? digit : parseInt(digit, 10);
+
+    if (isNaN(digitIndex) || digitIndex < 0 || digitIndex > 9) {
+      console.error(`Invalid digit for numeric text: ${digit}`);
+      return;
+    }
+
+    digitDisplay2 =
+      textType === 'REGULAR' ? pixelNumbers[digitIndex] : smallPixelNumbers[digitIndex];
+  } else {
+    // Handle units (e.g., 'c' or 'f')
+    if (typeof digit !== 'string' || !(digit in units)) {
+      console.error(`Invalid unit: ${digit}`);
+      return;
+    }
+    digitDisplay2 = units[digit as keyof typeof units];
+  }
+
+  // Place the digit onto the grid
+  for (let i = r; i < r + digitDisplay2.length; i++) {
+    for (let j = c; j < c + digitDisplay2[0].length; j++) {
+      grid[i][j] = digitDisplay2[i - r][j - c] === 1 ? color : [0, 0, 0];
     }
   }
-}
+};
 
 export async function GET(request: Request) {
 
@@ -296,7 +348,22 @@ export async function GET(request: Request) {
   const fourthDigit = minute % 10;
   placeDigit(grid, fourthDigit, 13 + xOffset, 1);
 
+  const firstTemperatureDigit = 2;
+  placeDigit(grid, firstTemperatureDigit, 2, 9, 'SMALL');
+  const secondTemperatureDigit = 3;
+  placeDigit(grid, secondTemperatureDigit, 6, 9, 'SMALL');
+  grid[9][10] = ON_COLOR_2;
+
+  if (seconds % 4 < 2) {
+    placeDigit(grid, 'c', 11, 11, 'UNITS');
+  } else {
+    placeDigit(grid, 'f', 11, 11, 'UNITS');
+  }
+
   const buffer = convertGridToBuffer(grid);
+
+  t += 1;
+  console.log(t);
 
   return new Response(buffer, {
     headers: {
