@@ -5,8 +5,8 @@ export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 export const revalidate = false
 
-const ON_COLOR = [225, 80, 20];
-const ON_COLOR_2 = [0, 40, 95];
+const ON_COLOR = [225, 80, 5];
+const ON_COLOR_2 = [0, 40, 65];
 const OPENWEATHER_API_KEY = 'ca015f89bc53d74ffdc10754b3e0e5f6'; // Replace with your API key
 const ZIP_CODE = '02141';
 const COUNTRY_CODE = 'US';
