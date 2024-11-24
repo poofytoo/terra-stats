@@ -11,10 +11,12 @@ const OPENWEATHER_API_KEY = 'ca015f89bc53d74ffdc10754b3e0e5f6'; // Replace with 
 const ZIP_CODE = '02141';
 const COUNTRY_CODE = 'US';
 
+const UPDATE_FREQUENCY = 20000; // Update every 20 seconds
 let lastFetchTime = 0;
 let cachedTemperature: number | null = null;
 
 let t = 0;
+
 
 const condensedOne = [
   [1, 1],
@@ -239,7 +241,7 @@ const units = {
 
 const fetchWeather = async () => {
   const currentTime = Date.now();
-  if (currentTime - lastFetchTime < 10000) { // Check if less than 10 seconds have passed
+  if (currentTime - lastFetchTime < UPDATE_FREQUENCY) { // Check if less than 10 seconds have passed
     return cachedTemperature; // Return the cached temperature
   }
 
