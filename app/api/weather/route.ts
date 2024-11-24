@@ -1,4 +1,4 @@
-import { text } from "stream/consumers";
+import fetch from 'node-fetch'; // Import fetch for server-side requests
 
 export const runtime = 'nodejs'; // Specify the runtime explicitly
 export const dynamic = 'force-dynamic'
@@ -6,7 +6,13 @@ export const fetchCache = 'force-no-store'
 export const revalidate = false
 
 const ON_COLOR = [225, 75, 6];
-const ON_COLOR_2 = [0, 150, 155];
+const ON_COLOR_2 = [0, 90, 115];
+const OPENWEATHER_API_KEY = 'ca015f89bc53d74ffdc10754b3e0e5f6'; // Replace with your API key
+const ZIP_CODE = '02141';
+const COUNTRY_CODE = 'US';
+
+let lastFetchTime = 0;
+let cachedTemperature: number | null = null;
 
 let t = 0;
 
@@ -231,6 +237,35 @@ const units = {
   ],
 }
 
+const fetchWeather = async () => {
+  const currentTime = Date.now();
+  if (currentTime - lastFetchTime < 10000) { // Check if less than 10 seconds have passed
+    return cachedTemperature; // Return the cached temperature
+  }
+
+  console.log('Refetching weather...');
+  const LAT = 42.370970;
+  const LON = -71.073720
+  const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${LAT}&lon=${LON}&appid=${OPENWEATHER_API_KEY}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.error(`Failed to fetch weather data: ${response.statusText}`, response);
+      return null;
+    }
+
+    const data = await response.json() as any;
+    const temperature = Math.round(data.main.temp); // Round to nearest integer
+    lastFetchTime = currentTime; // Update the last fetch time
+    cachedTemperature = temperature; // Cache the temperature
+    return temperature;
+  } catch (error: any) {
+    console.error(`Error fetching weather data: ${error.message}`);
+    return null;
+  }
+};
+
 const convertGridToBuffer = (grid: number[][][]): Buffer => {
   const buffer = Buffer.alloc(16 * 16 * 3); // Allocate buffer for 768 bytes
 
@@ -266,10 +301,10 @@ const clearAll = (): number[][][] => {
 type TextType = 'REGULAR' | 'SMALL' | 'UNITS';
 
 const placeDigit = (
-  grid: number[][][], 
-  digit: number | string, 
-  c: number, 
-  r: number, 
+  grid: number[][][],
+  digit: number | string,
+  c: number,
+  r: number,
   textType: TextType = 'REGULAR'
 ) => {
   let digitDisplay2: number[][];
@@ -327,7 +362,6 @@ export async function GET(request: Request) {
   const minute = now.getMinutes();
   const seconds = now.getSeconds();
 
-  console.log("Current time in ET:", currentETTime);
   let xOffset = 0;
 
   if (hourIn12HourFormat >= 10) {
@@ -347,6 +381,18 @@ export async function GET(request: Request) {
   placeDigit(grid, thirdDigit, 9 + xOffset, 1);
   const fourthDigit = minute % 10;
   placeDigit(grid, fourthDigit, 13 + xOffset, 1);
+
+  const temperature = await fetchWeather(); // Fetch weather only if necessary
+  if (temperature !== null) {
+    // const tempFirstDigit = Math.floor(temperature / 10);
+    // const tempSecondDigit = temperature % 10;
+
+    // placeDigit(grid, tempFirstDigit, 2, 9, 'SMALL');
+    // placeDigit(grid, tempSecondDigit, 6, 9, 'SMALL');
+  } else {
+    console.error("Failed to retrieve temperature. Skipping display.");
+  }
+
 
   const firstTemperatureDigit = 2;
   placeDigit(grid, firstTemperatureDigit, 2, 9, 'SMALL');
