@@ -11,12 +11,9 @@ const OPENWEATHER_API_KEY = 'ca015f89bc53d74ffdc10754b3e0e5f6'; // Replace with 
 const ZIP_CODE = '02141';
 const COUNTRY_CODE = 'US';
 
-const UPDATE_FREQUENCY = 20000; // Update every 20 seconds
+const UPDATE_FREQUENCY = 3 * 60 * 1000; // Update every 3 minutes
 let lastFetchTime = 0;
 let cachedTemperature: number | null = null;
-
-let t = 0;
-
 
 const condensedOne = [
   [1, 1],
@@ -143,12 +140,12 @@ const smallPixelNumbers = [
   ],
   // 1
   [
-    [0, 1, 1],
-    [0, 0, 1],
-    [0, 0, 1],
-    [0, 0, 1],
-    [0, 0, 1],
-    [0, 0, 1],
+    [1, 1],
+    [0, 1],
+    [0, 1],
+    [0, 1],
+    [0, 1],
+    [0, 1],
   ],
   // 2
   [
@@ -239,6 +236,9 @@ const units = {
   ],
 }
 
+const kelvinToCelsius = (kelvin: number) => kelvin - 273.15;
+const kelvinToFahrenheit = (kelvin: number) => kelvin * 9 / 5 - 459.67;
+
 const fetchWeather = async () => {
   const currentTime = Date.now();
   if (currentTime - lastFetchTime < UPDATE_FREQUENCY) { // Check if less than 10 seconds have passed
@@ -248,7 +248,7 @@ const fetchWeather = async () => {
   console.log('Refetching weather...');
   const LAT = 42.370970;
   const LON = -71.073720
-  const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${LAT}&lon=${LON}&appid=${OPENWEATHER_API_KEY}`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${LAT}&lon=${LON}&appid=${OPENWEATHER_API_KEY}`;
 
   try {
     const response = await fetch(url);
@@ -300,7 +300,7 @@ const clearAll = (): number[][][] => {
   return grid;
 };
 
-type TextType = 'REGULAR' | 'SMALL' | 'UNITS';
+type TextType = 'REGULAR' | 'SMALL' | 'UNITS' | 'DEGREE_SYMBOL';
 
 const placeDigit = (
   grid: number[][][],
@@ -324,6 +324,10 @@ const placeDigit = (
 
     digitDisplay2 =
       textType === 'REGULAR' ? pixelNumbers[digitIndex] : smallPixelNumbers[digitIndex];
+  } else if (textType === 'DEGREE_SYMBOL') {
+    digitDisplay2 = [
+      [1],
+    ]
   } else {
     // Handle units (e.g., 'c' or 'f')
     if (typeof digit !== 'string' || !(digit in units)) {
@@ -385,33 +389,71 @@ export async function GET(request: Request) {
   placeDigit(grid, fourthDigit, 13 + xOffset, 1);
 
   const temperature = await fetchWeather(); // Fetch weather only if necessary
+  const SECONDS_FOR_EACH_UNIT = 2;
+  
   if (temperature !== null) {
-    // const tempFirstDigit = Math.floor(temperature / 10);
-    // const tempSecondDigit = temperature % 10;
+    const variant = seconds % (SECONDS_FOR_EACH_UNIT * 2) < SECONDS_FOR_EACH_UNIT;
+    const unit = variant ? 'c' : 'f';
+    const displayTemperature =
+      variant ?
+        Math.floor(kelvinToCelsius(temperature)) :
+        Math.floor(kelvinToFahrenheit(temperature));
 
-    // placeDigit(grid, tempFirstDigit, 2, 9, 'SMALL');
-    // placeDigit(grid, tempSecondDigit, 6, 9, 'SMALL');
+    const toRender: { digit: number | string; x: number; y: number; type: TextType }[] = [];
+    const pixelLength = displayTemperature.toString().split('').reduce((acc, digit) => {
+      if (digit === '-') {
+        toRender.push({
+          digit,
+          x: acc,
+          y: 12,
+          type: 'SMALL'
+        });
+        return acc + 3;
+      } else if (digit === '1') {
+        toRender.push({
+          digit,
+          x: acc,
+          y: 9,
+          type: 'SMALL'
+        });
+        return acc + 3;
+      } else {
+        toRender.push({
+          digit,
+          x: acc,
+          y: 9,
+          type: 'SMALL'
+        });
+        return acc + 4
+      }
+    }, 0);
+    toRender.push({
+      digit: unit,
+      x: pixelLength,
+      y: 9,
+      type: 'DEGREE_SYMBOL'
+    })
+    toRender.push({
+      digit: unit,
+      x: pixelLength + 1,
+      y: 11,
+      type: 'UNITS'
+    })
+
+    const xOffset = Math.floor(Math.max((12 - pixelLength), 0) / 2 + 0.5);
+    toRender.forEach(({ digit, x, y, type }) => {
+      if (digit === '-') {
+        grid[y][x + xOffset] = ON_COLOR_2;
+        grid[y][x + 1 + xOffset] = ON_COLOR_2;
+      } else {
+        placeDigit(grid, digit, x + xOffset, y, type);
+      }
+    });
   } else {
     console.error("Failed to retrieve temperature. Skipping display.");
   }
 
-
-  const firstTemperatureDigit = 2;
-  placeDigit(grid, firstTemperatureDigit, 2, 9, 'SMALL');
-  const secondTemperatureDigit = 3;
-  placeDigit(grid, secondTemperatureDigit, 6, 9, 'SMALL');
-  grid[9][10] = ON_COLOR_2;
-
-  if (seconds % 4 < 2) {
-    placeDigit(grid, 'c', 11, 11, 'UNITS');
-  } else {
-    placeDigit(grid, 'f', 11, 11, 'UNITS');
-  }
-
   const buffer = convertGridToBuffer(grid);
-
-  t += 1;
-  console.log(t);
 
   return new Response(buffer, {
     headers: {

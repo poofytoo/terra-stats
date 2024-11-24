@@ -44,7 +44,13 @@ const LEDGridSimulator: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      backgroundColor: "black",
+      height: "100vh"
+    }}>
       <h1>LED Grid Simulator</h1>
       {gridData ? (
         <div
@@ -52,6 +58,7 @@ const LEDGridSimulator: React.FC = () => {
             display: "grid",
             gridTemplateColumns: `repeat(${gridSize}, 20px)`, // Adjust size of squares
             gap: "2px",
+            border: '2px solid #333333',
           }}
         >
           {gridData.flat().map(([r, g, b], idx) => (
