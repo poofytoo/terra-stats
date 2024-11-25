@@ -6,7 +6,7 @@ export const fetchCache = 'force-no-store'
 export const revalidate = false
 
 const ON_COLOR = [225, 60, 5];
-const ON_COLOR_2 = [0, 40, 65];
+const ON_COLOR_2 = [0, 40, 30];
 const OPENWEATHER_API_KEY = process.env.WEATHER_KEY; // Replace with your API key
 const ZIP_CODE = '02141';
 const COUNTRY_CODE = 'US';
