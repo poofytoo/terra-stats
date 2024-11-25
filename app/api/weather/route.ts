@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 export const revalidate = false
 
-const ON_COLOR = [225, 80, 5];
+const ON_COLOR = [225, 60, 5];
 const ON_COLOR_2 = [0, 40, 65];
 const OPENWEATHER_API_KEY = process.env.WEATHER_KEY; // Replace with your API key
 const ZIP_CODE = '02141';
@@ -347,7 +347,6 @@ const placeDigit = (
 
 export async function GET(request: Request) {
 
-  const grid = clearAll(); // Clear all LEDs
 
   // grid[0][0] = [255, 0, 0]; // Set top-left LED to red
   // grid[0][15] = [0, 255, 0]; // Set top-right LED to green
@@ -355,6 +354,37 @@ export async function GET(request: Request) {
   // grid[15][15] = [255, 255, 255]; // Set bottom-right LED to white
 
   const now = new Date();
+
+
+  // for every time, we want to get 4 variants:
+  // 1. the time and the weather, as normal in celsius
+  // 2. the time and the weather, as normal in celsius, without the : between the hour and minute
+  // 3. the time and the weather, as normal in fahrenheit
+  // 4. the time and the weather, as normal in fahrenheit, without the : between the hour and minute
+
+  const buffer1 = await getBufferData(now, true, true);
+  const buffer2 = await getBufferData(now, false, true);
+  const buffer3 = await getBufferData(now, true, false);
+  const buffer4 = await getBufferData(now, false, false);
+
+  const buffer = new Uint8Array([...buffer1, ...buffer2, ...buffer3, ...buffer4]);
+
+  return new Response(buffer, {
+    headers: {
+      'Content-Type': 'application/octet-stream',
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+      'Surrogate-Control': 'no-store',
+    },
+  });
+}
+
+const getBufferData = async (
+  now: Date, 
+  getWithColon: boolean, 
+  getWithCelsius: boolean
+) => {
   const options: Intl.DateTimeFormatOptions = {
     timeZone: "America/New_York", // Eastern Time (ET)
     hour: "numeric",
@@ -362,11 +392,12 @@ export async function GET(request: Request) {
     hour12: true,
   };
 
+  const grid = clearAll(); // Clear all LEDs
+
   const formatter = new Intl.DateTimeFormat("en-US", options);
   const currentETTime = formatter.format(now);
   const hourIn12HourFormat = parseInt(currentETTime.split(":")[0]);
   const minute = now.getMinutes();
-  const seconds = now.getSeconds();
 
   let xOffset = 0;
 
@@ -379,20 +410,20 @@ export async function GET(request: Request) {
 
   const secondDigit = hourIn12HourFormat % 10;
   placeDigit(grid, secondDigit, 3 + xOffset, 1);
-  if (seconds % 2 === 0) {
+  if (getWithColon === true) {
     grid[3][7 + xOffset] = ON_COLOR;
     grid[6][7 + xOffset] = ON_COLOR;
   }
+
   const thirdDigit = Math.floor(minute / 10);
   placeDigit(grid, thirdDigit, 9 + xOffset, 1);
   const fourthDigit = minute % 10;
   placeDigit(grid, fourthDigit, 13 + xOffset, 1);
 
   const temperature = await fetchWeather(); // Fetch weather only if necessary
-  const SECONDS_FOR_EACH_UNIT = 2;
-  
+
   if (temperature !== null) {
-    const variant = seconds % (SECONDS_FOR_EACH_UNIT * 2) < SECONDS_FOR_EACH_UNIT;
+    const variant = getWithCelsius === true;
     const unit = variant ? 'c' : 'f';
     const displayTemperature =
       variant ?
@@ -454,14 +485,5 @@ export async function GET(request: Request) {
   }
 
   const buffer = convertGridToBuffer(grid);
-
-  return new Response(buffer, {
-    headers: {
-      'Content-Type': 'application/octet-stream',
-      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-      'Pragma': 'no-cache',
-      'Expires': '0',
-      'Surrogate-Control': 'no-store',
-    },
-  });
+  return buffer;
 }

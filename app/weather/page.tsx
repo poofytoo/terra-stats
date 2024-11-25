@@ -15,7 +15,7 @@ const LEDGridSimulator: React.FC = () => {
 
         // Parse the RGB data into a 2D array with serpentine layout
         const grid: number[][][] = [];
-        for (let row = 0; row < gridSize; row++) {
+        for (let row = 0; row < gridSize * 4; row++) {
           const rowArray: number[][] = [];
           for (let col = 0; col < gridSize; col++) {
             // Handle serpentine style
@@ -46,31 +46,37 @@ const LEDGridSimulator: React.FC = () => {
   return (
     <div style={{
       display: "flex",
-      flexDirection: "column",
       alignItems: "center",
       backgroundColor: "black",
-      height: "100vh"
+      minHeight: "100vh",
+      gap: "20px"
     }}>
       <h1>LED Grid Simulator</h1>
       {gridData ? (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: `repeat(${gridSize}, 20px)`, // Adjust size of squares
-            gap: "2px",
-            border: '2px solid #333333',
-          }}
-        >
-          {gridData.flat().map(([r, g, b], idx) => (
-            <div
-              key={idx}
+        <div>
+          {[[...Array(4).keys()].map((_, idx) => {
+            const gridToDisplay = gridData.slice(idx * gridSize, (idx + 1) * gridSize);
+            return <div
               style={{
-                width: "20px",
-                height: "20px",
-                backgroundColor: `rgb(${r}, ${g}, ${b})`,
+                display: "grid",
+                gridTemplateColumns: `repeat(${gridSize}, 20px)`, // Adjust size of squares
+                gap: "2px",
+                border: '2px solid #333333',
               }}
-            />
-          ))}
+              key={idx}
+            >
+              {gridToDisplay.flat().map(([r, g, b], idx2) => (
+                <div
+                  key={idx2}
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    backgroundColor: `rgb(${r}, ${g}, ${b})`,
+                  }}
+                />
+              ))}
+            </div>
+          })]}
         </div>
       ) : (
         <p>Loading...</p>
