@@ -66,6 +66,7 @@ export const notableCollections = [
 
 export const formatDate = (date?: Date) => {
   if (!date) return 'n/a';
+  console.log(date);
   return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 }
 
