@@ -64,11 +64,22 @@ export const notableCollections = [
   "Small Animals"
 ];
 
-export const formatDate = (date?: Date) => {
+export const formatDate = (date?: Date | string) => {
   if (!date) return 'n/a';
+
+  // Check if date is a string and convert it to a Date object if necessary
+  if (typeof date === 'string') {
+    const parsedDate = new Date(date);
+    if (isNaN(parsedDate.getTime())) {
+      console.error(`Invalid date string: ${date}`);
+      return 'invalid date';
+    }
+    date = parsedDate;
+  }
+
   console.log(date);
   return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-}
+};
 
 // round to two digits
 const round = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100;
