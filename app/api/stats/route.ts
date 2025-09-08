@@ -39,6 +39,8 @@ export async function GET(request: Request) {
   const htmlFiles = files.filter(file => file.endsWith('.html') || file.endsWith('.htm'));
   const processedData: processedData = [];
 
+  console.log(htmlFiles.filter(file => file.includes('2025')));
+
   const notableCollectionRecords = notableCollections.map(collection => {
     return {
       collection,
@@ -141,11 +143,11 @@ export async function GET(request: Request) {
             // game.players[normalizedPlayerName].awardPoints = parseInt(tds[3]);
             game.players[normalizedPlayerName].greeneryPoints = parseInt(tds[4]);
             game.players[normalizedPlayerName].cityPoints = parseInt(tds[5]);
-            game.players[normalizedPlayerName].victoryPoints = parseInt(tds[6].replace(/<\/?div.*?>/g, '').trim());
+            game.players[normalizedPlayerName].victoryPoints = parseInt(tds[6]?.replace(/<\/?div.*?>/g, '').trim() || '0');
             game.players[normalizedPlayerName].finalScore = parseInt(tds[7 + hasEscapeVelocity]);
-            game.players[normalizedPlayerName].megaCredits = parseInt(tds[8 + hasEscapeVelocity].replace(/<\/?div.*?>/g, '').trim());
+            game.players[normalizedPlayerName].megaCredits = parseInt(tds[8 + hasEscapeVelocity]?.replace(/<\/?div.*?>/g, '').trim() || '0');
             // add the timer to the player object. replace any <div> or </div> with a space, and trim the string.
-            const timerString = tds[9 + hasEscapeVelocity].replace(/<\/?div.*?>/g, '').trim();
+            const timerString = tds[9 + hasEscapeVelocity]?.replace(/<\/?div.*?>/g, '').trim() || '';
 
             // if there are only two colons, then it's in the format of mm:ss. if there are three colons, then it's in the format of hh:mm:ss.
             const colonCount = timerString.split(':').length;
@@ -169,7 +171,7 @@ export async function GET(request: Request) {
             }
 
             // actions taken
-            game.players[normalizedPlayerName].actionsTaken = parseInt(tds[10 + hasEscapeVelocity].replace(/<\/?div.*?>/g, '').trim());
+            game.players[normalizedPlayerName].actionsTaken = parseInt(tds[10 + hasEscapeVelocity]?.replace(/<\/?div.*?>/g, '').trim() || '0');
 
             // search for this: <a href="api/game/logs?id=p7955b5d5891&amp;full=true" target="_blank">Download game log</a> and extract the ID, in this case it's p7955b5d5891
             const logIdRegex = /logs\?id=(.*?)&amp;full=true"/;
@@ -216,7 +218,7 @@ export async function GET(request: Request) {
 
         for (let i = 0; i < vpMatches.length; i++) {
           // ignore white space like &nbsp;
-          let cardName = textMatches[i].replace(/<\/?span.*?>/g, '');
+          let cardName = textMatches[i]?.replace(/<\/?span.*?>/g, '') || '';
 
           // if the cardname contains the phrase `funded by X`, we want to replace X which is the original player name with the normalized player name.
           const fundedByRegex = /\(funded by (.*?)\)/;
@@ -234,9 +236,9 @@ export async function GET(request: Request) {
           // remove double spaces
           cardName = cardName.replace(/  /g, ' ');
 
-          if (textMatches[i].replace(/&nbsp;/g, '') !== '') {
+          if (textMatches[i]?.replace(/&nbsp;/g, '') !== '') {
             vpCards.push({
-              vp: parseInt(vpMatches[i]),
+              vp: parseInt(vpMatches[i] || '0'),
               cardName
             });
           }

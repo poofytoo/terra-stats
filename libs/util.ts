@@ -3,8 +3,8 @@ import path from "path";
 
 const playerAliases: { [key: string]: string[] } = {
   Victor: ['Vic', 'VicVic', 'Victortor', 'Yogurt', 'notsuspicious', 'Vanadium', 'McVictor', 'V'],
-  Yota: ['Haircut', 'flourer', 'Yoyo', 'y'],
-  Vy: ['Vyvy', 'need bubs', 'Vynus'],
+  Yota: ['Haircut', 'flourer', 'Yoyo', 'y', 'Yoter'],
+  Vy: ['Vyvy', 'need bubs', 'Vynus', 'Vyter'],
   Lindsey: ['LinLin', 'Lin', 'Lind', 'Lithium', 'McLindsey'],
   Landon: ['Lando', 'Lan', 'LanLan', 'Lanthanum', 'L'],
   Ming: ['need nap', 'm'],
