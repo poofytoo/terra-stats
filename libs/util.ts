@@ -61,7 +61,8 @@ export const notableCollections = [
   "Cloud Tourism",
   "Main Belt Asteroids",
   "Herbivores",
-  "Small Animals"
+  "Small Animals",
+  "Vermin"
 ];
 
 export const formatDate = (date?: Date | string) => {
@@ -77,7 +78,6 @@ export const formatDate = (date?: Date | string) => {
     date = parsedDate;
   }
 
-  console.log(date);
   return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 };
 

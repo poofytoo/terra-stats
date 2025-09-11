@@ -39,8 +39,6 @@ export async function GET(request: Request) {
   const htmlFiles = files.filter(file => file.endsWith('.html') || file.endsWith('.htm'));
   const processedData: processedData = [];
 
-  console.log(htmlFiles.filter(file => file.includes('2025')));
-
   const notableCollectionRecords = notableCollections.map(collection => {
     return {
       collection,
@@ -111,11 +109,13 @@ export async function GET(request: Request) {
 
             // get the corporation name as a list. the format it shows up is: <a href="https://terraforming-mars.herokuapp.com/player?id=pcfc131ecfc01&amp;noredirect">LanLan</a> <div class="column-corporation"><div>Polyphemos</div><div>Point Luna</div><div>Vitor</div></div>. In this case, the list would be: Polyphemos, Point Luna, and Vitor
             const corporationsHtml = tds[0];
-            const corporationRegex = /<div>(.*?)<\/div>/gs;
-            const corporationList = [];
-            let corporationMatch;
-            while ((corporationMatch = corporationRegex.exec(corporationsHtml)) !== null) {
-              corporationList.push(corporationMatch[1]);
+            const corporationRegex = /<div\b[^>]*>(.*?)<\/div>/gs;
+            const corporationList: string[] = [];
+            let m: RegExpExecArray | null;
+
+            while ((m = corporationRegex.exec(corporationsHtml)) !== null) {
+              const inner = m[1].replace(/<[^>]*>/g, ""); // remove all tags
+              corporationList.push(inner); // inner content only
             }
 
             // if the player name is not in the players object, add it.
